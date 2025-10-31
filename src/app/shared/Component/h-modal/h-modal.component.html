@@ -1,0 +1,16 @@
+<div style="width: 100%;">
+  <div class="modal-header">
+    <h3 class="modal-title">{{headerTitle}}</h3>
+    <button class="close-btn" (click)="closeDialog()">&times;</button>
+  </div>
+
+  <div class="modal-body">
+    <ng-content></ng-content>
+  </div>
+
+  @if(menuFooterFlg){
+  <div class="modal-footer">
+    <ng-content select="[modal-footer]"></ng-content>
+  </div>
+  }
+</div>

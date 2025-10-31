@@ -1,0 +1,137 @@
+<div class="contact-container" dir="rtl">
+  <div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h4 class="mb-0"><i class="fas fa-address-card"></i> بيانات الاتصال</h4>
+
+      <button
+        *ngIf="!isEditing"
+        class="btn btn-primary"
+        (click)="startEditing()"
+      >
+        <i class="fas fa-edit"></i> {{ contactData ? 'تعديل' : 'إضافة' }}
+      </button>
+    </div>
+
+    <!-- ✅ عرض البيانات -->
+    <div *ngIf="!isEditing && contactData" class="card-body">
+      <div class="info-grid">
+        <p><strong>اسم الشركة:</strong> {{ contactData.companyName }}</p>
+        <p><strong>العنوان:</strong> {{ contactData.address || '-' }}</p>
+        <p><strong>الهاتف:</strong> {{ contactData.phone || '-' }}</p>
+        <p><strong>البريد الإلكتروني:</strong> {{ contactData.email || '-' }}</p>
+        <p><strong>الموقع الإلكتروني:</strong> {{ contactData.website || '-' }}</p>
+      </div>
+    </div>
+
+    <!-- ✏️ وضع التعديل -->
+    <form *ngIf="isEditing" [formGroup]="contactForm" (ngSubmit)="saveContact()" novalidate>
+      <div class="card-body">
+        <!-- اسم الشركة -->
+        <div class="mb-3 text-end">
+          <label class="form-label">
+            اسم الشركة <span class="text-danger">*</span>
+          </label>
+          <input
+            type="text"
+            formControlName="companyName"
+            class="form-control text-end"
+            placeholder="أدخل اسم الشركة"
+            [class.is-invalid]="companyName?.invalid && (companyName?.touched || companyName?.dirty)"
+          />
+          <div class="invalid-feedback text-end" *ngIf="companyName?.errors?.['required']">
+            اسم الشركة مطلوب.
+          </div>
+          <div class="invalid-feedback text-end" *ngIf="companyName?.errors?.['minlength']">
+            يجب ألا يقل الاسم عن {{ companyName?.errors?.['minlength']?.requiredLength }} أحرف.
+          </div>
+        </div>
+
+        <!-- العنوان -->
+        <div class="mb-3 text-end">
+          <label class="form-label">العنوان</label>
+          <input
+            type="text"
+            formControlName="address"
+            class="form-control text-end"
+            placeholder="أدخل العنوان"
+            [class.is-invalid]="address?.invalid && (address?.touched || address?.dirty)"
+          />
+          <div class="invalid-feedback text-end" *ngIf="address?.errors?.['minlength']">
+            يجب ألا يقل العنوان عن {{ address?.errors?.['minlength']?.requiredLength }} أحرف.
+          </div>
+        </div>
+
+        <!-- الهاتف -->
+        <div class="mb-3 text-end">
+          <label class="form-label">رقم الهاتف</label>
+          <input
+            type="tel"
+            formControlName="phone"
+            class="form-control text-end"
+            placeholder="أدخل رقم الهاتف"
+            [class.is-invalid]="phone?.invalid && (phone?.touched || phone?.dirty)"
+          />
+          <div class="invalid-feedback text-end" *ngIf="phone?.errors?.['pattern']">
+            الرجاء إدخال رقم هاتف صالح.
+          </div>
+        </div>
+
+        <!-- البريد الإلكتروني -->
+        <div class="mb-3 text-end">
+          <label class="form-label">البريد الإلكتروني</label>
+          <input
+            type="email"
+            formControlName="email"
+            class="form-control text-end"
+            placeholder="أدخل البريد الإلكتروني"
+            [class.is-invalid]="email?.invalid && (email?.touched || email?.dirty)"
+          />
+          <div class="invalid-feedback text-end" *ngIf="email?.errors?.['email']">
+            الرجاء إدخال بريد إلكتروني صالح.
+          </div>
+        </div>
+
+        <!-- الموقع الإلكتروني -->
+        <div class="mb-3 text-end">
+          <label class="form-label">الموقع الإلكتروني</label>
+          <input
+            type="url"
+            formControlName="website"
+            class="form-control text-end"
+            placeholder="أدخل رابط الموقع الإلكتروني"
+            [class.is-invalid]="website?.invalid && (website?.touched || website?.dirty)"
+          />
+          <div class="invalid-feedback text-end" *ngIf="website?.errors?.['pattern']">
+            الرجاء إدخال رابط موقع إلكتروني صالح (مثال: https://example.com).
+          </div>
+        </div>
+
+        <!-- الأزرار -->
+        <div class="d-flex justify-content-end mt-4">
+          <button 
+            class="btn btn-primary ms-2" 
+            type="submit" 
+            [disabled]="contactForm.invalid || contactForm.pristine"
+          >
+            <i class="fas fa-save"></i> {{ contactData ? 'تحديث' : 'حفظ' }}
+          </button>
+          <button 
+            class="btn btn-secondary" 
+            type="button" 
+            (click)="cancelEditing()"
+          >
+            <i class="fas fa-times"></i> إلغاء
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- حالة عدم وجود بيانات -->
+    <div *ngIf="!isEditing && !contactData" class="card-body text-center py-5">
+      <p class="text-muted">لا توجد بيانات اتصال مسجلة</p>
+      <button class="btn btn-primary" (click)="startEditing()">
+        <i class="fas fa-plus"></i> إضافة بيانات اتصال
+      </button>
+    </div>
+  </div>
+</div>

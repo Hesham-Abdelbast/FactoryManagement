@@ -1,0 +1,20 @@
+// src/app/shared/services/loader.service.ts
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+@Injectable({ providedIn: 'root' })
+export class LoaderService {
+  private loading = new BehaviorSubject<boolean>(false);
+  isLoading$ = this.loading.asObservable();
+
+  show() {
+    this.loading.next(true);
+  }
+
+  hide() {
+    this.loading.next(false);
+  }
+  public isLoading():boolean{
+    return this.loading.value;
+  }
+}

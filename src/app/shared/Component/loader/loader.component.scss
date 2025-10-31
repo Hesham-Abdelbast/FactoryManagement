@@ -1,0 +1,51 @@
+/* Overlay */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+}
+
+/* Spinner container */
+.dot-spinner {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+/* Dots styling */
+.dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #3b57db; /* Base color */
+  transform-origin: 0 -30px;
+  animation: spinner-fade 1.2s linear infinite;
+}
+
+/* Position each dot in a circle */
+.dot:nth-child(1)  { transform: rotate(0deg);   animation-delay: -1.1s; }
+.dot:nth-child(2)  { transform: rotate(30deg);  animation-delay: -1.0s; }
+.dot:nth-child(3)  { transform: rotate(60deg);  animation-delay: -0.9s; }
+.dot:nth-child(4)  { transform: rotate(90deg);  animation-delay: -0.8s; }
+.dot:nth-child(5)  { transform: rotate(120deg); animation-delay: -0.7s; }
+.dot:nth-child(6)  { transform: rotate(150deg); animation-delay: -0.6s; }
+.dot:nth-child(7)  { transform: rotate(180deg); animation-delay: -0.5s; }
+.dot:nth-child(8)  { transform: rotate(210deg); animation-delay: -0.4s; }
+.dot:nth-child(9)  { transform: rotate(240deg); animation-delay: -0.3s; }
+.dot:nth-child(10) { transform: rotate(270deg); animation-delay: -0.2s; }
+.dot:nth-child(11) { transform: rotate(300deg); animation-delay: -0.1s; }
+.dot:nth-child(12) { transform: rotate(330deg); animation-delay: 0s; }
+
+/* Fade animation */
+@keyframes spinner-fade {
+  0%, 39%, 100% { opacity: 0.2; }
+  40% { opacity: 1; }
+}

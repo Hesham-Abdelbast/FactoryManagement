@@ -1,0 +1,24 @@
+<app-h-table 
+  entityName=" المعاملة"
+  headerText="قائمة المعاملات"
+  [keyColumns]="columnKeys"
+  [displayColumns]="columns"
+  [data]="transctionList"
+  P_Key="id"
+
+  [enableActions]="true"
+  actionName="الإجراءات"
+  [actions]="actions"
+  (actionClick)="onTableAction($event)"
+
+  [enableAdd]="true"
+  addIcon="fa-solid fa-square-plus"
+  addText="إضافة معاملة"
+  (onAddEvent)="addTransaction()"
+
+  [showPagination]="true"
+  [total]="total"
+  (pageChangeEvent)="onPageChange($event)"
+  page="صفحة"
+  ItemPerPage="عدد العناصر في الصفحة">
+</app-h-table>

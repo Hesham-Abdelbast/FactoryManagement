@@ -1,0 +1,94 @@
+<app-h-modal (closeEvent)="close()" [headerTitle]="isEditMode ? 'تعديل معاملة' : 'إضافة معاملة'">
+
+    <div class="container mt-4" dir="rtl">
+        <div class="card shadow p-4">
+            <form  [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
+
+                <!-- نوع المعاملة -->
+                <div class="mb-3 text-end">
+                    <label class="form-label">نوع المعاملة <span class="text-danger">*</span></label>
+                    <select formControlName="type" class="form-select text-end"
+                        [ngClass]="{'is-invalid': transactionForm.get('type')?.invalid && transactionForm.get('type')?.touched}">
+                        <option [value]="1" >وارد</option>
+                        <option [value]="2">صادر</option>
+                    </select>
+                    <div class="invalid-feedback text-end">نوع المعاملة مطلوب.</div>
+                </div>
+
+                <!-- نوع المادة -->
+                <div class="mb-3 text-end">
+                    <label class="form-label">نوع المادة <span class="text-danger">*</span></label>
+                    <select formControlName="materialTypeId" class="form-select text-end"
+                        [ngClass]="{'is-invalid': transactionForm.get('materialTypeId')?.invalid && transactionForm.get('materialTypeId')?.touched}">
+                        @for (item of materialTypeLst; track $index) {
+                          <option [value]="item.id" >{{ item.name }}</option>
+                        }
+                    </select>
+
+                    <div class="invalid-feedback text-end">نوع المادة مطلوب.</div>
+                </div>
+
+                <!-- التاجر -->
+                <div class="mb-3 text-end">
+                    <label class="form-label">التاجر <span class="text-danger">*</span></label>
+                        <select formControlName="merchantId" class="form-select text-end" placeholder="أدخل رقم أو اسم التاجر"
+                        [ngClass]="{'is-invalid': transactionForm.get('merchantId')?.invalid && transactionForm.get('merchantId')?.touched}">
+                        @for (item of merchantLst; track $index) {
+                          <option [value]="item.id">{{ item.name }}</option>
+                        }
+                    </select>
+                    <div class="invalid-feedback text-end">التاجر مطلوب.</div>
+                </div>
+
+                <!-- الكمية -->
+                <div class="mb-3 text-end">
+                    <label class="form-label">الكمية <span class="text-danger">*</span></label>
+                    <input type="number" formControlName="quantity" class="form-control text-end"
+                        placeholder="أدخل الكمية"
+                        [ngClass]="{'is-invalid': transactionForm.get('quantity')?.invalid && transactionForm.get('quantity')?.touched}" />
+                    <div class="invalid-feedback text-end">يجب أن تكون الكمية أكبر من صفر.</div>
+                </div>
+
+                <!-- السعر للوحدة -->
+                <div class="mb-3 text-end">
+                    <label class="form-label">السعر للوحدة <span class="text-danger">*</span></label>
+                    <input type="number" formControlName="pricePerUnit" class="form-control text-end"
+                        placeholder="أدخل السعر للوحدة"
+                        [ngClass]="{'is-invalid': transactionForm.get('pricePerUnit')?.invalid && transactionForm.get('pricePerUnit')?.touched}" />
+                    <div class="invalid-feedback text-end">يجب أن يكون السعر أكبر من صفر.</div>
+                </div>
+
+                <!-- المبلغ الإجمالي (محسوب) -->
+                <div class="mb-3 text-end">
+                    <label class="form-label">المبلغ الإجمالي</label>
+                    <input type="number" class="form-control text-end" [value]="totalAmount" readonly />
+                </div>
+
+                <!-- المبلغ المدفوع -->
+                <div class="mb-3 text-end">
+                    <label class="form-label">المبلغ المدفوع</label>
+                    <input type="number" formControlName="amountPaid" class="form-control text-end"
+                        placeholder="أدخل المبلغ المدفوع"
+                        [ngClass]="{'is-invalid': transactionForm.get('amountPaid')?.invalid && transactionForm.get('amountPaid')?.touched}" />
+                </div>
+
+                <!-- الملاحظات -->
+                <div class="mb-3 text-end">
+                    <label class="form-label">ملاحظات</label>
+                    <textarea formControlName="notes" class="form-control text-end" rows="3"
+                        placeholder="أدخل أي ملاحظات إضافية"
+                        [ngClass]="{'is-invalid': transactionForm.get('notes')?.invalid && transactionForm.get('notes')?.touched}"></textarea>
+                    <div class="invalid-feedback text-end">لا يمكن أن تتجاوز الملاحظات 500 حرف.</div>
+                </div>
+
+                <!-- الأزرار -->
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary ms-2" type="submit" [disabled]="transactionForm.invalid">
+                        {{ isEditMode ? 'تحديث' : 'حفظ' }}
+                    </button>
+                    <button class="btn btn-secondary" type="button" (click)="close()">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</app-h-modal>

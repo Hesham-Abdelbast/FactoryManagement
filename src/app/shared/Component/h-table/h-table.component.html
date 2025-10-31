@@ -1,0 +1,192 @@
+<!-- ===============================
+     Top Section (Entity Title + Add Button)
+     =============================== -->
+<div class="top-bar">
+  <h3 class="top-title">{{ entityName }}</h3>
+
+  <!-- Add button -->
+  @if(enableAdd){
+    <button class="btn btn-primary" type="button" (click)="onAddEvent.emit()">
+    <i *ngIf="addIcon" class="{{addIcon}}" style="margin: 0 5px;"></i>{{ addText }}
+  </button>
+  }
+</div>
+
+<!-- ===============================
+     Table Panel
+     =============================== -->
+<div class="h_panel">
+
+  <!-- Table Header (Title + Search/Filter/Export) -->
+  <div class="h_table-header">
+    <!-- Left: Section Title -->
+    <h4 class="h_header-text">{{ headerText }}</h4>
+
+    <!-- Right: Actions -->
+    <div class="h_actions">
+      <!-- Search -->
+       @if(enableSearch){
+         <input [(ngModel)]="textSearch" class="h_search" type="text" placeholder="{{placeholdeSearch}}" (change)="onSearchChange()"/>
+       }
+
+      <!-- Filter -->
+      @if(enableFilter){
+      <button class="h_filter" type="button" (click)="onFilterEvent.emit()">
+        <i *ngIf="filterIcon" class="{{filterIcon}}"></i> {{filtertText}}
+      </button>
+      }
+
+      <!-- Export -->
+      @if(enableExport){
+      <button class="h_filter" type="button" (click)="onExportEvent.emit()">
+        <i *ngIf="exportIcon" class="{{exportIcon}}"></i> {{exportText}}
+      </button>
+      }
+    </div>
+  </div>
+
+  <!-- ===============================
+       Table Body
+       =============================== -->
+  <div class="h_table-container">
+    <div class="h_table-scroll">
+      <table class="h_table">
+        <thead>
+          <tr>
+            @if(showOrder){
+              <th class="h_col-order">{{ orderTitle }}</th>
+            }
+            <!-- Dynamic columns -->
+            @for (item of displayColumns; track $index) {
+            <th [class]="'h_col-' + $index">{{ item }}</th>
+            }
+
+            <!-- Actions column (optional) -->
+            @if (enableActions) {
+            <th class="h_col-actions">{{ actionName }}</th>
+            }
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (row of data; track $index) {
+          <tr>
+            <!-- Order cell-->
+             @if(showOrder){
+              <td class="h_col-order">
+                <div class="order-controls">
+                  <!-- Move Up -->
+                  <button
+                    class="btn btn-sm btn-outline-secondary rounded-circle"
+                    matTooltip="Move Up" matTooltipPosition="above"
+                    [disabled]="getCellValue(row, orderKey) === 0"
+                    (click)="moveUp(getCellValue(row, orderKey))">
+                    ▲
+                  </button>
+
+                  <!-- Move Down -->
+                  <button
+                    class="btn btn-sm btn-outline-secondary rounded-circle"
+                    matTooltip="Move Down" matTooltipPosition="above"
+                    [disabled]="getCellValue(row, orderKey) === data.length - 1"
+                    (click)="moveDown(getCellValue(row, orderKey))">
+                    ▼
+                  </button>
+                </div>
+              </td>
+             }
+
+            <!-- Dynamic cells -->
+            @for (col of keyColumns; track $index) {
+            <td [class]="'h_col-' + $index" [innerHTML]="getCellValue(row, col)"></td>
+            }
+
+            <!-- Action buttons (optional) -->
+            @if (enableActions) {
+            <td class="h_col-actions">
+              <div class="table-actions">
+                @for (action of actions; track $index) {
+                @if (action.show !== false) {
+                <button type="button" [class]="action.style" [title]="action.label" (click)="onActionClick(action, row)">
+                  <!-- Icon -->
+                   @if(action.icon){
+                     <i [class]="action.icon + ' ' + action.iconColor"></i>
+                   }
+
+                  <!-- Label -->
+                   @if(action.label){
+                     <span class="action-label">{{ action.label }}</span>
+                   }
+                </button>
+                }
+                }
+              </div>
+            </td>
+            }
+          </tr>
+          }
+          <tr *ngIf="!data || data.length === 0">
+              <td [attr.colspan]="(showOrder ? 1 : 0) + displayColumns.length + (enableActions ? 1 : 0)" class="text-muted py-4">لا توجد بيانات للعرض.</td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===============================
+       Pagination (optional)
+       =============================== -->
+  @if (showPagination) {
+  <div class="h_pagination-container">
+
+    <!-- First + Previous -->
+    <div class="h_page-nav">
+      <button class="h_nav-btn" title="First Page" type="button" (click)="goToFirst()" [disabled]="pageIndex <= 1">
+        <i class="fas" [ngClass]="getDir() === 'rtl' ? 'fa-angle-double-right' : 'fa-angle-double-left'"></i>
+      </button>
+
+      <button class="h_nav-btn" title="Previous Page" type="button" (click)="goToPrev()" [disabled]="pageIndex <= 1">
+        <i class="fas" [ngClass]="getDir() === 'rtl' ? 'fa-angle-right' : 'fa-angle-left'"></i>
+      </button>
+    </div>
+
+    <!-- Page Numbers -->
+    <div class="h_pagination">
+      <button class="h_page-btn" type="button" (click)="goToPrev()" [disabled]="pageIndex <= 1">
+        {{ pageIndex - 1 }}
+      </button>
+
+      <button class="h_page-btn h_active" type="button">
+        {{ pageIndex }}
+      </button>
+
+      <button class="h_page-btn" type="button" (click)="goToNext()" [disabled]="pageIndex >= totalPages">
+        {{ pageIndex + 1 }}
+      </button>
+    </div>
+
+    <!-- Next + Last -->
+    <div class="h_page-nav">
+      <button class="h_nav-btn" title="Next Page" type="button" (click)="goToNext()"
+        [disabled]="pageIndex >= totalPages">
+        <i class="fas" [ngClass]="getDir() === 'ltr' ? 'fa-angle-right' : 'fa-angle-left'"></i>
+      </button>
+
+      <button class="h_nav-btn" title="Last Page" type="button" (click)="goToLast()"
+        [disabled]="pageIndex >= totalPages">
+        <i class="fas" [ngClass]="getDir() === 'ltr' ? 'fa-angle-double-right' : 'fa-angle-double-left'"></i>
+      </button>
+    </div>
+
+    <!-- Page Size Selector -->
+    <div class="h_page-size-container">
+      <span class="h_page-size-label">{{ItemPerPage}}</span>
+      <select class="h_page-size" [(ngModel)]="pageSize" (change)="pageSizeChange()">
+        <option *ngFor="let ps of pageSizeOptions" [ngValue]="ps">
+          {{ ps }} / {{page}}
+        </option>
+      </select>
+    </div>
+  </div>
+  }
+</div>

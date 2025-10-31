@@ -1,0 +1,52 @@
+<app-h-modal (closeEvent)="close()" [headerTitle]="isEditMode ? 'تعديل نوع المادة' : 'إضافة نوع مادة'">
+    <!-- material-type-form.component.html -->
+<div class="container mt-4" dir="rtl">
+  <div class="card shadow p-4">
+    <h4 class="mb-3 text-end">
+      
+    </h4>
+
+    <form [formGroup]="materialTypeForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3 text-end">
+        <label class="form-label">
+          الاسم <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          formControlName="name"
+          class="form-control text-end"
+          [class.is-invalid]="materialTypeForm.get('name')?.invalid && materialTypeForm.get('name')?.touched"
+          placeholder="أدخل اسم المادة"
+        />
+        <div class="invalid-feedback text-end" *ngIf="materialTypeForm.get('name')?.errors?.['required']">
+          الاسم مطلوب.
+        </div>
+        <div class="invalid-feedback text-end" *ngIf="materialTypeForm.get('name')?.errors?.['maxlength']">
+          لا يمكن أن يتجاوز الاسم 50 حرفًا.
+        </div>
+      </div>
+
+      <div class="mb-3 text-end">
+        <label class="form-label">الوصف</label>
+        <textarea
+          formControlName="description"
+          class="form-control text-end"
+          rows="3"
+          placeholder="أدخل الوصف (اختياري)"
+        ></textarea>
+        <div class="invalid-feedback text-end" *ngIf="materialTypeForm.get('description')?.errors?.['maxlength']">
+          لا يمكن أن يتجاوز الوصف 200 حرفًا.
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-primary ms-2" type="submit" [disabled]="materialTypeForm.invalid || isLoading">
+          {{ isEditMode ? 'تحديث' : 'حفظ' }}
+        </button>
+        <button class="btn btn-secondary" type="button" (click)="close()">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+</app-h-modal>

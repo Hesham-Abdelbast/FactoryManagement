@@ -1,0 +1,425 @@
+/* ===============================
+   Top Section
+   =============================== */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.top-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.outline-btn {
+    padding: 8px 16px;
+    border: 2px solid #6c63ff;
+    border-radius: 8px;
+    background: transparent;
+    color: #6c63ff;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        background: #6c63ff;
+        color: #fff;
+    }
+}
+
+/* ===============================
+   Panel Wrapper
+   =============================== */
+.h_panel {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* ===============================
+   Header (search, filter, export)
+   =============================== */
+.h_table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #ffffff;
+}
+
+.h_header-text {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.h_actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.h_search {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    width: 200px;
+    transition: border-color 0.2s;
+
+    &:focus {
+        border-color: #6c63ff;
+        box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
+    }
+}
+
+.h_filter {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+
+    i {
+        margin-right: 5px;
+    }
+
+    &:hover {
+        background: #6c63ff;
+        color: #fff;
+        border-color: #6c63ff;
+    }
+}
+
+/* ===============================
+   Table Container
+   =============================== */
+.h_table-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.h_table-scroll {
+    overflow-x: auto;
+    padding: 10px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.h_table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* Minimum width to prevent excessive shrinking */
+}
+
+.h_table thead {
+    background: #f3f4f8;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.h_table th,
+.h_table td {
+    padding: 12px 10px;
+    text-align: start;
+    font-size: 14px;
+    color: #555;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Column width management */
+.h_col-order {
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+}
+
+.h_col-actions {
+    width: 180px;
+    min-width: 180px;
+    max-width: 180px;
+}
+
+/* Dynamic columns - set reasonable min-width */
+.h_table th:not(.h_col-order):not(.h_col-actions),
+.h_table td:not(.h_col-order):not(.h_col-actions) {
+    min-width: 120px;
+    max-width: 300px;
+}
+
+.h_table tbody tr:hover {
+    background: #f9f9ff;
+}
+
+/* Order controls */
+.order-controls {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+}
+
+/* ===============================
+   Action Buttons
+   =============================== */
+.table-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.action-label {
+    margin-left: 4px;
+}
+
+.btn-outline-primary i,
+.btn-outline-success i,
+.btn-outline-danger i {
+    margin-right: 4px;
+}
+
+.btn-outline-primary:hover i,
+.btn-outline-success:hover i,
+.btn-outline-danger:hover i {
+    color: #fff !important;
+}
+
+/* ===============================
+   Pagination
+   =============================== */
+.h_pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 16px;
+}
+
+.h_pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.h_page-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.h_page-btn,
+.h_nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 8px;
+    background: #f8f9fa;
+    color: #4a5568;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+
+    &:hover:not(.h_active, :disabled) {
+        background: #6c63ff;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(108, 99, 255, 0.3);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+}
+
+.h_page-btn.h_active {
+    background: #6c63ff;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(108, 99, 255, 0.2);
+}
+
+.h_page-size-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.h_page-size-label {
+    font-size: 14px;
+    color: #4a5568;
+    white-space: nowrap;
+}
+
+.h_page-size {
+    padding: 8px 12px;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:focus {
+        outline: none;
+        border-color: #6c63ff;
+        box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+    }
+}
+
+/* ===============================
+   Responsive Design
+   =============================== */
+@media (max-width: 768px) {
+    .h_table-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .h_actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .h_search {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .h_table th,
+    .h_table td {
+        padding: 10px 6px;
+        font-size: 13px;
+    }
+
+    .h_col-order {
+        width: 100px;
+        min-width: 100px;
+        max-width: 100px;
+    }
+
+    .h_col-actions {
+        width: 150px;
+        min-width: 150px;
+        max-width: 150px;
+    }
+
+    .h_table th:not(.h_col-order):not(.h_col-actions),
+    .h_table td:not(.h_col-order):not(.h_col-actions) {
+        min-width: 100px;
+        max-width: 200px;
+    }
+
+    .table-actions {
+        gap: 4px;
+    }
+
+    .action-label {
+        display: none; /* Hide action labels on small screens */
+    }
+}
+
+@media (max-width: 576px) {
+    .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .h_table th,
+    .h_table td {
+        padding: 8px 4px;
+        font-size: 12px;
+    }
+
+    .h_col-order {
+        width: 80px;
+        min-width: 80px;
+        max-width: 80px;
+    }
+
+    .h_col-actions {
+        width: 120px;
+        min-width: 120px;
+        max-width: 120px;
+    }
+
+    .h_table th:not(.h_col-order):not(.h_col-actions),
+    .h_table td:not(.h_col-order):not(.h_col-actions) {
+        min-width: 80px;
+        max-width: 150px;
+    }
+
+    .h_pagination-container {
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .h_page-btn,
+    .h_nav-btn {
+        min-width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+
+    .h_page-size-container {
+        flex-direction: column;
+        gap: 5px;
+        align-items: flex-start;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 400px) {
+    .h_table-scroll {
+        padding: 5px;
+    }
+
+    .h_table th,
+    .h_table td {
+        padding: 6px 3px;
+    }
+
+    .h_col-order {
+        width: 70px;
+        min-width: 70px;
+        max-width: 70px;
+    }
+
+    .h_col-actions {
+        width: 100px;
+        min-width: 100px;
+        max-width: 100px;
+    }
+
+    .h_table th:not(.h_col-order):not(.h_col-actions),
+    .h_table td:not(.h_col-order):not(.h_col-actions) {
+        min-width: 70px;
+        max-width: 120px;
+    }
+
+    .order-controls {
+        flex-direction: column;
+        gap: 3px;
+    }
+}

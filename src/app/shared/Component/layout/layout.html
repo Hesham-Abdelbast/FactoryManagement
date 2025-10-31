@@ -1,0 +1,60 @@
+<div class="sidebar" [ngClass]="isOpened?'open':''" [dir]="drawerDirection">
+  <div class="logo-details">
+    <div class="logo_name">هيفو</div>
+    <i [ngClass]=" isOpened? 'bx bx-menu-alt-right':'bx bx-menu'" (click)="isOpened= !isOpened" id="btn"></i>
+  </div>
+  <ul class="nav-list">
+    <li>
+      <a routerLink="">
+        <i class='bx bx-grid-alt'></i>
+        <span class="links_name">لوحة التحكم</span>
+      </a>
+      <span class="tooltip">لوحة التحكم</span>
+    </li>
+    <li>
+      <a routerLink="transactions">
+        <i class='bx bx-grid-alt'></i>
+        <span class="links_name">المعاملة</span>
+      </a>
+      <span class="tooltip">المعاملة</span>
+    </li>
+
+    <li>
+      <a routerLink="material-types">
+        <i class='bx bx-grid-alt'></i>
+        <span class="links_name">المعادن</span>
+      </a>
+      <span class="tooltip">المعادن</span>
+    </li>
+
+     <li>
+      <a routerLink="merchants">
+        <i class='bx bx-grid-alt'></i>
+        <span class="links_name">التجار</span>
+      </a>
+      <span class="tooltip">التجار</span>
+    </li>
+
+    <li>
+      <a routerLink="contact">
+        <i class='bx bx-grid-alt'></i>
+        <span class="links_name">عنا</span>
+      </a>
+      <span class="tooltip">عنا</span>
+    </li>
+    <!-- <li class="profile">
+      <div class="profile-details">
+        <div class="name_job">
+          <div class="name">{{this.user?.name}}</div>
+          <div class="job">{{ this.user?.role }}</div>
+        </div>
+      </div>
+      <i class='bx bx-log-out' style="cursor: pointer;" id="log_out" (click)="logout()"></i>
+    </li> -->
+
+  </ul>
+</div>
+
+<div class="home-section">
+  <router-outlet></router-outlet>
+</div>

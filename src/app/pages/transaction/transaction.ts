@@ -1,0 +1,221 @@
+import { Component, OnInit } from '@angular/core';
+import { ApiResponse } from '../../model/api-response';
+import { HTableComponent } from '../../shared/Component/h-table/h-table.component';
+import { TransactionDto } from '../../model/Transaction/transaction-dto';
+import { TableAction } from '../../model/table-action';
+import { TransactionServices } from '../../core/Transaction/transaction-services';
+import { MatDialog } from '@angular/material/dialog';
+import { ToastService } from '../../core/shared/toast.service';
+import { AddEditTransaction } from './add-edit-transaction/add-edit-transaction';
+import { PageEvent } from '../../model/page-event';
+import { MaterialTypeVM } from '../../model/MaterialType/material-type-vm';
+import { MerchantDto } from '../../model/Merchant/merchant-dto';
+import { MaterialTypeServices } from '../../core/MaterialType/material-type-services';
+import { MerchantServices } from '../../core/Merchant/merchant-services';
+import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
+import { InvoiceComponent } from './invoice-component/invoice-component';
+
+@Component({
+  selector: 'app-transaction',
+  standalone: true,
+  imports: [HTableComponent],
+  templateUrl: './transaction.html',
+  styleUrls: ['./transaction.scss'],
+})
+export class Transaction implements OnInit {
+  /** Table Columns */
+  columns = [
+    'نوع المعاملة',
+    'نوع المادة',
+    'الكمية',
+    'السعر للوحدة',
+    'الإجمالي',
+    'التاجر',
+    'المبلغ المدفوع',
+  ];
+
+  columnKeys = [
+    'typeName',
+    'materialTypeName',
+    'quantity',
+    'pricePerUnit',
+    'totalAmount',
+    'merchantName',
+    'amountPaid',
+  ];
+
+  /** Data sources */
+  transctionList: TransactionDto[] = [];
+  materialTypeLst: MaterialTypeVM[] = [];
+  merchantLst: MerchantDto[] = [];
+  total = 0;
+  /** Table actions */
+  actions: TableAction[] = [
+    {
+      icon: 'fa-solid fa-file-invoice-dollar',
+      label: 'الفاتوره',
+      type: 'view',
+      style: 'btn btn-outline-primary btn-sm',
+    }, {
+      icon: 'fa fa-edit',
+      label: 'تعديل',
+      type: 'edit',
+      style: 'btn btn-outline-success btn-sm',
+    },
+    {
+      icon: 'fa fa-trash',
+      label: 'حذف',
+      type: 'delete',
+      style: 'btn btn-outline-danger btn-sm',
+    },
+  ];
+
+  constructor(
+    private transactionServices: TransactionServices,
+    private dialog: MatDialog,
+    private toast: ToastService,
+    private materialService: MaterialTypeServices,
+    private merchantService: MerchantServices,
+    private router: Router
+  ) { }
+
+  async ngOnInit(): Promise<void> {
+    await this.loadReferenceData();
+    this.loadTransactions();
+  }
+
+  /** Load all lookup data (materials + merchants) */
+  private async loadReferenceData(): Promise<void> {
+    try {
+      const [matRes, merRes] = await Promise.all([
+        firstValueFrom(this.materialService.getAll()),
+        firstValueFrom(this.merchantService.getAll()),
+      ]);
+
+      if (matRes?.success) this.materialTypeLst = matRes.data ?? [];
+      if (merRes?.success) this.merchantLst = merRes.data ?? [];
+    } catch (err) {
+      this.toast.error('فشل تحميل البيانات المرجعية.');
+      console.error(err);
+    }
+  }
+
+  /** Load all transactions */
+  public loadTransactions(): void {
+    this.transactionServices.getAll().subscribe({
+      next: (res: ApiResponse<TransactionDto[]>) => {
+        if (res.success && res.data) {
+          this.transctionList = res.data.map((t) => ({
+            ...t,
+            merchantName: this.getMerchantName(t.merchantId),
+            materialTypeName: this.getMaterialTypeName(t.materialTypeId),
+            typeName: t.type === 1 ? 'وارد' : 'صادر',
+            totalAmount: t.quantity * t.pricePerUnit,
+          }));
+
+          this.total = this.transctionList.length;
+        } else {
+          this.toast.error('فشل تحميل المعاملات.');
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.toast.error('حدث خطأ أثناء تحميل المعاملات.');
+      },
+    });
+  }
+
+  /** Safe lookup helpers */
+  private getMerchantName(id: string): string {
+    return this.merchantLst.find((x) => x.id === id)?.name ?? 'غير معروف';
+  }
+
+  private getMaterialTypeName(id: string): string {
+    return this.materialTypeLst.find((x) => x.id === id)?.name ?? 'غير معروف';
+  }
+
+  /** Table Actions */
+  onTableAction(event: { action: string; row: TransactionDto }): void {
+    if (event.action === 'edit') this.editTransaction(event.row);
+    if (event.action === 'delete') this.deleteTransaction(event.row.id);
+    if (event.action === 'view') this.viewTransaction(event.row.id);
+  }
+
+  onPageChange(pageEvent: PageEvent): void {
+    const start = (pageEvent.pageIndex - 1) * pageEvent.pageSize;
+    const end = start + pageEvent.pageSize;
+    console.log(`عرض البيانات من ${start} إلى ${end}`);
+  }
+
+  /** Add / Edit / Delete / view logic */
+  addTransaction(): void {
+    const dialogRef = this.dialog.open(AddEditTransaction, {
+      width: '900px',
+      maxHeight: '90vh',
+      disableClose: true,
+      data: {
+        isEdit: false,
+        item: null,
+        materialTypeLst: this.materialTypeLst,
+        merchantLst: this.merchantLst,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) this.loadTransactions();
+    });
+  }
+  viewTransaction(id: string) {
+    const dialogRef = this.dialog.open(InvoiceComponent, {
+      width: '900px',
+      height:'100%',
+      maxHeight: 'none',
+      data: {
+        id: id
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) this.loadTransactions();
+    });
+    // this.router.navigate(['invoice', id]);
+  }
+
+  editTransaction(item: TransactionDto): void {
+    const dialogRef = this.dialog.open(AddEditTransaction, {
+      width: '900px',
+      maxHeight: '90vh',
+      disableClose: true,
+      data: {
+        isEdit: true,
+        item,
+        materialTypeLst: this.materialTypeLst,
+        merchantLst: this.merchantLst,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) this.loadTransactions();
+    });
+  }
+
+
+  deleteTransaction(id: string): void {
+    this.toast.confirm('هل أنت متأكد من حذف هذا النوع؟', 'نعم', 'إلغاء').then((confirmed) => {
+      if (confirmed) {
+        this.transactionServices.delete(id).subscribe({
+          next: (res: ApiResponse<boolean>) => {
+            if (res.success) {
+              this.toast.success('تم حذف المعاملة بنجاح.');
+              this.loadTransactions();
+            } else {
+              this.toast.error('فشل حذف المعاملة.');
+            }
+          },
+          error: () => this.toast.error('حدث خطأ أثناء حذف المعاملة.'),
+        });
+      }
+    });
+  }
+}

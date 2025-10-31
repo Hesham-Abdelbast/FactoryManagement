@@ -1,0 +1,7 @@
+@if (loader.isLoading$ | async) {
+  <div class="loader-overlay">
+    <div class="spinner">
+      <div *ngFor="let dot of dots; index as i" class="dot"></div>
+    </div>
+  </div>
+}

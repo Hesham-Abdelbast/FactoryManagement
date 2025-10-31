@@ -1,0 +1,84 @@
+<app-h-modal 
+  (closeEvent)="close()" 
+  [headerTitle]="isEditMode ? 'تعديل تاجر' : 'إضافة تاجر'">
+
+  <div class="container mt-4" dir="rtl">
+    <div class="card shadow p-4">
+      <form [formGroup]="merchantForm" (ngSubmit)="onSubmit()">
+
+        <!-- الاسم -->
+        <div class="mb-3 text-end">
+          <label class="form-label">
+            الاسم <span class="text-danger">*</span>
+          </label>
+          <input
+            type="text"
+            formControlName="name"
+            class="form-control text-end"
+            [ngClass]="{'is-invalid': merchantForm.get('name')?.invalid && merchantForm.get('name')?.touched}"
+            placeholder="أدخل اسم التاجر"
+          />
+          <div class="invalid-feedback text-end" *ngIf="merchantForm.get('name')?.errors?.['required']">
+            الاسم مطلوب.
+          </div>
+          <div class="invalid-feedback text-end" *ngIf="merchantForm.get('name')?.errors?.['maxlength']">
+            لا يمكن أن يتجاوز الاسم 50 حرفًا.
+          </div>
+        </div>
+
+        <!-- رقم الهاتف -->
+        <div class="mb-3 text-end">
+          <label class="form-label">رقم الهاتف</label>
+          <input
+            type="text"
+            formControlName="phone"
+            class="form-control text-end"
+            [ngClass]="{'is-invalid': merchantForm.get('phone')?.invalid && merchantForm.get('phone')?.touched}"
+            placeholder="أدخل رقم الهاتف (اختياري)"
+          />
+          <div class="invalid-feedback text-end" *ngIf="merchantForm.get('phone')?.errors?.['pattern']">
+            رقم الهاتف غير صالح. يجب أن يحتوي على 8 إلى 15 رقمًا.
+          </div>
+        </div>
+
+        <!-- البريد الإلكتروني -->
+        <div class="mb-3 text-end">
+          <label class="form-label">البريد الإلكتروني</label>
+          <input
+            type="email"
+            formControlName="email"
+            class="form-control text-end"
+            [ngClass]="{'is-invalid': merchantForm.get('email')?.invalid && merchantForm.get('email')?.touched}"
+            placeholder="أدخل البريد الإلكتروني (اختياري)"
+          />
+          <div class="invalid-feedback text-end" *ngIf="merchantForm.get('email')?.errors?.['email']">
+            البريد الإلكتروني غير صالح.
+          </div>
+        </div>
+
+        <!-- العنوان -->
+        <div class="mb-3 text-end">
+          <label class="form-label">العنوان</label>
+          <textarea
+            formControlName="address"
+            class="form-control text-end"
+            [ngClass]="{'is-invalid': merchantForm.get('address')?.invalid && merchantForm.get('address')?.touched}"
+            rows="3"
+            placeholder="أدخل عنوان التاجر (اختياري)"
+          ></textarea>
+          <div class="invalid-feedback text-end" *ngIf="merchantForm.get('address')?.errors?.['maxlength']">
+            لا يمكن أن يتجاوز العنوان 200 حرفًا.
+          </div>
+        </div>
+
+        <!-- أزرار الإجراءات -->
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-primary ms-2" type="submit" >
+            {{ isEditMode ? 'تحديث' : 'حفظ' }}
+          </button>
+          <button class="btn btn-secondary" type="button" (click)="close()">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</app-h-modal>

@@ -1,1 +1,88 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('../node_modules/@fortawesome/fontawesome-free/css/all.min.css');
+@import url('../node_modules/bootstrap/dist/css/bootstrap.min.css');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-color);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  padding: 0 0.8rem;
+  font-weight: bold;
+}
+
+
+//Color Setting
+
+.light {
+  --primary-color: #3b82f6;
+  --primary-dark: #2563eb;
+  --secondary-color: #64748b;
+  --text-color: #1e293b;
+  --text-light: #64748b;
+  --text-dark: #0f172a;
+  --bg-color: #c3bcbc;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #e2e8f0;
+  --input-bg: #f8fafc;
+  --input-border: #e2e8f0;
+  --error-color: #dc2626;
+  --success-color: #10b981;
+  --divider-color: #e2e8f0;
+  --feature-bg: rgba(255, 255, 255, 0.15);
+  --feature-icon: #ffd43b;
+  --logo-bg: #ffffff;
+  --logo-color: #3b82f6;
+  --brand-gradient: linear-gradient(135deg, #2563eb, #3b82f6);
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --overlay-color: rgba(255, 255, 255, 0.1);
+  --link-color: #3b82f6;
+  --link-hover: #2563eb;
+  --button-bg: linear-gradient(to right, var(--primary-dark), var(--primary-color));
+  --button-hover: linear-gradient(to right, #1d4ed8, #2563eb);
+  --google-button-bg: #ffffff;
+  --google-button-border: #e2e8f0;
+  --google-button-hover: #f8fafc;
+
+  --SideNavAdmin : linear-gradient(135deg, #2563eb, #3b82f6);
+}
+
+.dark {
+  --primary-color: #60a5fa;
+  --primary-dark: #3b82f6;
+  --secondary-color: #94a3b8;
+  --text-color: #e2e8f0;
+  --text-light: #cbd5e1;
+  --text-dark: #f1f5f9;
+  --bg-color: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --input-bg: #1e293b;
+  --input-border: #334155;
+  --error-color: #f16e6e;
+  --divider-color: #334155;
+  --feature-bg: rgba(255, 255, 255, 0.1);
+  --feature-icon: #fcd34d;
+  --logo-bg: #1e293b;
+  --logo-color: #93c5fd;
+  --brand-gradient: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --overlay-color: rgba(0, 0, 0, 0.1);
+  --link-color: #93c5fd;
+  --link-hover: #60a5fa;
+  --button-bg: linear-gradient(to right, #1e40af, #3b82f6);
+  --button-hover: linear-gradient(to right, #1e3a8a, #2563eb);
+  --google-button-bg: #1e293b;
+  --google-button-border: #334155;
+  --google-button-hover: #334155;
+  --SideNavAdmin : linear-gradient(135deg, #2563eb, #3b82f6);
+}
