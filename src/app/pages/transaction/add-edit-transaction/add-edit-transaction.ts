@@ -128,14 +128,15 @@ export class AddEditTransaction implements OnInit {
   /** Update transaction */
   private update(transaction: TransactionDto): void {
     if (!transaction.id) transaction.id = this.data.item?.id ?? '';
-
+    console.log(transaction, 'تحديث المعاملة');
     this.transactionService.update(transaction).subscribe({
       next: (res: ApiResponse<boolean>) => {
         if (res.success) {
           this.toast.success('تم تعديل المعاملة بنجاح.');
           this.dialogRef.close(true);
         } else {
-          this.toast.error('فشل في تحديث المعاملة.');
+          console.log(res.returnMsg)
+          this.toast.error(res.returnMsg);
         }
       },
       error: () => {

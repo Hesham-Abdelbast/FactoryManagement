@@ -166,6 +166,7 @@ export class Transaction implements OnInit {
       if (result) this.loadTransactions();
     });
   }
+  
   viewTransaction(id: string) {
     const dialogRef = this.dialog.open(InvoiceComponent, {
       width: '900px',

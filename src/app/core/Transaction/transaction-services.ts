@@ -23,7 +23,22 @@ export class TransactionServices {
             )
           );
       }
-    
+    /**
+       * Fetch Transaction by ID
+       */
+      GetAllByMerchantId(id: string): Observable<ApiResponse<TransactionDto[]>> {
+        return this.baseService
+          .GetRequest<ApiResponse<TransactionDto[]>>(TransactionURLs.GetAllByMerchantId(id))
+          .pipe(
+            catchError(error =>
+              this.handleError<TransactionDto[]>(
+                `fetching Transaction by ID ${id}`,
+                error,
+                null
+              )
+            )
+          );
+      }
       /**
        * Fetch Transaction by ID
        */
