@@ -1,0 +1,57 @@
+<app-h-modal (closeEvent)="close()" [headerTitle]="isEditMode ? 'تعديل مخزن' : 'إضافة مخزن'">
+  <div class="container mt-4" dir="rtl">
+    <div class="card shadow p-4">
+      <form [formGroup]="warehouseForm" (ngSubmit)="onSubmit()">
+
+        <!-- الاسم -->
+        <div class="mb-3 text-end">
+          <label class="form-label">اسم المخزن <span class="text-danger">*</span></label>
+          <input type="text" formControlName="name" class="form-control text-end"
+            placeholder="أدخل اسم المخزن"
+            [ngClass]="{'is-invalid': warehouseForm.get('name')?.invalid && warehouseForm.get('name')?.touched}" />
+          <div class="invalid-feedback text-end">الاسم مطلوب ولا يمكن أن يكون فارغًا.</div>
+        </div>
+
+        <!-- الموقع -->
+        <div class="mb-3 text-end">
+          <label class="form-label">الموقع</label>
+          <input type="text" formControlName="location" class="form-control text-end"
+            placeholder="أدخل موقع المخزن" />
+        </div>
+
+        <!-- اسم المدير -->
+        <div class="mb-3 text-end">
+          <label class="form-label">اسم المدير</label>
+          <input type="text" formControlName="managerName" class="form-control text-end"
+            placeholder="أدخل اسم مدير المخزن" />
+        </div>
+
+        <!-- رقم الهاتف -->
+        <div class="mb-3 text-end">
+          <label class="form-label">رقم الهاتف</label>
+          <input type="text" formControlName="phoneNumber" class="form-control text-end"
+            placeholder="أدخل رقم الهاتف"
+            [ngClass]="{'is-invalid': warehouseForm.get('phoneNumber')?.invalid && warehouseForm.get('phoneNumber')?.touched}">
+          <div class="invalid-feedback text-end">يجب إدخال رقم هاتف صحيح.</div>
+        </div>
+
+        <!-- البريد الإلكتروني -->
+        <div class="mb-3 text-end">
+          <label class="form-label">البريد الإلكتروني</label>
+          <input type="email" formControlName="email" class="form-control text-end"
+            placeholder="example@mail.com"
+            [ngClass]="{'is-invalid': warehouseForm.get('email')?.invalid && warehouseForm.get('email')?.touched}">
+          <div class="invalid-feedback text-end">يجب إدخال بريد إلكتروني صالح.</div>
+        </div>
+
+        <!-- الأزرار -->
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-primary ms-2" type="submit" [disabled]="warehouseForm.invalid">
+            {{ isEditMode ? 'تحديث' : 'حفظ' }}
+          </button>
+          <button class="btn btn-secondary" type="button" (click)="close()">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</app-h-modal>

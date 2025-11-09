@@ -1,4 +1,4 @@
-export const Base_URL = 'http://localhost:5008/';
+export const Base_URL = 'https://localhost:44308/';
 
 export const URLs = {
   LOGIN: 'login',
@@ -55,4 +55,12 @@ export class StoreURLs{
   static Delete(id:string):string {return `${Base_URL}api/Store/Delete/${id}`};
   static readonly Add = Base_URL + 'api/Store/Add';
   static readonly Update = Base_URL + 'api/Store/Update';
+}
+
+export class WarehouseURLs{
+  static readonly GetAll = Base_URL + 'api/Warehouse/GetAll';
+  static GetByID(id:string):string {return `${Base_URL}api/Warehouse/GetById/${id}`};
+  static Delete(id:string):string {return `${Base_URL}api/Warehouse/Delete/${id}`};
+  static readonly Add = Base_URL + 'api/Warehouse/Add';
+  static readonly Update = Base_URL + 'api/Warehouse/Update';
 }

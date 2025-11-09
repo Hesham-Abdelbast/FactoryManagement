@@ -20,5 +20,4 @@ export interface InvoiceData {
         address: string;
         phone: string;
     };
-    taxRate: number;
 }

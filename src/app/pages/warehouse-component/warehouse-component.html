@@ -1,0 +1,24 @@
+    <app-h-table 
+        entityName="المخازن"
+        headerText="قائمة المخازن"
+        [keyColumns]="columnKeys"
+        [displayColumns]="columns"
+        [data]="warehouseList"
+        P_Key="id"
+
+        [enableActions]="true"
+        actionName="الإجراءات"
+        [actions]="actions"
+        (actionClick)="onTableAction($event)"
+
+        [enableAdd]="true"
+        addIcon="fa-solid fa-square-plus"
+        addText="إضافة مخزن جديد"
+        (onAddEvent)="addTransaction()"
+
+        [showPagination]="true"
+        [total]="pagination.totalCount"
+        (pageChangeEvent)="onPageChange($event)"
+        page="صفحة"
+        ItemPerPage="عدد العناصر في الصفحة">
+</app-h-table>

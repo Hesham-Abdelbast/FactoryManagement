@@ -17,7 +17,7 @@
   (onAddEvent)="addTransaction()"
 
   [showPagination]="true"
-  [total]="total"
+  [total]="pagination.totalCount"
   (pageChangeEvent)="onPageChange($event)"
   page="صفحة"
   ItemPerPage="عدد العناصر في الصفحة">

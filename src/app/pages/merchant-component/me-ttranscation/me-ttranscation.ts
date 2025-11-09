@@ -95,7 +95,7 @@ balance: number = 0;
             ...t,
             merchantName: this.getMerchantName(t.merchantId),
             materialTypeName: this.getMaterialTypeName(t.materialTypeId),
-            typeName: t.type === 1 ? 'وارد' : 'صادر',
+            typeName: t.type === 'Income' ? 'وارد' : 'صادر',
             totalAmount: t.quantity * t.pricePerUnit,
           }));
           this.total = res.data.length;
@@ -103,11 +103,11 @@ balance: number = 0;
           //                2000 1000 1000
         // ✅ Sum totals
         this.moneyToBePaid = this.transctionList
-          .filter(x => x.type === 1)                  // merchant sells to you
+          .filter(x => x.type === 'Income')                  // merchant sells to you
           .reduce((sum, t) => sum + t.quantity * t.pricePerUnit - t.amountPaid, 0);
 
         this.totalMoneyTaken = this.transctionList
-          .filter(x => x.type === 2)                  // merchant buys from you
+          .filter(x => x.type === 'Outcome')                  // merchant buys from you
           .reduce((sum, t) => sum + t.quantity * t.pricePerUnit - t.amountPaid, 0);
 
         this.balance = this.totalMoneyTaken - this.moneyToBePaid;
