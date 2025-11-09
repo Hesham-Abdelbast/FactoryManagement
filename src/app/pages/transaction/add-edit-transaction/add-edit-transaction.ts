@@ -6,6 +6,7 @@ import { TransactionServices } from '../../../core/Transaction/transaction-servi
 import { TransactionDto } from '../../../model/Transaction/transaction-dto';
 import { HModalComponent } from '../../../shared/Component/h-modal/h-modal.component';
 import { CommonModule } from '@angular/common';
+import { CreateTransactionDto } from '../../../model/Transaction/create-transaction-dto';
 
 @Component({
   selector: 'app-add-edit-transaction',
@@ -35,9 +36,9 @@ export class AddEditTransaction implements OnInit {
     this.isEditMode = this.data?.isEdit ?? false;
 
     this.transactionForm = this.fb.group({
-      id: [''],
       type: ['', Validators.required],
       materialTypeId: ['', Validators.required],
+      warehouseId: ['', Validators.required],
       merchantId: ['', Validators.required],
 
       carDriverName: [''],
@@ -49,7 +50,7 @@ export class AddEditTransaction implements OnInit {
       percentageOfImpurities: [0, [Validators.min(0), Validators.max(100)]],
       weightOfImpurities: [{ value: 0, disabled: true }],
 
-      pricePerUnit: [null, [Validators.required, Validators.min(1)]],
+      pricePerUnit: [null, [Validators.required, Validators.min(0.01)]],
       amountPaid: [0, [Validators.min(0)]],
 
       notes: ['', Validators.maxLength(500)],
@@ -57,7 +58,9 @@ export class AddEditTransaction implements OnInit {
 
     // ✅ Editing mode
     if (this.isEditMode && this.data.item) {
+      this.transactionForm.addControl('id', this.fb.control(this.data.item.id, Validators.required));
       this.transactionForm.patchValue(this.data.item);
+      console.log('Editing item:', this.data.item);
       this.recalculateQuantity();
       this.updateTotalAmount();
     }
@@ -84,7 +87,7 @@ export class AddEditTransaction implements OnInit {
 
     this.transactionForm.get('quantity')?.setValue(Number(net.toFixed(2)), { emitEvent: false });
     this.recalculateImpurities();
-    this.updateTotalAmount();
+    
   }
 
   recalculateImpurities() {
@@ -93,6 +96,10 @@ export class AddEditTransaction implements OnInit {
 
     const impurity = q * (p / 100);
     this.transactionForm.get('weightOfImpurities')?.setValue(Number(impurity.toFixed(2)), { emitEvent: false });
+
+    const net = q > impurity ? q - impurity : 0;
+    this.transactionForm.get('quantity')?.setValue(Number(net.toFixed(2)), { emitEvent: false });
+    this.updateTotalAmount();
   }
 
   updateTotalAmount() {
@@ -115,13 +122,12 @@ export class AddEditTransaction implements OnInit {
     return;
   }
 
-  const payload: TransactionDto = {
+  const payload: CreateTransactionDto = {
     ...this.transactionForm.getRawValue(),
-    totalAmount: this.totalAmount,
-    remainingAmount: this.remaining,
-    isFullyPaid: this.remaining <= 0
+    totalAmount: this.totalAmount
   };
-  payload.createDate = new Date().toISOString();
+  console.log('Payload:', payload);
+
   if (this.isEditMode) {
     this.service.update(payload).subscribe({
       next: (res: any) => this.handleResponse(res, true),

@@ -16,6 +16,9 @@ import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { InvoiceComponent } from './invoice-component/invoice-component';
 import { PaginationEntity } from '../../model/pagination-entity';
+import { WarehouseDto } from '../../model/Warehouse/warehouse-dto';
+import { WarehouseServices } from '../../core/Warehouse/warehouse-services';
+import { ViewTransactionComponent } from './view-transaction-component/view-transaction-component';
 
 @Component({
   selector: 'app-transaction',
@@ -30,7 +33,7 @@ export class Transaction implements OnInit {
     'نوع المعاملة',
     'نوع المادة',
     'الكمية',
-    'السعر للوحدة',
+    'المخزن',
     'الإجمالي',
     'التاجر',
     'المبلغ المدفوع',
@@ -40,7 +43,7 @@ export class Transaction implements OnInit {
     'typeName',
     'materialTypeName',
     'quantity',
-    'pricePerUnit',
+    'warehouseName',
     'totalAmount',
     'merchantName',
     'amountPaid',
@@ -50,14 +53,21 @@ export class Transaction implements OnInit {
   transctionList: TransactionDto[] = [];
   materialTypeLst: MaterialTypeVM[] = [];
   merchantLst: MerchantDto[] = [];
+  warehouseLst: WarehouseDto[] = [];
   pagination:PaginationEntity = {pageIndex:1,pageSize:10,totalCount:10};
   /** Table actions */
   actions: TableAction[] = [
     {
       icon: 'fa-solid fa-file-invoice-dollar',
       label: 'الفاتوره',
-      type: 'view',
+      type: 'invoice',
       style: 'btn btn-outline-primary btn-sm',
+    }, 
+     {
+      icon: 'fa-solid fa-eye',
+      label: 'التفاصيل',
+      type: 'view',
+      style: 'btn btn-outline-secondary btn-sm',
     }, {
       icon: 'fa fa-edit',
       label: 'تعديل',
@@ -78,6 +88,7 @@ export class Transaction implements OnInit {
     private toast: ToastService,
     private materialService: MaterialTypeServices,
     private merchantService: MerchantServices,
+    private warehouseService: WarehouseServices,
     private router: Router
   ) { }
 
@@ -89,13 +100,15 @@ export class Transaction implements OnInit {
   /** Load all lookup data (materials + merchants) */
   private async loadReferenceData(): Promise<void> {
     try {
-      const [matRes, merRes] = await Promise.all([
+      const [matRes, merRes,warRes] = await Promise.all([
         firstValueFrom(this.materialService.getAll()),
         firstValueFrom(this.merchantService.getAll()),
+        firstValueFrom(this.warehouseService.getAll()),
       ]);
 
       if (matRes?.success) this.materialTypeLst = matRes.data ?? [];
       if (merRes?.success) this.merchantLst = merRes.data ?? [];
+      if (warRes?.success) this.warehouseLst = warRes.data ?? [];
     } catch (err) {
       this.toast.error('فشل تحميل البيانات المرجعية.');
       console.error(err);
@@ -129,7 +142,8 @@ export class Transaction implements OnInit {
   onTableAction(event: { action: string; row: TransactionDto }): void {
     if (event.action === 'edit') this.editTransaction(event.row);
     if (event.action === 'delete') this.deleteTransaction(event.row.id);
-    if (event.action === 'view') this.viewTransaction(event.row.id);
+    if (event.action === 'invoice') this.InvoiceTransaction(event.row.id);
+    if (event.action === 'view') this.viewTransaction(event.row);
   }
 
   onPageChange(pageEvent: PageEvent): void {
@@ -148,6 +162,7 @@ export class Transaction implements OnInit {
         item: null,
         materialTypeLst: this.materialTypeLst,
         merchantLst: this.merchantLst,
+        warehouseLst: this.warehouseLst,
       },
     });
 
@@ -156,21 +171,27 @@ export class Transaction implements OnInit {
     });
   }
   
-  viewTransaction(id: string) {
-    console.log(id, 'iddddddddddddd')
-    const dialogRef = this.dialog.open(InvoiceComponent, {
+  InvoiceTransaction(id: string) {
+  this.dialog.open(InvoiceComponent, {
+    panelClass: 'invoice-dialog',
+    width: '100vw',
+    height: '100vh',
+    maxWidth: '100vw',
+    maxHeight: '100vh',
+    autoFocus: false,
+    data: { Id: id },
+  });
+}
+  viewTransaction(item: TransactionDto) {
+    this.dialog.open(ViewTransactionComponent, {
       width: 'auto',
       height:'90%',
       maxWidth: 'none',
       maxHeight: 'none',
       data: {
-        Id: id
+        item: item
       },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) this.loadTransactions();
-    });
+    })
   }
 
   editTransaction(item: TransactionDto): void {
@@ -182,6 +203,7 @@ export class Transaction implements OnInit {
         item,
         materialTypeLst: this.materialTypeLst,
         merchantLst: this.merchantLst,
+        warehouseLst: this.warehouseLst,
       },
     });
 

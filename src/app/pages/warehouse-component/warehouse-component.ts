@@ -72,7 +72,7 @@ export class WarehouseComponent {
     this.loadWarehouse();
   }
   public loadWarehouse(): void {
-    this.warehouseServices.getAll(this.pagination).subscribe({
+    this.warehouseServices.GetAllWithPagination(this.pagination).subscribe({
       next: (res: ApiResponse<WarehouseDto[]>) => {
         console.log(res,'res');
         if (res.success && res.data) {

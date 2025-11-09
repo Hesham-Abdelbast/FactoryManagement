@@ -44,6 +44,19 @@
           <div class="invalid-feedback text-end">التاجر مطلوب.</div>
         </div>
 
+         <!-- المخزن -->
+        <div class="col-md-6 text-end">
+          <label class="form-label fw-bold">المخزن <span class="text-danger">*</span></label>
+          <select formControlName="warehouseId" class="form-select text-end"
+            [ngClass]="{'is-invalid': invalid('warehouseId')}">
+            <option value="">-- اختر --</option>
+            @for (item of data.warehouseLst; track $index) {
+              <option [value]="item.id">{{ item.name }}</option>
+            }
+          </select>
+          <div class="invalid-feedback text-end">المخزن مطلوب.</div>
+        </div>
+
       </div>
 
       <hr>
@@ -61,7 +74,7 @@
 
         <!-- وزن السيارة بالحمولة -->
         <div class="col-md-6 text-end">
-          <label class="form-label fw-bold">وزن السيارة بالحمولة (كجم) <span class="text-danger">*</span></label>
+          <label class="form-label fw-bold">الوزن الكلى (كجم) <span class="text-danger">*</span></label>
           <input type="number" formControlName="carAndMatrerialWeight" class="form-control text-end"
             [ngClass]="{'is-invalid': invalid('carAndMatrerialWeight')}"
             (input)="recalculateQuantity()">
@@ -70,17 +83,11 @@
 
         <!-- وزن السيارة فارغة -->
         <div class="col-md-6 text-end">
-          <label class="form-label fw-bold">وزن السيارة فارغة (كجم) <span class="text-danger">*</span></label>
+          <label class="form-label fw-bold">الوزن الفارغ (كجم) <span class="text-danger">*</span></label>
           <input type="number" formControlName="carWeight" class="form-control text-end"
             [ngClass]="{'is-invalid': invalid('carWeight')}"
             (input)="recalculateQuantity()">
           <div class="invalid-feedback text-end">الوزن يجب أن يكون أكبر من الصفر.</div>
-        </div>
-
-        <!-- الكمية الناتجة -->
-        <div class="col-md-6 text-end">
-          <label class="form-label fw-bold">الكمية (صافي الحمولة)</label>
-          <input type="number" formControlName="quantity" class="form-control text-end" readonly>
         </div>
 
         <!-- نسبة الشوائب -->
@@ -94,6 +101,12 @@
         <div class="col-md-6 text-end">
           <label class="form-label">وزن الشوائب (كجم)</label>
           <input type="number" formControlName="weightOfImpurities" class="form-control text-end" readonly>
+        </div>
+
+        <!-- الكمية الناتجة -->
+        <div class="col-md-6 text-end">
+          <label class="form-label fw-bold">الوزن الصافي</label>
+          <input type="number" formControlName="quantity" class="form-control text-end" readonly>
         </div>
 
       </div>

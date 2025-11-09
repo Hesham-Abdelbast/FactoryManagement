@@ -86,3 +86,36 @@ body {
   --google-button-hover: #334155;
   --SideNavAdmin : linear-gradient(135deg, #2563eb, #3b82f6);
 }
+
+
+/* Target the overlay pane by its panelClass */
+.cdk-overlay-pane.invoice-dialog {
+  max-width: 100vw !important;
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+/* Remove default padding/radius from Material dialog */
+.invoice-dialog .mat-mdc-dialog-container {
+  padding: 0 !important;
+}
+.invoice-dialog .mat-mdc-dialog-surface {
+  border-radius: 0 !important;
+}
+
+/* Make inside scrollable if needed */
+.invoice-dialog .mat-mdc-dialog-content {
+  max-height: none !important;
+  padding: 0 !important;
+}
+
+/* Improve printing from a dialog */
+@media print {
+  .cdk-overlay-backdrop { display: none !important; }
+  .cdk-overlay-pane, .mat-mdc-dialog-container, .mat-mdc-dialog-surface {
+    position: static !important;
+    transform: none !important;
+    inset: auto !important;
+    overflow: visible !important;
+  }
+}

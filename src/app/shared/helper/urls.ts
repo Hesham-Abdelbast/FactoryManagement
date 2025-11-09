@@ -38,6 +38,7 @@ export class MerchantURLs{
 export class TransactionURLs{
   static readonly GetAll = Base_URL + 'api/Transactions/GetAll';
   static GetByID(id:string):string {return `${Base_URL}api/Transactions/GetById/${id}`};
+  static GetInvoiceById(id:string):string {return `${Base_URL}api/Transactions/GetInvoiceById/${id}`};
   static GetAllByMerchantId(id:string):string {return `${Base_URL}api/Transactions/GetAllByMerchantId/${id}`};
   static Delete(id:string):string {return `${Base_URL}api/Transactions/Delete/${id}`};
   static readonly Add = Base_URL + 'api/Transactions/Add';
@@ -59,6 +60,7 @@ export class StoreURLs{
 
 export class WarehouseURLs{
   static readonly GetAll = Base_URL + 'api/Warehouse/GetAll';
+  static readonly GetAllWithPagination = Base_URL + 'api/Warehouse/GetAllWithPagination';
   static GetByID(id:string):string {return `${Base_URL}api/Warehouse/GetById/${id}`};
   static Delete(id:string):string {return `${Base_URL}api/Warehouse/Delete/${id}`};
   static readonly Add = Base_URL + 'api/Warehouse/Add';

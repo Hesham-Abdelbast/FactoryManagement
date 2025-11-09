@@ -5,6 +5,8 @@ import { catchError, Observable, of } from 'rxjs';
 import { TransactionDto } from '../../model/Transaction/transaction-dto';
 import { TransactionURLs } from '../../shared/helper/urls';
 import { PaginationEntity } from '../../model/pagination-entity';
+import { CreateTransactionDto } from '../../model/Transaction/create-transaction-dto';
+import { InvoiceDto } from '../../model/Transaction/invoice-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -56,11 +58,26 @@ export class TransactionServices {
             )
           );
       }
-    
+    /**
+       * Fetch Transaction by ID
+       */
+      getInvoiceById(id: string): Observable<ApiResponse<InvoiceDto>> {
+        return this.baseService
+          .GetRequest<ApiResponse<InvoiceDto>>(TransactionURLs.GetInvoiceById(id))
+          .pipe(
+            catchError(error =>
+              this.handleError<InvoiceDto>(
+                `fetching Transaction by ID ${id}`,
+                error,
+                null
+              )
+            )
+          );
+      }
       /**
        * Add new Transaction
        */
-      add(materialType: TransactionDto): Observable<ApiResponse<string>> {
+      add(materialType: CreateTransactionDto): Observable<ApiResponse<string>> {
         return this.baseService
           .PostRequest<ApiResponse<string>>(TransactionURLs.Add, materialType)
           .pipe(
@@ -73,7 +90,7 @@ export class TransactionServices {
       /**
        * Update existing Transaction
        */
-      update(materialType: TransactionDto): Observable<ApiResponse<boolean>> {
+      update(materialType: CreateTransactionDto): Observable<ApiResponse<boolean>> {
         return this.baseService
           .PutRequest<ApiResponse<boolean>>(TransactionURLs.Update, materialType)
           .pipe(

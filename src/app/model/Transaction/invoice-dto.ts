@@ -1,11 +1,12 @@
-export interface TransactionDto {
-  id: string;
-  transactionIdentifier?: string;
+export interface InvoiceDto {
+  transactionIdentifier: string;
+
+  // Income / Outcome (Enum in backend)
   type: string;
-  materialTypeId: string;
+
   materialTypeName?: string;
 
-  // Truck
+  // Truck section
   carDriverName?: string;
   carAndMatrerialWeight: number;
   carWeight: number;
@@ -16,17 +17,17 @@ export interface TransactionDto {
   pricePerUnit: number;
   totalAmount: number;
 
-  merchantId: string;
   merchantName?: string;
-
-  warehouseId: string;
   warehouseName?: string;
-  
   notes?: string;
 
   amountPaid: number;
   remainingAmount: number;
   isFullyPaid: boolean;
 
-  createDate: string;
+  createDate: string; // DateTime from backend → string in TS
+
+  companyName: string;
+  companyAddress: string;
+  companyPhone: string;
 }

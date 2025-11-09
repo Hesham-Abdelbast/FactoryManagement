@@ -1,11 +1,12 @@
-export interface TransactionDto {
-  id: string;
-  transactionIdentifier?: string;
-  type: string;
-  materialTypeId: string;
-  materialTypeName?: string;
+export interface CreateTransactionDto {
+  id?: string; // Guid
 
-  // Truck
+  type: string; // Income / Outcome (Enum in backend)
+
+  materialTypeId: string;
+  warehouseId: string;
+
+  // Truck data
   carDriverName?: string;
   carAndMatrerialWeight: number;
   carWeight: number;
@@ -17,16 +18,7 @@ export interface TransactionDto {
   totalAmount: number;
 
   merchantId: string;
-  merchantName?: string;
-
-  warehouseId: string;
-  warehouseName?: string;
-  
   notes?: string;
 
   amountPaid: number;
-  remainingAmount: number;
-  isFullyPaid: boolean;
-
-  createDate: string;
 }

@@ -1,109 +1,168 @@
-<div class="container">
-  <header>
-    <div class="logo">{{ invoiceData.companyInfo.name }}</div>
-    <div class="invoice-title">
-      <h1>فاتورة</h1>
-      <p>معاملة رقم <span id="transaction-id">{{ invoiceData.transaction.id }}</span></p>
-    </div>
-  </header>
-  
-  <div class="invoice-details">
-    <div>
-      <h3 class="section-title">تفاصيل المعاملة</h3>
-      <div class="detail-row">
-        <div class="detail-label">معرف المعاملة:</div>
-        <div>{{ invoiceData.transaction.id }}</div>
+<ng-container *ngIf="!isLoading; else loadingTpl">
+  <div class="p-2 overflow-auto" dir="rtl" *ngIf="invoiceDto as inv; else noDataTpl">
+    <header>
+      <div class="logo">{{ inv.companyName }}</div>
+      <div class="invoice-title">
+        <h1>فاتورة</h1>
       </div>
-      <div class="detail-row">
-        <div class="detail-label">النوع:</div>
+    </header>
+
+    <div class="invoice-details">
+      <div>
+        <h3 class="section-title">تفاصيل المعاملة</h3>
+        <div class="detail-row">
+          <div class="detail-label">معرف المعاملة:</div>
+          <div>{{ inv.transactionIdentifier }}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">النوع:</div>
+          <div>
+            <span [class]="'transaction-type ' + getTransactionTypeClass()">
+              {{ getTransactionTypeText() }}
+            </span>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">التاريخ:</div>
+          <div>{{ formatDate(inv.createDate) }}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">نوع المادة:</div>
+          <div>{{ inv.materialTypeName || '-' }}</div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="section-title">الأطراف</h3>
+        <div class="detail-row">
+          <div class="detail-label">التاجر:</div>
+          <div>{{ inv.merchantName || '-' }}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">المخزن:</div>
+          <div>{{ inv.warehouseName || '-' }}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">الاتصال:</div>
+          <div>{{ inv.companyPhone || '-' }}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">العنوان:</div>
+          <div>{{ inv.companyAddress || '-' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Truck Details Section -->
+    <div class="truck-section">
+      <h3 class="section-title">تفاصيل الشاحنة</h3>
+      <div class="truck-grid">
         <div>
-          <span [class]="'transaction-type ' + getTransactionTypeClass()">
-            {{ getTransactionTypeText() }}
-          </span>
+          <div class="detail-row">
+            <div class="detail-label">اسم السائق:</div>
+            <div>{{ inv.carDriverName || '-' }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">الوزن الكلى:</div>
+            <div>{{ formatNumber(inv.carAndMatrerialWeight) }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">الوزن الفارغ:</div>
+            <div>{{ formatNumber(inv.carWeight) }}</div>
+          </div>
+          <!-- <div class="detail-row">
+            <div class="detail-label">الوزن الصافي:</div>
+            <div>{{ formatNumber(grossWeight) }}</div>
+          </div> -->
         </div>
-      </div>
-      <div class="detail-row">
-        <div class="detail-label">التاريخ:</div>
-        <div>{{ invoiceData.transaction.date }}</div>
-      </div>
-      <div class="detail-row">
-        <div class="detail-label">نوع المادة:</div>
-        <div>{{ invoiceData.transaction.materialType }}</div>
-      </div>
-    </div>
-    
-    <div>
-      <h3 class="section-title">الأطراف</h3>
-      <div class="detail-row">
-        <div class="detail-label">التاجر:</div>
-        <div>{{ invoiceData.transaction.merchant }}</div>
-      </div>
-      <div class="detail-row">
-        <div class="detail-label">الاتصال:</div>
-        <div>{{ invoiceData.transaction.merchantContact }}</div>
-      </div>
-      <div class="detail-row">
-        <div class="detail-label">العنوان:</div>
-        <div>{{ invoiceData.transaction.merchantAddress }}</div>
-      </div>
-    </div>
-  </div>
-  
-  <div style="padding: 0 30px;">
-    <h3 class="section-title">بنود المعاملة</h3>
-    <table class="items-table">
-      <thead>
-        <tr>
-          <th>الوصف</th>
-          <th>الكمية</th>
-          <th>سعر الوحدة</th>
-          <th class="text-left">المبلغ</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{ invoiceData.transaction.materialType }}</td>
-          <td>{{ formatNumber(invoiceData.transaction.quantity) }}</td>
-          <td>{{ formatCurrency(invoiceData.transaction.pricePerUnit) }}</td>
-          <td class="text-left">{{ formatCurrency(totalAmount) }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
-  <div class="total-section">
-    <div>
-      <h3 class="section-title">ملاحظات</h3>
-      <div class="notes">
-        {{ invoiceData.transaction.notes || 'لا توجد ملاحظات' }}
-      </div>
-    </div>
-    
-    <div>
-      <h3 class="section-title">ملخص المبالغ</h3>
-      <div class="amounts">
-        <div class="amount-row">
-          <div>المجموع الفرعي:</div>
-          <div>{{ formatCurrency(totalAmount) }}</div>
-        </div>
-        <div class="amount-row">
-          <div>المبلغ المدفوع:</div>
-          <div>{{ formatCurrency(invoiceData.transaction.amountPaid) }}</div>
-        </div>
-        <div class="amount-row total-row">
-          <div>الرصيد المستحق:</div>
-          <div>{{ formatCurrency(balanceDue) }}</div>
+
+        <div>
+          
+          <div class="detail-row">
+            <div class="detail-label">نسبة الشوائب:</div>
+            <div>{{ formatPercentage(inv.percentageOfImpurities) }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">وزن الشوائب:</div>
+            <div>{{ formatNumber(impuritiesWeight) }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">الوزن الصافي:</div>
+            <div>{{ formatNumber(netAfterImpurities) }}</div>
+          </div>
         </div>
       </div>
     </div>
+
+    <div style="padding: 0 30px;">
+      <h3 class="section-title">بنود المعاملة</h3>
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>الوصف</th>
+            <th>الكمية</th>
+            <th>سعر الوحدة</th>
+            <th class="text-left">المبلغ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ inv.materialTypeName || '-' }}</td>
+            <td>{{ formatNumber(inv.quantity) }}</td>
+            <td>{{ formatCurrency(inv.pricePerUnit) }}</td>
+            <td class="text-left">{{ formatCurrency(totalAmount) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="total-section">
+      <div>
+        <h3 class="section-title">ملاحظات</h3>
+        <div class="notes">
+          {{ inv.notes || 'لا توجد ملاحظات' }}
+        </div>
+      </div>
+
+      <div>
+        <h3 class="section-title">ملخص المبالغ</h3>
+        <div class="amounts">
+          <div class="amount-row">
+            <div>المجموع الفرعي:</div>
+            <div>{{ formatCurrency(totalAmount) }}</div>
+          </div>
+          <div class="amount-row">
+            <div>المبلغ المدفوع:</div>
+            <div>{{ formatCurrency(inv.amountPaid) }}</div>
+          </div>
+          <div class="amount-row total-row">
+            <div>الرصيد المستحق:</div>
+            <div>{{ formatCurrency(balanceDue) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn btn-primary" (click)="printInvoice()">طباعة الفاتورة</button>
+    </div>
+
+    <div class="footer">
+      <p>شكرًا لتعاملك معنا!</p>
+      <p>{{ inv.companyName }} • {{ inv.companyAddress }} • {{ inv.companyPhone }}</p>
+    </div>
   </div>
-  
-  <div class="action-buttons">
-    <button class="btn btn-primary" (click)="printInvoice()">طباعة الفاتورة</button>
+</ng-container>
+
+<ng-template #loadingTpl>
+  <div class="loading">
+    <div class="spinner"></div>
+    <div>جارٍ تحميل بيانات الفاتورة...</div>
   </div>
-  
-  <div class="footer">
-    <p>شكرًا لتعاملك معنا!</p>
-    <p>{{ invoiceData.companyInfo.name }} • {{ invoiceData.companyInfo.address }} • {{ invoiceData.companyInfo.phone }}</p>
+</ng-template>
+
+<ng-template #noDataTpl>
+  <div class="loading">
+    لا توجد بيانات لعرضها
   </div>
-</div>
+</ng-template>

@@ -15,9 +15,22 @@ export class WarehouseServices {
       /**
        * Fetch all Merchants
        */
-      getAll(data:PaginationEntity): Observable<ApiResponse<WarehouseDto[]>> {
+      getAll(): Observable<ApiResponse<WarehouseDto[]>> {
         return this.baseService
-          .PostRequest<ApiResponse<WarehouseDto[]>>(WarehouseURLs.GetAll,data)
+          .GetRequest<ApiResponse<WarehouseDto[]>>(WarehouseURLs.GetAll)
+          .pipe(
+            catchError(error =>
+              this.handleError<WarehouseDto[]>('fetching all Merchants', error, [])
+            )
+          );
+      }
+    
+      /**
+       * Fetch all Merchants
+       */
+      GetAllWithPagination(data:PaginationEntity): Observable<ApiResponse<WarehouseDto[]>> {
+        return this.baseService
+          .PostRequest<ApiResponse<WarehouseDto[]>>(WarehouseURLs.GetAllWithPagination,data)
           .pipe(
             catchError(error =>
               this.handleError<WarehouseDto[]>('fetching all Merchants', error, [])

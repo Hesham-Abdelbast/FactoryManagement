@@ -1,0 +1,152 @@
+<app-h-modal (closeEvent)="close()" [headerTitle]="'تفاصيل المعاملة'" >
+  <div class="container mt-2" dir="rtl">
+
+    <div class="card shadow p-4">
+
+      <!-- BASIC DATA -->
+      <h5 class="fw-bold mb-3 text-end">البيانات الأساسية</h5>
+
+      <div class="row g-3">
+
+        <div class="col-md-6 text-end">
+          <label class="form-label fw-bold">نوع المعاملة:</label>
+          <div class="border rounded p-2 bg-light">
+            {{ data?.item?.type === 'Income' ? 'وارد' : 'صادر' }}
+          </div>
+        </div>
+
+        <div class="col-md-6 text-end">
+          <label class="form-label fw-bold">نوع المادة:</label>
+          <div class="border rounded p-2 bg-light">
+            {{ data?.item?.materialTypeName || '-' }}
+          </div>
+        </div>
+
+        <div class="col-md-6 text-end">
+          <label class="form-label fw-bold">التاجر:</label>
+          <div class="border rounded p-2 bg-light">
+            {{ data?.item?.merchantName || '-' }}
+          </div>
+        </div>
+
+        <div class="col-md-6 text-end">
+          <label class="form-label fw-bold">المخزن:</label>
+          <div class="border rounded p-2 bg-light">
+            {{ data?.item?.warehouseName || '-' }}
+          </div>
+        </div>
+
+      </div>
+
+      <hr>
+
+      <!-- TRUCK DETAILS -->
+      <h5 class="fw-bold mb-3 text-end">بيانات الشاحنة</h5>
+
+      <div class="row g-3">
+
+        <div class="col-md-6 text-end">
+          <label class="form-label">اسم السائق:</label>
+          <div class="border rounded p-2 bg-light">
+            {{ data?.item?.carDriverName || '-' }}
+          </div>
+        </div>
+
+        <div class="col-md-6 text-end">
+          <label class="form-label">الوزن الكلي (كجم):</label>
+          <div class="border rounded p-2 bg-light">
+            {{ data?.item?.carAndMatrerialWeight | number:'1.2-2' }}
+          </div>
+        </div>
+
+        <div class="col-md-6 text-end">
+          <label class="form-label">وزن السيارة فارغة (كجم):</label>
+          <div class="border rounded p-2 bg-light">
+            {{ data?.item?.carWeight | number:'1.2-2' }}
+          </div>
+        </div>
+
+        <div class="col-md-6 text-end">
+          <label class="form-label">نسبة الشوائب:</label>
+          <div class="border rounded p-2 bg-light">
+            {{ data?.item?.percentageOfImpurities }} %
+          </div>
+        </div>
+
+        <div class="col-md-6 text-end">
+          <label class="form-label">وزن الشوائب:</label>
+          <div class="border rounded p-2 bg-light">
+            {{ data?.item?.weightOfImpurities | number:'1.2-2' }}
+          </div>
+        </div>
+
+        <div class="col-md-6 text-end">
+          <label class="form-label fw-bold">الوزن الصافي:</label>
+          <div class="border rounded p-2 bg-light">
+            {{ data?.item?.quantity | number:'1.2-2' }}
+          </div>
+        </div>
+
+      </div>
+
+      <hr>
+
+      <!-- FINANCIAL -->
+      <h5 class="fw-bold mb-3 text-end">المالية</h5>
+
+      <div class="row g-3">
+
+        <div class="col-md-6 text-end">
+          <label class="form-label">السعر للوحدة:</label>
+          <div class="border rounded p-2 bg-light">
+            {{ data?.item?.pricePerUnit | number:'1.2-2' }}
+          </div>
+        </div>
+
+        <div class="col-md-6 text-end">
+          <label class="form-label fw-bold">الإجمالي:</label>
+          <div class="border rounded p-2 bg-light fw-bold">
+            {{ data?.item?.totalAmount | number:'1.2-2' }}
+          </div>
+        </div>
+
+        <div class="col-md-6 text-end">
+          <label class="form-label">المدفوع:</label>
+          <div class="border rounded p-2 bg-light">
+            {{ data?.item?.amountPaid | number:'1.2-2' }}
+          </div>
+        </div>
+
+        <div class="col-md-6 text-end">
+          <label class="form-label">المتبقي:</label>
+          <div class="border rounded p-2 bg-light">
+            {{ (data?.item?.totalAmount - data?.item?.amountPaid) | number:'1.2-2' }}
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTES -->
+      <div class="mt-3 text-end">
+        <label class="form-label">ملاحظات:</label>
+        <div class="border rounded p-2 bg-light" style="min-height: 60px">
+          {{ data?.item?.notes || '-' }}
+        </div>
+      </div>
+
+      <!-- DATE -->
+      <div class="mt-3 text-end">
+        <label class="form-label">تاريخ الإنشاء:</label>
+        <div class="border rounded p-2 bg-light">
+          {{ data?.item?.createDate | date:'yyyy-MM-dd HH:mm' }}
+        </div>
+      </div>
+
+      <!-- BUTTON -->
+      <div class="d-flex justify-content-end mt-4">
+        <button class="btn btn-secondary" type="button" (click)="close()">إغلاق</button>
+      </div>
+
+    </div>
+
+  </div>
+</app-h-modal>
