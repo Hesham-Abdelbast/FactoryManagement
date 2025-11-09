@@ -1,150 +1,150 @@
-import { Component, Inject, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TransactionDto } from '../../../model/Transaction/transaction-dto';
-import { MaterialTypeVM } from '../../../model/MaterialType/material-type-vm';
-import { MerchantDto } from '../../../model/Merchant/merchant-dto';
-import { TransactionServices } from '../../../core/Transaction/transaction-services';
 import { ToastService } from '../../../core/shared/toast.service';
+import { TransactionServices } from '../../../core/Transaction/transaction-services';
+import { TransactionDto } from '../../../model/Transaction/transaction-dto';
 import { HModalComponent } from '../../../shared/Component/h-modal/h-modal.component';
-import { ApiResponse } from '../../../model/api-response';
-
-interface DialogData {
-  isEdit: boolean;
-  item: TransactionDto | null;
-  materialTypeLst: MaterialTypeVM[];
-  merchantLst: MerchantDto[];
-}
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-edit-transaction',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HModalComponent],
   templateUrl: './add-edit-transaction.html',
-  styleUrls: ['./add-edit-transaction.scss'],
+  styleUrl: './add-edit-transaction.scss',
+  imports: [CommonModule, ReactiveFormsModule, HModalComponent]
 })
 export class AddEditTransaction implements OnInit {
-  transactionForm!: FormGroup;
 
+  transactionForm!: FormGroup;
   isEditMode = false;
-  materialTypeLst: MaterialTypeVM[] = [];
-  merchantLst: MerchantDto[] = [];
+  loading = false;
+
+  totalAmount = 0;
+  remaining = 0;
 
   constructor(
     private fb: FormBuilder,
-    private transactionService: TransactionServices,
+    private service: TransactionServices,
     private toast: ToastService,
     private dialogRef: MatDialogRef<AddEditTransaction>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private cdr: ChangeDetectorRef
-  ) {
-    this.transactionForm = this.fb.group({});
-  }
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
   ngOnInit(): void {
+
     this.isEditMode = this.data?.isEdit ?? false;
-    this.materialTypeLst = this.data.materialTypeLst ?? [];
-    this.merchantLst = this.data.merchantLst ?? [];
 
-    this.createForm();
-  }
+    this.transactionForm = this.fb.group({
+      id: [''],
+      type: ['', Validators.required],
+      materialTypeId: ['', Validators.required],
+      merchantId: ['', Validators.required],
 
-  /** Create or initialize form */
-  createForm(): void {
-    const transaction: TransactionDto | null = this.data.item;
+      carDriverName: [''],
+
+      carAndMatrerialWeight: [null, [Validators.required, Validators.min(1)]],
+      carWeight: [null, [Validators.required, Validators.min(1)]],
+
+      quantity: [{ value: 0, disabled: true }],
+      percentageOfImpurities: [0, [Validators.min(0), Validators.max(100)]],
+      weightOfImpurities: [{ value: 0, disabled: true }],
+
+      pricePerUnit: [null, [Validators.required, Validators.min(1)]],
+      amountPaid: [0, [Validators.min(0)]],
+
+      notes: ['', Validators.maxLength(500)],
+    });
+
+    // ✅ Editing mode
     if (this.isEditMode && this.data.item) {
-      this.transactionForm = this.fb.group({
-        id: [transaction?.id ?? null],
-        type: [transaction?.type, Validators.required],
-        transactionIdentifier:[transaction?.transactionIdentifier],
-        materialTypeId: [transaction?.materialTypeId ?? '', Validators.required],
-        quantity: [transaction?.quantity ?? 0, [Validators.required, Validators.min(0.01)]],
-        pricePerUnit: [transaction?.pricePerUnit ?? 0, [Validators.required, Validators.min(0.01)]],
-        merchantId: [transaction?.merchantId ?? '', Validators.required],
-        notes: [transaction?.notes ?? '', [Validators.maxLength(500)]],
-        amountPaid: [transaction?.amountPaid ?? 0, [Validators.min(0)]],
-      });
+      this.transactionForm.patchValue(this.data.item);
+      this.recalculateQuantity();
+      this.updateTotalAmount();
     }
-    else {
-      this.transactionForm = this.fb.group({
-        id: [null],
-        type: ['', Validators.required],
-        transactionIdentifier:[''],
-        materialTypeId: ['', Validators.required],
-        quantity: [, [Validators.required, Validators.min(0.01)]],
-        pricePerUnit: [, [Validators.required, Validators.min(0.01)]],
-        merchantId: ['', Validators.required],
-        notes: ['', [Validators.maxLength(500)]],
-        amountPaid: [, [Validators.min(0)]],
-      });
-    }
-
-    console.log(transaction)
-
-    // trigger CD after patch to avoid ExpressionChanged error
-    this.cdr.detectChanges();
   }
 
-  /** Compute total */
-  get totalAmount(): number {
-    const q = this.transactionForm.get('quantity')?.value || 0;
-    const p = this.transactionForm.get('pricePerUnit')?.value || 0;
-    return +(q * p).toFixed(2);
+  // ✅ Helper: avoid NaN
+  numeric(val: any): number {
+    const v = Number(val);
+    return isNaN(v) || v < 0 ? 0 : v;
   }
 
-  /** Handle submit */
-  onSubmit(): void {
-    if (this.transactionForm.invalid) {
-      this.transactionForm.markAllAsTouched();
-      return;
-    }
-
-    const transaction: TransactionDto = {
-      ...this.transactionForm.value,
-      type: Number(this.transactionForm.value.type),
-    };
-
-    this.isEditMode ? this.update(transaction) : this.create(transaction);
+  invalid(control: string): boolean {
+    const c = this.transactionForm.get(control);
+    return !!(c && c.touched && c.invalid);
   }
 
-  /** Create transaction */
-  private create(transaction: TransactionDto): void {
-    this.transactionService.add(transaction).subscribe({
-      next: (res: ApiResponse<string>) => {
-        if (res.success) {
-          this.toast.success('تم إضافة المعاملة بنجاح.');
-          this.dialogRef.close(true);
-        } else {
-          this.toast.error('فشل في إضافة المعاملة.');
-        }
-      },
-      error: () => {
-        this.toast.error('حدث خطأ أثناء إضافة المعاملة.');
-      },
+  // ✅ Quantity recalculation with check
+  recalculateQuantity() {
+    const total = this.numeric(this.transactionForm.get('carAndMatrerialWeight')?.value);
+    const empty = this.numeric(this.transactionForm.get('carWeight')?.value);
+
+    // Prevent empty > loaded
+    const net = total > empty ? total - empty : 0;
+
+    this.transactionForm.get('quantity')?.setValue(Number(net.toFixed(2)), { emitEvent: false });
+    this.recalculateImpurities();
+    this.updateTotalAmount();
+  }
+
+  recalculateImpurities() {
+    const q = this.numeric(this.transactionForm.get('quantity')?.value);
+    const p = this.numeric(this.transactionForm.get('percentageOfImpurities')?.value);
+
+    const impurity = q * (p / 100);
+    this.transactionForm.get('weightOfImpurities')?.setValue(Number(impurity.toFixed(2)), { emitEvent: false });
+  }
+
+  updateTotalAmount() {
+    const quantity = this.numeric(this.transactionForm.get('quantity')?.value);
+    const price = this.numeric(this.transactionForm.get('pricePerUnit')?.value);
+
+    this.totalAmount = Number((quantity * price).toFixed(2));
+    this.updateRemaining();
+  }
+
+  updateRemaining() {
+    const paid = this.numeric(this.transactionForm.get('amountPaid')?.value);
+    this.remaining = Number((this.totalAmount - paid).toFixed(2));
+  }
+
+  onSubmit() {
+  if (this.transactionForm.invalid) {
+    this.transactionForm.markAllAsTouched();
+    this.toast.error("الرجاء تعبئة البيانات المطلوبة بشكل صحيح");
+    return;
+  }
+
+  const payload: TransactionDto = {
+    ...this.transactionForm.getRawValue(),
+    totalAmount: this.totalAmount,
+    remainingAmount: this.remaining,
+    isFullyPaid: this.remaining <= 0
+  };
+  payload.createDate = new Date().toISOString();
+  if (this.isEditMode) {
+    this.service.update(payload).subscribe({
+      next: (res: any) => this.handleResponse(res, true),
+      error: () => this.toast.error('حدث خطأ أثناء الاتصال بالخادم')
+    });
+  } else {
+    this.service.add(payload).subscribe({
+      next: (res: any) => this.handleResponse(res, false),
+      error: () => this.toast.error('حدث خطأ أثناء الاتصال بالخادم')
     });
   }
+}
 
-  /** Update transaction */
-  private update(transaction: TransactionDto): void {
-    if (!transaction.id) transaction.id = this.data.item?.id ?? '';
-
-    this.transactionService.update(transaction).subscribe({
-      next: (res: ApiResponse<boolean>) => {
-        if (res.success) {
-          this.toast.success('تم تعديل المعاملة بنجاح.');
-          this.dialogRef.close(true);
-        } else {
-          this.toast.error('فشل في تحديث المعاملة.');
-        }
-      },
-      error: () => {
-        this.toast.error('حدث خطأ أثناء تحديث المعاملة.');
-      },
-    });
+private handleResponse(res: any, isEdit: boolean) {
+  if (res.success) {
+    this.toast.success(isEdit ? 'تم التحديث بنجاح' : 'تم الحفظ بنجاح');
+    this.dialogRef.close(true);
+  } else {
+    this.toast.error(res.returnMsg || 'فشل العملية');
   }
+}
 
-  close(): void {
+  close() {
     this.dialogRef.close(false);
   }
 }

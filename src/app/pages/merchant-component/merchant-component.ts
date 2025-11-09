@@ -8,6 +8,7 @@ import { ApiResponse } from '../../model/api-response';
 import { HTableComponent } from '../../shared/Component/h-table/h-table.component';
 import { PageEvent } from '../../model/page-event';
 import { MatDialog } from '@angular/material/dialog';
+import { MeTtranscation } from './me-ttranscation/me-ttranscation';
 
 @Component({
   selector: 'app-merchant-component',
@@ -42,6 +43,13 @@ columnKeys = ['name', 'phone', 'email', 'address'];
   /** إجراءات الجدول */
   actions: TableAction[] = [
     {
+      icon: 'fa fa-show',
+      iconColor: '',
+      label: 'معاملاتي',
+      type: 'show',
+      style: 'btn btn-outline-primary btn-sm'
+    },
+    {
       icon: 'fa fa-edit',
       iconColor: '',
       label: 'تعديل',
@@ -60,6 +68,9 @@ columnKeys = ['name', 'phone', 'email', 'address'];
   /** التعامل مع الأحداث من الجدول */
   onTableAction(event: { action: string; row: MerchantDto }) {
     switch (event.action) {
+      case 'show':
+        this.show(event.row.id);
+        break;
       case 'edit':
         this.editMerchant(event.row);
         break;
@@ -90,6 +101,17 @@ columnKeys = ['name', 'phone', 'email', 'address'];
     });
   }
 
+  /** عرض المعاملات الخاصة بالتاجر */
+  show(id: string) {
+    this.dialog.open(MeTtranscation, {
+      width: '900px',
+      height: 'auto',
+      maxHeight: '90vh',
+      maxWidth: '100%',
+      data: { merchantID: id }
+
+    });
+  }
   /** تعديل نوع مادة */
   editMerchant(item: MerchantDto) {
     console.log(item)

@@ -4,6 +4,7 @@ import { ApiResponse } from '../../model/api-response';
 import { catchError, Observable, of } from 'rxjs';
 import { TransactionDto } from '../../model/Transaction/transaction-dto';
 import { TransactionURLs } from '../../shared/helper/urls';
+import { PaginationEntity } from '../../model/pagination-entity';
 
 @Injectable({
   providedIn: 'root'
@@ -14,16 +15,31 @@ export class TransactionServices {
       /**
        * Fetch all Transactions
        */
-      getAll(): Observable<ApiResponse<TransactionDto[]>> {
+      getAll(pagination:PaginationEntity): Observable<ApiResponse<TransactionDto[]>> {
         return this.baseService
-          .GetRequest<ApiResponse<TransactionDto[]>>(TransactionURLs.GetAll)
+          .PostRequest<ApiResponse<TransactionDto[]>>(TransactionURLs.GetAll,pagination)
           .pipe(
             catchError(error =>
               this.handleError<TransactionDto[]>('fetching all Transactions', error, [])
             )
           );
       }
-    
+    /**
+       * Fetch Transaction by ID
+       */
+      GetAllByMerchantId(id: string): Observable<ApiResponse<TransactionDto[]>> {
+        return this.baseService
+          .GetRequest<ApiResponse<TransactionDto[]>>(TransactionURLs.GetAllByMerchantId(id))
+          .pipe(
+            catchError(error =>
+              this.handleError<TransactionDto[]>(
+                `fetching Transaction by ID ${id}`,
+                error,
+                null
+              )
+            )
+          );
+      }
       /**
        * Fetch Transaction by ID
        */

@@ -1,0 +1,52 @@
+<div class="store-container">
+  <!-- Header Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="page-title">
+          <i class="fas fa-warehouse me-2"></i>
+          مخزون المواد
+        </h2>
+
+      </div>
+    </div>
+  </div>
+  <div class="row g-3">
+
+    <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *ngFor="let item of materialStocks">
+      <div class="material-card" [class]="getStockStatus(item.currentQuantity)">
+        <div class="card-header">
+          <h5 class="material-name">
+            <i class="fas fa-box me-2"></i>
+            {{ item.materialTypeName || 'غير معروف' }}
+          </h5>
+          <span class="stock-badge" [class]="getStockStatus(item.currentQuantity)">
+            {{ getStockStatusText(item.currentQuantity) }}
+          </span>
+        </div>
+
+        <div class="card-body">
+          <div class="quantity-section">
+            <p class="quantity-label">الكمية الحالية</p>
+            <h3 class="quantity-value">{{ item.currentQuantity || 0 }}</h3>
+          </div>
+
+          <div class="stock-indicator">
+            <div class="progress">
+              <div class="progress-bar" [class]="getStockStatus(item.currentQuantity)"
+                [style.width.%]="getStockPercentage(item.currentQuantity)">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <small class="text-muted">
+            آخر تحديث: {{ getCurrentTime() }}
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

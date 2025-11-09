@@ -15,6 +15,7 @@ import { MerchantServices } from '../../core/Merchant/merchant-services';
 import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { InvoiceComponent } from './invoice-component/invoice-component';
+import { PaginationEntity } from '../../model/pagination-entity';
 
 @Component({
   selector: 'app-transaction',
@@ -49,7 +50,7 @@ export class Transaction implements OnInit {
   transctionList: TransactionDto[] = [];
   materialTypeLst: MaterialTypeVM[] = [];
   merchantLst: MerchantDto[] = [];
-  total = 0;
+  pagination:PaginationEntity = {pageIndex:1,pageSize:10,totalCount:10};
   /** Table actions */
   actions: TableAction[] = [
     {
@@ -103,18 +104,17 @@ export class Transaction implements OnInit {
 
   /** Load all transactions */
   public loadTransactions(): void {
-    this.transactionServices.getAll().subscribe({
+    this.transactionServices.getAll(this.pagination).subscribe({
       next: (res: ApiResponse<TransactionDto[]>) => {
         if (res.success && res.data) {
+          console.log(res,'res');
           this.transctionList = res.data.map((t) => ({
             ...t,
-            merchantName: this.getMerchantName(t.merchantId),
-            materialTypeName: this.getMaterialTypeName(t.materialTypeId),
-            typeName: t.type === 1 ? 'وارد' : 'صادر',
+            typeName: t.type === 'Income' ? 'وارد' : 'صادر',
             totalAmount: t.quantity * t.pricePerUnit,
           }));
 
-          this.total = this.transctionList.length;
+          this.pagination.totalCount = res.totalCount ?? 0;
         } else {
           this.toast.error('فشل تحميل المعاملات.');
         }
@@ -125,16 +125,6 @@ export class Transaction implements OnInit {
       },
     });
   }
-
-  /** Safe lookup helpers */
-  private getMerchantName(id: string): string {
-    return this.merchantLst.find((x) => x.id === id)?.name ?? 'غير معروف';
-  }
-
-  private getMaterialTypeName(id: string): string {
-    return this.materialTypeLst.find((x) => x.id === id)?.name ?? 'غير معروف';
-  }
-
   /** Table Actions */
   onTableAction(event: { action: string; row: TransactionDto }): void {
     if (event.action === 'edit') this.editTransaction(event.row);
@@ -143,17 +133,16 @@ export class Transaction implements OnInit {
   }
 
   onPageChange(pageEvent: PageEvent): void {
-    const start = (pageEvent.pageIndex - 1) * pageEvent.pageSize;
-    const end = start + pageEvent.pageSize;
-    console.log(`عرض البيانات من ${start} إلى ${end}`);
+    this.pagination.pageIndex = pageEvent.pageIndex + 1;
+    this.pagination.pageSize = pageEvent.pageSize;
+    this.loadTransactions();
   }
 
   /** Add / Edit / Delete / view logic */
   addTransaction(): void {
     const dialogRef = this.dialog.open(AddEditTransaction, {
-      width: '900px',
+      maxWidth: '60vw',
       maxHeight: '90vh',
-      disableClose: true,
       data: {
         isEdit: false,
         item: null,
@@ -166,27 +155,28 @@ export class Transaction implements OnInit {
       if (result) this.loadTransactions();
     });
   }
+  
   viewTransaction(id: string) {
+    console.log(id, 'iddddddddddddd')
     const dialogRef = this.dialog.open(InvoiceComponent, {
-      width: '900px',
-      height:'100%',
+      width: 'auto',
+      height:'90%',
+      maxWidth: 'none',
       maxHeight: 'none',
       data: {
-        id: id
+        Id: id
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) this.loadTransactions();
     });
-    // this.router.navigate(['invoice', id]);
   }
 
   editTransaction(item: TransactionDto): void {
     const dialogRef = this.dialog.open(AddEditTransaction, {
       width: '900px',
       maxHeight: '90vh',
-      disableClose: true,
       data: {
         isEdit: true,
         item,
@@ -199,7 +189,6 @@ export class Transaction implements OnInit {
       if (result) this.loadTransactions();
     });
   }
-
 
   deleteTransaction(id: string): void {
     this.toast.confirm('هل أنت متأكد من حذف هذا النوع؟', 'نعم', 'إلغاء').then((confirmed) => {

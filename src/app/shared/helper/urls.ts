@@ -1,4 +1,4 @@
-export const Base_URL = 'http://localhost:5000/';
+export const Base_URL = 'https://localhost:44308/';
 
 export const URLs = {
   LOGIN: 'login',
@@ -38,6 +38,7 @@ export class MerchantURLs{
 export class TransactionURLs{
   static readonly GetAll = Base_URL + 'api/Transactions/GetAll';
   static GetByID(id:string):string {return `${Base_URL}api/Transactions/GetById/${id}`};
+  static GetAllByMerchantId(id:string):string {return `${Base_URL}api/Transactions/GetAllByMerchantId/${id}`};
   static Delete(id:string):string {return `${Base_URL}api/Transactions/Delete/${id}`};
   static readonly Add = Base_URL + 'api/Transactions/Add';
   static readonly Update = Base_URL + 'api/Transactions/Update';
@@ -46,4 +47,20 @@ export class TransactionURLs{
 export class ContactURLs{
   static readonly GetContact = Base_URL + 'api/Contact/GetContact';
   static readonly Update = Base_URL + 'api/Contact/Update';
+}
+
+export class StoreURLs{
+  static readonly GetAll = Base_URL + 'api/Store/GetAll';
+  static GetByID(id:string):string {return `${Base_URL}api/Store/GetById/${id}`};
+  static Delete(id:string):string {return `${Base_URL}api/Store/Delete/${id}`};
+  static readonly Add = Base_URL + 'api/Store/Add';
+  static readonly Update = Base_URL + 'api/Store/Update';
+}
+
+export class WarehouseURLs{
+  static readonly GetAll = Base_URL + 'api/Warehouse/GetAll';
+  static GetByID(id:string):string {return `${Base_URL}api/Warehouse/GetById/${id}`};
+  static Delete(id:string):string {return `${Base_URL}api/Warehouse/Delete/${id}`};
+  static readonly Add = Base_URL + 'api/Warehouse/Add';
+  static readonly Update = Base_URL + 'api/Warehouse/Update';
 }

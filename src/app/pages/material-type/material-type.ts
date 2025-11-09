@@ -107,6 +107,11 @@ export class MaterialType implements OnInit {
     });
   }
 
+  /** تعديل نوع مادة */
+  editMaterialWight(item: MaterialTypeVM) {
+    console.log(item)
+  }
+  
   /** حذف نوع مادة */
   deleteMaterialType(id: string) {
     console.log(id)
