@@ -5,4 +5,5 @@ export interface AllTransByMerchantDto {
   totalMoneyProcessed: number;
   totalMoneypay: number;
   totalWight: number;
+  totalImpurities: number;
 }

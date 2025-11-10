@@ -30,6 +30,7 @@ export class MeTtranscation implements OnInit{
   totalMoneyTaken = 0;
   moneyToBePaid = 0;
   totalWight = 0;
+  totalImp = 0;
   titleName = 'معاملات ';
 balance: number = 0;
   total = 0;
@@ -83,6 +84,7 @@ balance: number = 0;
           this.totalMoneyTaken = res.data.totalMoneypay
           this.moneyToBePaid = res.data.totalMoneyProcessed
           this.totalWight = res.data.totalWight;
+          this.totalImp = res.data.totalImpurities;
           this.balance = this.moneyToBePaid - this.totalMoneyTaken;
           this.titleName = `معاملات ${this.orginalTransctionList[0]?.merchantName || ''}`;
           this.cdr.markForCheck();

@@ -61,10 +61,9 @@ export class InvoiceComponent implements OnInit{
       });
   }
 
-
   formatPercentage(value?: number): string {
     const v = value ?? 0;
-    return `${v.toLocaleString('ar-EG', { maximumFractionDigits: 2 })}%`;
+    return `${v.toLocaleString('en-US', { maximumFractionDigits: 2 })}%`;
   }
 
   formatDate(dateStr?: string): string {
@@ -72,14 +71,14 @@ export class InvoiceComponent implements OnInit{
     const d = new Date(dateStr);
     return isNaN(d.getTime())
       ? dateStr
-      : d.toLocaleString('ar-EG', {
+      : d.toLocaleString('en-US', {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
           hour: '2-digit',
           minute: '2-digit',
         });
-  }
+   }
 
   // Computed UI helpers
   getTransactionTypeText(): string {

@@ -29,6 +29,29 @@
           </h4>
         </div>
       </div>
+
+      <div class="col-12 col-md-4 mb-3">
+        <div class="card shadow-sm text-center p-3" [ngClass]="balance >= 0 ? 'border-success' : 'border-danger'">
+
+          <h6 class="fw-bold text-secondary"> اجمالي المعدن</h6>
+
+          <h4 [ngClass]="balance >= 0 ? 'text-success' : 'text-danger'" class="fw-bold">
+            {{ totalWight | number }}
+          </h4>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4 mb-3">
+        <div class="card shadow-sm text-center p-3" [ngClass]="balance >= 0 ? 'border-success' : 'border-danger'">
+
+          <h6 class="fw-bold text-secondary"> اجمالي الشوائب</h6>
+
+          <h4 [ngClass]="balance >= 0 ? 'text-success' : 'text-danger'" class="fw-bold">
+            {{ totalImp | number }}
+          </h4>
+        </div>
+      </div>
+
     </div>
 
     <app-h-table 

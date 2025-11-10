@@ -57,44 +57,51 @@
 
     <!-- Truck Details Section -->
     <div class="truck-section">
-      <h3 class="section-title">تفاصيل الشاحنة</h3>
-      <div class="truck-grid">
-        <div>
-          <div class="detail-row">
-            <div class="detail-label">اسم السائق:</div>
-            <div>{{ inv.carDriverName || '-' }}</div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">الوزن الكلى:</div>
-            <div>{{ inv.carAndMatrerialWeight| number}}</div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">الوزن الفارغ:</div>
-            <div>{{ inv.carWeight| number}}</div>
-          </div>
-          <!-- <div class="detail-row">
-            <div class="detail-label">الوزن الصافي:</div>
-            <div>{{ formatNumber(grossWeight) }}</div>
-          </div> -->
-        </div>
+  <h3 class="section-title">تفاصيل الشاحنة</h3>
 
-        <div>
-          
-          <div class="detail-row">
-            <div class="detail-label">نسبة الشوائب:</div>
-            <div>{{ formatPercentage(inv.percentageOfImpurities) }}</div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">وزن الشوائب:</div>
-            <div>{{ impuritiesWeight | number }}</div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">الوزن الصافي:</div>
-            <div>{{ netAfterImpurities| number }}</div>
-          </div>
-        </div>
-      </div>
+  <!-- First Row: 3 items -->
+  <div class="truck-details-row">
+    <div class="detail-item">
+      <div class="detail-label">اسم السائق:</div>
+      <div class="detail-value">{{ inv.carDriverName || '-' }}</div>
     </div>
+
+    <div class="detail-item">
+      <div class="detail-label">الوزن الكلى:</div>
+      <div class="detail-value">{{ inv.carAndMatrerialWeight | number }}</div>
+    </div>
+
+    <div class="detail-item">
+      <div class="detail-label">الوزن الفارغ:</div>
+      <div class="detail-value">{{ inv.carWeight | number }}</div>
+    </div>
+  </div>
+
+  <!-- Second Row: 2 items -->
+  <div class="truck-details-row">
+    <div class="detail-item">
+      <div class="detail-label">نسبة الشوائب:</div>
+      <div class="detail-value">{{ formatPercentage(inv.percentageOfImpurities) }}</div>
+    </div>
+
+    <div class="detail-item">
+      <div class="detail-label">وزن الشوائب:</div>
+      <div class="detail-value">{{ impuritiesWeight | number }}</div>
+    </div>
+  </div>
+
+  <!-- Third Row: 1 item -->
+  <div class="truck-details-row">
+    <div class="detail-item full-width">
+      <div class="detail-label">الوزن الصافي:</div>
+      <div class="detail-value">{{ netAfterImpurities | number }}</div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
     <div style="padding: 0 30px;">
       <h3 class="section-title">بنود المعاملة</h3>
@@ -104,7 +111,7 @@
             <th>الوصف</th>
             <th>الكمية</th>
             <th>سعر الوحدة</th>
-            <th class="text-left">المبلغ</th>
+            <th class="text-center">المبلغ</th>
           </tr>
         </thead>
         <tbody>
@@ -112,7 +119,7 @@
             <td>{{ inv.materialTypeName || '-' }}</td>
             <td>{{ inv.quantity| number }}</td>
             <td>{{ inv.pricePerUnit | number}}</td>
-            <td class="text-left">{{ totalAmount| number }}</td>
+            <td class="text-center">{{ totalAmount| number }}</td>
           </tr>
         </tbody>
       </table>
@@ -129,17 +136,17 @@
       <div>
         <h3 class="section-title">ملخص المبالغ</h3>
         <div class="amounts">
-          <div class="amount-row">
+          <div class="amount-row لاخق">
             <div>المجموع الفرعي:</div>
-            <div>{{ totalAmount | number}}</div>
+            <div>{{ totalAmount | number}} دل</div>
           </div>
           <div class="amount-row">
             <div>المبلغ المدفوع:</div>
-            <div>{{inv.amountPaid| number}}</div>
+            <div>{{inv.amountPaid| number}} دل</div>
           </div>
           <div class="amount-row total-row">
             <div>الرصيد المستحق:</div>
-            <div>{{balanceDue| number}}</div>
+            <div>{{balanceDue| number}} دل</div>
           </div>
         </div>
       </div>

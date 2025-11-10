@@ -103,11 +103,6 @@ header {
   border-top: 1px solid #eee;
 }
 
-.truck-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-}
 
 .items-table {
   width: 100%;
@@ -245,4 +240,44 @@ header {
   to {
     transform: rotate(360deg);
   }
+}
+
+.border-gray{
+  border: 1px solid gray;
+  padding: 5px 10px;
+}
+
+.truck-section {
+  margin-top: 10px;
+}
+
+.truck-details-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.detail-item {
+  flex: 1 1 auto;
+  min-width: 140px;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.full-width {
+  flex: 1 1 100%;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #333;
+}
+
+.detail-value {
+  color: #000;
+  text-align: end;
 }
