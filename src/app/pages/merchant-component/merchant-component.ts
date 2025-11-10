@@ -19,11 +19,12 @@ import { MeTtranscation } from './me-ttranscation/me-ttranscation';
 export class MerchantComponent {
 /** أعمدة الجدول */
  columns = ['الاسم', 'رقم الهاتف', 'البريد الإلكتروني', 'العنوان'];
-columnKeys = ['name', 'phone', 'email', 'address'];
+ columnKeys = ['name', 'phone', 'email', 'address'];
 
 
   /** قائمة الأنواع */
-  merchantList: any;
+  orgnialMerchantList: any;
+ searchMerchantList: any;
 
   /** عدد السجلات */
   total = 0;
@@ -84,7 +85,7 @@ columnKeys = ['name', 'phone', 'email', 'address'];
   onPageChange(pageEvent: PageEvent) {
     const start = (pageEvent.pageIndex - 1) * pageEvent.pageSize;
     const end = start + pageEvent.pageSize;
-    console.log(`عرض البيانات من ${start} إلى ${end}`);
+    this.searchMerchantList = this.orgnialMerchantList.slice(start, end);
   }
 
   /** إضافة نوع جديد */
@@ -112,6 +113,7 @@ columnKeys = ['name', 'phone', 'email', 'address'];
 
     });
   }
+
   /** تعديل نوع مادة */
   editMerchant(item: MerchantDto) {
     console.log(item)
@@ -149,7 +151,8 @@ columnKeys = ['name', 'phone', 'email', 'address'];
   public loadMerchants() {
     this.MerchantServices.getAll().subscribe((res: ApiResponse<MerchantDto[]>) => {
       if (res.success && res.data) {
-        this.merchantList = res.data;
+        this.orgnialMerchantList = res.data;
+        this.searchMerchantList = res.data;
         this.total = res.data.length;
         console.log(res.data)
       } else {
@@ -157,4 +160,11 @@ columnKeys = ['name', 'phone', 'email', 'address'];
       }
     });
   }
+
+  onSearch(event:string) {
+    this.searchMerchantList = this.orgnialMerchantList.filter((merchant: MerchantDto) =>
+      merchant.name.toLowerCase().includes(event.toLowerCase())
+    );
+  }
+
 }

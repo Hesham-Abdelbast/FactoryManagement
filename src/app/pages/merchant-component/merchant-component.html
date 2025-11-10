@@ -3,7 +3,7 @@
   headerText="قائمة التجار"
   [keyColumns]="columnKeys"
   [displayColumns]="columns"
-  [data]="merchantList"
+  [data]="searchMerchantList"
   P_Key="id"
 
   [enableActions]="true"
@@ -20,5 +20,9 @@
   [total]="total"
   (pageChangeEvent)="onPageChange($event)"
   page="صفحة"
-  ItemPerPage="عدد العناصر في الصفحة">
+  ItemPerPage="عدد العناصر في الصفحة"
+  
+  [enableSearch]="true"
+  placeholdeSearch="ادخل اسم التاجر"
+  (onSarchChangeEvent)="onSearch($event)">
 </app-h-table>

@@ -1,45 +1,39 @@
 <app-h-modal [headerTitle]="titleName" (closeEvent)="close()">
-    <div class="p-4">
-        <div class="row mt-4">
+  <div class="p-4">
+    <div class="row mt-4">
 
-  <!-- Money you must pay the merchant -->
-  <div class="col-12 col-md-4 mb-3">
-    <div class="card shadow-sm text-center p-3">
-      <h6 class="fw-bold text-secondary">المبلغ المستحق دفعه</h6>
-      <h4 class="text-danger fw-bold">{{ moneyToBePaid | number }}</h4>
+      <!-- Money you must pay the merchant -->
+      <div class="col-12 col-md-4 mb-3">
+        <div class="card shadow-sm text-center p-3">
+          <h6 class="fw-bold text-secondary">اجمالي القيمة المستحقة</h6>
+          <h4 class="text-danger fw-bold">{{ moneyToBePaid | number }}</h4>
+        </div>
+      </div>
+
+      <!-- Money merchant must pay you -->
+      <div class="col-12 col-md-4 mb-3">
+        <div class="card shadow-sm text-center p-3">
+          <h6 class="fw-bold text-secondary">القيمة المستلمة</h6>
+          <h4 class="text-success fw-bold">{{ totalMoneyTaken | number }}</h4>
+        </div>
+      </div>
+
+      <!-- Final Balance -->
+      <div class="col-12 col-md-4 mb-3">
+        <div class="card shadow-sm text-center p-3" [ngClass]="balance >= 0 ? 'border-success' : 'border-danger'">
+
+          <h6 class="fw-bold text-secondary">الباقي</h6>
+
+          <h4 [ngClass]="balance >= 0 ? 'text-success' : 'text-danger'" class="fw-bold">
+            {{ balance | number }}
+          </h4>
+        </div>
+      </div>
     </div>
+
+    <app-h-table entityName="" headerText="قائمة المعاملات" [keyColumns]="columnKeys" [displayColumns]="columns"
+      [data]="transctionList" P_Key="id" [showPagination]="true" [total]="total"
+      (pageChangeEvent)="onPageChange($event)" page="صفحة" ItemPerPage="عدد العناصر في الصفحة">
+    </app-h-table>
   </div>
-
-  <!-- Money merchant must pay you -->
-  <div class="col-12 col-md-4 mb-3">
-    <div class="card shadow-sm text-center p-3">
-      <h6 class="fw-bold text-secondary">المبلغ المستحق لي</h6>
-      <h4 class="text-success fw-bold">{{ totalMoneyTaken | number }}</h4>
-    </div>
-  </div>
-
-  <!-- Final Balance -->
-  <div class="col-12 col-md-4 mb-3">
-    <div class="card shadow-sm text-center p-3"
-         [ngClass]="balance >= 0 ? 'border-success' : 'border-danger'">
-
-      <h6 class="fw-bold text-secondary">الرصيد النهائي</h6>
-
-      <h4 [ngClass]="balance >= 0 ? 'text-success' : 'text-danger'" class="fw-bold">
-        {{ balance | number }}
-      </h4>
-
-      <small class="text-muted">
-        {{ balance >= 0 ? 'التاجر مديون لك' : 'أنت مدين للتاجر' }}
-      </small>
-    </div>
-  </div>
-
-</div>
-
-        <app-h-table entityName="" headerText="قائمة المعاملات" [keyColumns]="columnKeys"
-            [displayColumns]="columns" [data]="transctionList" P_Key="id" [showPagination]="true" [total]="total"
-            (pageChangeEvent)="onPageChange($event)" page="صفحة" ItemPerPage="عدد العناصر في الصفحة">
-        </app-h-table>
-    </div>
 </app-h-modal>

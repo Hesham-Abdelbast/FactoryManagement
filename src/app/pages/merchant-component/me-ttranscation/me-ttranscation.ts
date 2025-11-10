@@ -99,9 +99,6 @@ balance: number = 0;
             totalAmount: t.quantity * t.pricePerUnit,
           }));
           this.total = res.data.length;
-          // ✅ Sum totals 5000 2000 3000 
-          //                2000 1000 1000
-        // ✅ Sum totals
         this.moneyToBePaid = this.transctionList
           .filter(x => x.type === 'Income')                  // merchant sells to you
           .reduce((sum, t) => sum + t.quantity * t.pricePerUnit - t.amountPaid, 0);
