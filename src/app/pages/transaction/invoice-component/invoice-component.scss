@@ -132,7 +132,6 @@ header {
 
 .total-section {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 30px;
   padding: 0 30px 25px;
 }
@@ -278,6 +277,40 @@ header {
 }
 
 .detail-value {
+  color: #000;
+  text-align: end;
+}
+.total-section {
+  padding: 0 30px 25px;
+}
+
+.amounts-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap; /* ensures responsive on smaller screens */
+}
+
+.amount-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  width: 25vw;
+}
+
+.amount-row.total-row {
+  font-weight: 600;
+  background-color: #f5f5f5;
+}
+
+.label {
+  color: #333;
+}
+
+.value {
   color: #000;
   text-align: end;
 }

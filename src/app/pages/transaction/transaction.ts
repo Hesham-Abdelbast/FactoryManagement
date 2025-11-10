@@ -174,9 +174,9 @@ export class Transaction implements OnInit {
   InvoiceTransaction(id: string) {
   this.dialog.open(InvoiceComponent, {
     panelClass: 'invoice-dialog',
-    width: '100vw',
+    width: '90vw',
     height: '100vh',
-    maxWidth: '100vw',
+    maxWidth: '90vw',
     maxHeight: '100vh',
     autoFocus: false,
     data: { Id: id },

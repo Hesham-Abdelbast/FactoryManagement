@@ -43,7 +43,7 @@
           <div>{{ inv.warehouseName || '-' }}</div>
         </div>
         @if(inv.showPhoneNumber) {
-          <div class="detail-row">
+        <div class="detail-row">
           <div class="detail-label">الاتصال:</div>
           <div>{{ inv.companyPhone || '-' }}</div>
         </div>
@@ -57,53 +57,48 @@
 
     <!-- Truck Details Section -->
     <div class="truck-section">
-  <h3 class="section-title">تفاصيل الشاحنة</h3>
+      <h3 class="section-title">تفاصيل الشاحنة</h3>
 
-  <!-- First Row: 3 items -->
-  <div class="truck-details-row">
-    <div class="detail-item">
-      <div class="detail-label">اسم السائق:</div>
-      <div class="detail-value">{{ inv.carDriverName || '-' }}</div>
+      <!-- First Row: 3 items -->
+      <div class="truck-details-row">
+        <div class="detail-item">
+          <div class="detail-label">اسم السائق:</div>
+          <div class="detail-value">{{ inv.carDriverName || '-' }}</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">الوزن الكلى:</div>
+          <div class="detail-value">{{ inv.carAndMatrerialWeight | number }}</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">الوزن الفارغ:</div>
+          <div class="detail-value">{{ inv.carWeight | number }}</div>
+        </div>
+      </div>
+
+      <!-- Second Row: 2 items -->
+      <div class="truck-details-row">
+        <div class="detail-item">
+          <div class="detail-label">نسبة الشوائب:</div>
+          <div class="detail-value">{{ formatPercentage(inv.percentageOfImpurities) }}</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">وزن الشوائب:</div>
+          <div class="detail-value">{{ impuritiesWeight | number }}</div>
+        </div>
+      </div>
+
+      <!-- Third Row: 1 item -->
+      <div class="truck-details-row">
+        <div class="detail-item full-width">
+          <div class="detail-label">الوزن الصافي:</div>
+          <div class="detail-value">{{ netAfterImpurities | number }}</div>
+        </div>
+      </div>
     </div>
-
-    <div class="detail-item">
-      <div class="detail-label">الوزن الكلى:</div>
-      <div class="detail-value">{{ inv.carAndMatrerialWeight | number }}</div>
-    </div>
-
-    <div class="detail-item">
-      <div class="detail-label">الوزن الفارغ:</div>
-      <div class="detail-value">{{ inv.carWeight | number }}</div>
-    </div>
-  </div>
-
-  <!-- Second Row: 2 items -->
-  <div class="truck-details-row">
-    <div class="detail-item">
-      <div class="detail-label">نسبة الشوائب:</div>
-      <div class="detail-value">{{ formatPercentage(inv.percentageOfImpurities) }}</div>
-    </div>
-
-    <div class="detail-item">
-      <div class="detail-label">وزن الشوائب:</div>
-      <div class="detail-value">{{ impuritiesWeight | number }}</div>
-    </div>
-  </div>
-
-  <!-- Third Row: 1 item -->
-  <div class="truck-details-row">
-    <div class="detail-item full-width">
-      <div class="detail-label">الوزن الصافي:</div>
-      <div class="detail-value">{{ netAfterImpurities | number }}</div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-    <div style="padding: 0 30px;">
+    <!-- <div style="padding: 0 30px;">
       <h3 class="section-title">بنود المعاملة</h3>
       <table class="items-table">
         <thead>
@@ -123,34 +118,29 @@
           </tr>
         </tbody>
       </table>
-    </div>
+    </div> -->
 
-    <div class="total-section">
-      <div>
-        <h3 class="section-title">ملاحظات</h3>
-        <div class="notes">
-          {{ inv.notes || 'لا توجد ملاحظات' }}
+    <div class="">
+      <h3 class="section-title">ملخص المبالغ</h3>
+
+      <div class="d-flex align-items-center justify-content-around">
+        <div class="amount-row">
+          <div class="label ms-5">المجموع الفرعي</div>
+          <div class="value">{{ totalAmount | number }} دل</div>
         </div>
-      </div>
 
-      <div>
-        <h3 class="section-title">ملخص المبالغ</h3>
-        <div class="amounts">
-          <div class="amount-row لاخق">
-            <div>المجموع الفرعي:</div>
-            <div>{{ totalAmount | number}} دل</div>
-          </div>
-          <div class="amount-row">
-            <div>المبلغ المدفوع:</div>
-            <div>{{inv.amountPaid| number}} دل</div>
-          </div>
-          <div class="amount-row total-row">
-            <div>الرصيد المستحق:</div>
-            <div>{{balanceDue| number}} دل</div>
-          </div>
+        <div class="amount-row">
+          <div class="label ms-5">المبلغ المدفوع:</div>
+          <div class="value">{{ inv.amountPaid | number }} دل</div>
+        </div>
+
+        <div class="amount-row total-row">
+          <div class="label ms-5">الرصيد المستحق </div>
+          <div class="value">{{ balanceDue | number }} دل</div>
         </div>
       </div>
     </div>
+
 
     <div class="action-buttons">
       <button class="btn btn-primary" (click)="printInvoice()">طباعة الفاتورة</button>
