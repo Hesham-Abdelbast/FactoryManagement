@@ -21,4 +21,6 @@ export interface CreateTransactionDto {
   notes?: string;
 
   amountPaid: number;
+  createDate: string;
+  showPhoneNumber: boolean;
 }

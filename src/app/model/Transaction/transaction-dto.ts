@@ -2,6 +2,7 @@ export interface TransactionDto {
   id: string;
   transactionIdentifier?: string;
   type: string;
+  typeNameAr: string;
   materialTypeId: string;
   materialTypeName?: string;
 

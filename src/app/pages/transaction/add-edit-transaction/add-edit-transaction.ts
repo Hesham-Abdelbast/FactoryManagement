@@ -27,7 +27,7 @@ export class AddEditTransaction implements OnInit {
     private toast: ToastService,
     private dialogRef: MatDialogRef<AddEditTransaction>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
@@ -42,7 +42,7 @@ export class AddEditTransaction implements OnInit {
       carDriverName: [''],
 
       carAndMatrerialWeight: [null, [Validators.required, Validators.min(1)]],
-      carWeight: [null, [ Validators.min(0)]],
+      carWeight: [null, [Validators.min(0)]],
 
       quantity: [{ value: 0, disabled: true }],
       percentageOfImpurities: [0, [Validators.min(0), Validators.max(100)]],
@@ -50,19 +50,30 @@ export class AddEditTransaction implements OnInit {
 
       pricePerUnit: [null, [Validators.required, Validators.min(0.01)]],
       amountPaid: [0, [Validators.min(0)]],
+      createDate: [Date.now(), Validators.required],
+      showPhoneNumber: [false],
 
       notes: ['', Validators.maxLength(500)],
-      totalAmount: [ 0, [ Validators.min(1)] ]
+      totalAmount: [0, [Validators.min(1)]]
     });
 
-    // ✅ Editing mode
     if (this.isEditMode && this.data.item) {
       this.transactionForm.addControl('id', this.fb.control(this.data.item.id, Validators.required));
-      this.transactionForm.patchValue(this.data.item);
-      console.log('Editing item:', this.data.item);
+
+      const formattedDate = this.data.item.createDate
+        ? this.data.item.createDate.split('T')[0]
+        : new Date().toISOString().split('T')[0];
+
+      this.transactionForm.patchValue({
+        ...this.data.item,
+        createDate: formattedDate,
+        showPhoneNumber: this.data.item.showPhoneNumber.toString()
+      });
+
       this.recalculateQuantity();
       this.updateTotalAmount();
     }
+
   }
 
   // ✅ Helper: avoid NaN
@@ -86,7 +97,7 @@ export class AddEditTransaction implements OnInit {
 
     this.transactionForm.get('quantity')?.setValue(Number(net.toFixed(2)), { emitEvent: false });
     this.recalculateImpurities();
-    
+
   }
 
   recalculateImpurities() {
@@ -112,34 +123,36 @@ export class AddEditTransaction implements OnInit {
 
   updateRemaining() {
     const paid = this.numeric(this.transactionForm.get('amountPaid')?.value);
-    const totalAmount = this.numeric(this.transactionForm.get('totalAmount')?.value)??0;
+    const totalAmount = this.numeric(this.transactionForm.get('totalAmount')?.value) ?? 0;
     this.remaining = Number((totalAmount - paid).toFixed(2));
   }
 
   onSubmit() {
-  if (this.transactionForm.invalid) {
-    this.transactionForm.markAllAsTouched();
-    this.toast.error("الرجاء تعبئة البيانات المطلوبة بشكل صحيح");
-    return;
-  }
+    if (this.transactionForm.invalid) {
+      this.transactionForm.markAllAsTouched();
+      this.toast.error("الرجاء تعبئة البيانات المطلوبة بشكل صحيح");
+      return;
+    }
+    console.log('showPhoneNumber: ',this.transactionForm.get('showPhoneNumber')?.value === 'true')
+    const payload: CreateTransactionDto = {
+      ...this.transactionForm.getRawValue(),
+      createDate: new Date(this.transactionForm.get('createDate')?.value).toISOString(),
+      showPhoneNumber: this.transactionForm.get('showPhoneNumber')?.value === 'true'
+    };
+    console.log('Payload:', payload);
 
-  const payload: CreateTransactionDto = {
-    ...this.transactionForm.getRawValue(),
-  };
-  console.log('Payload:', payload);
-
-  if (this.isEditMode) {
-    this.service.update(payload).subscribe({
-      next: (res: any) => this.handleResponse(res, true),
-      error: () => this.toast.error('حدث خطأ أثناء الاتصال بالخادم')
-    });
-  } else {
-    this.service.add(payload).subscribe({
-      next: (res: any) => this.handleResponse(res, false),
-      error: () => this.toast.error('حدث خطأ أثناء الاتصال بالخادم')
-    });
+    if (this.isEditMode) {
+      this.service.update(payload).subscribe({
+        next: (res: any) => this.handleResponse(res, true),
+        error: () => this.toast.error('حدث خطأ أثناء الاتصال بالخادم')
+      });
+    } else {
+      this.service.add(payload).subscribe({
+        next: (res: any) => this.handleResponse(res, false),
+        error: () => this.toast.error('حدث خطأ أثناء الاتصال بالخادم')
+      });
+    }
   }
-}
 
   private handleResponse(res: any, isEdit: boolean) {
     if (res.success) {
@@ -149,10 +162,10 @@ export class AddEditTransaction implements OnInit {
       this.toast.error(res.returnMsg || 'فشل العملية');
     }
   }
-  UpdatePricePerUnit(){
+  UpdatePricePerUnit() {
     const quantity = this.numeric(this.transactionForm.get('quantity')?.value);
-    const totalAmount = this.numeric(this.transactionForm.get('totalAmount')?.value)??0;
-    if(quantity > 0){
+    const totalAmount = this.numeric(this.transactionForm.get('totalAmount')?.value) ?? 0;
+    if (quantity > 0) {
       this.transactionForm.get('pricePerUnit')?.setValue(Number((totalAmount / quantity).toFixed(2)), { emitEvent: false });
     } else {
       this.transactionForm.get('pricePerUnit')?.setValue(0, { emitEvent: false });

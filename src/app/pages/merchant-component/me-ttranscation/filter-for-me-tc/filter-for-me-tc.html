@@ -1,0 +1,19 @@
+<app-h-modal headerTitle="الاحصاء حسب التاريخ" (closeEvent)="close()">
+ <div class="modal-container">
+  <form [formGroup]="form" class="date-form">
+
+    <label>من تاريخ</label>
+    <input class="form-control" type="date" formControlName="from" />
+
+    <label>إلى تاريخ</label>
+    <input class="form-control" type="date" formControlName="to" />
+
+  </form>
+
+  <div modal-footer class="modal-actions">
+    <button (click)="close()">إلغاء</button>
+    <button (click)="save()">حفظ</button>
+  </div>
+
+</div>
+</app-h-modal>

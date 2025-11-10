@@ -46,6 +46,7 @@ export class InvoiceComponent implements OnInit{
         next: (res: ApiResponse<InvoiceDto>) => {
           if (res.success && res.data) {
             this.invoiceDto = res.data;
+            console.log('Fetched invoice data:', this.invoiceDto);
           } else {
             console.error('Failed to fetch invoice data:', res.returnMsg);
             this.toastService.error('فشل في جلب بيانات الفاتورة');
@@ -60,15 +61,6 @@ export class InvoiceComponent implements OnInit{
       });
   }
 
-  // Formatting helpers
-  formatNumber(value?: number): string {
-    return (value ?? 0).toLocaleString('ar-EG');
-  }
-
-  formatCurrency(amount?: number): string {
-    // You can switch to Intl currency if you have a currency code on the DTO.
-    return (amount ?? 0).toLocaleString('ar-EG', { minimumFractionDigits: 2 }) + ' $';
-  }
 
   formatPercentage(value?: number): string {
     const v = value ?? 0;
@@ -133,5 +125,8 @@ export class InvoiceComponent implements OnInit{
 
   printInvoice(): void {
     window.print();
+  }
+  close(){
+    this.dialogRef.close();
   }
 }

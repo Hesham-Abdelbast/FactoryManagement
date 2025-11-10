@@ -42,10 +42,12 @@
           <div class="detail-label">المخزن:</div>
           <div>{{ inv.warehouseName || '-' }}</div>
         </div>
-        <div class="detail-row">
+        @if(inv.showPhoneNumber) {
+          <div class="detail-row">
           <div class="detail-label">الاتصال:</div>
           <div>{{ inv.companyPhone || '-' }}</div>
         </div>
+        }
         <div class="detail-row">
           <div class="detail-label">العنوان:</div>
           <div>{{ inv.companyAddress || '-' }}</div>
@@ -64,11 +66,11 @@
           </div>
           <div class="detail-row">
             <div class="detail-label">الوزن الكلى:</div>
-            <div>{{ formatNumber(inv.carAndMatrerialWeight) }}</div>
+            <div>{{ inv.carAndMatrerialWeight| number}}</div>
           </div>
           <div class="detail-row">
             <div class="detail-label">الوزن الفارغ:</div>
-            <div>{{ formatNumber(inv.carWeight) }}</div>
+            <div>{{ inv.carWeight| number}}</div>
           </div>
           <!-- <div class="detail-row">
             <div class="detail-label">الوزن الصافي:</div>
@@ -84,11 +86,11 @@
           </div>
           <div class="detail-row">
             <div class="detail-label">وزن الشوائب:</div>
-            <div>{{ formatNumber(impuritiesWeight) }}</div>
+            <div>{{ impuritiesWeight | number }}</div>
           </div>
           <div class="detail-row">
             <div class="detail-label">الوزن الصافي:</div>
-            <div>{{ formatNumber(netAfterImpurities) }}</div>
+            <div>{{ netAfterImpurities| number }}</div>
           </div>
         </div>
       </div>
@@ -108,9 +110,9 @@
         <tbody>
           <tr>
             <td>{{ inv.materialTypeName || '-' }}</td>
-            <td>{{ formatNumber(inv.quantity) }}</td>
-            <td>{{ formatCurrency(inv.pricePerUnit) }}</td>
-            <td class="text-left">{{ formatCurrency(totalAmount) }}</td>
+            <td>{{ inv.quantity| number }}</td>
+            <td>{{ inv.pricePerUnit | number}}</td>
+            <td class="text-left">{{ totalAmount| number }}</td>
           </tr>
         </tbody>
       </table>
@@ -129,15 +131,15 @@
         <div class="amounts">
           <div class="amount-row">
             <div>المجموع الفرعي:</div>
-            <div>{{ formatCurrency(totalAmount) }}</div>
+            <div>{{ totalAmount | number}}</div>
           </div>
           <div class="amount-row">
             <div>المبلغ المدفوع:</div>
-            <div>{{ formatCurrency(inv.amountPaid) }}</div>
+            <div>{{inv.amountPaid| number}}</div>
           </div>
           <div class="amount-row total-row">
             <div>الرصيد المستحق:</div>
-            <div>{{ formatCurrency(balanceDue) }}</div>
+            <div>{{balanceDue| number}}</div>
           </div>
         </div>
       </div>
@@ -145,6 +147,7 @@
 
     <div class="action-buttons">
       <button class="btn btn-primary" (click)="printInvoice()">طباعة الفاتورة</button>
+      <button class="btn btn-primary" (click)="close()">الرجوع</button>
     </div>
 
     <div class="footer">

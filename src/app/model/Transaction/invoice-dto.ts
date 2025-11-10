@@ -25,7 +25,8 @@ export interface InvoiceDto {
   remainingAmount: number;
   isFullyPaid: boolean;
 
-  createDate: string; // DateTime from backend → string in TS
+  createDate: string; 
+  showPhoneNumber: boolean;
 
   companyName: string;
   companyAddress: string;

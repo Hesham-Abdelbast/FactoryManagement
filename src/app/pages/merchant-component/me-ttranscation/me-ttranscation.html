@@ -31,9 +31,23 @@
       </div>
     </div>
 
-    <app-h-table entityName="" headerText="قائمة المعاملات" [keyColumns]="columnKeys" [displayColumns]="columns"
-      [data]="transctionList" P_Key="id" [showPagination]="true" [total]="total"
-      (pageChangeEvent)="onPageChange($event)" page="صفحة" ItemPerPage="عدد العناصر في الصفحة">
+    <app-h-table 
+        entityName="" 
+        headerText="قائمة المعاملات" 
+        [keyColumns]="columnKeys" 
+        [displayColumns]="columns"
+      [data]="searchTransctionList" 
+      P_Key="id" 
+      
+      [showPagination]="true" 
+      [total]="total"
+      (pageChangeEvent)="onPageChange($event)" 
+      page="صفحة" 
+      ItemPerPage="عدد العناصر في الصفحة"
+      
+      [enableFilter]="true"
+      (onFilterEvent)="onFilter()"
+      filterIcon="fa-solid fa-arrow-down-wide-short">
     </app-h-table>
   </div>
 </app-h-modal>

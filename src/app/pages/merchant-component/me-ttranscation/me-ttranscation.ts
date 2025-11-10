@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { HModalComponent } from "../../../shared/Component/h-modal/h-modal.component";
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ToastService } from '../../../core/shared/toast.service';
 import { TransactionServices } from '../../../core/Transaction/transaction-services';
 import { TransactionDto } from '../../../model/Transaction/transaction-dto';
@@ -13,6 +13,8 @@ import { firstValueFrom } from 'rxjs';
 import { MaterialTypeServices } from '../../../core/MaterialType/material-type-services';
 import { MerchantServices } from '../../../core/Merchant/merchant-services';
 import { CommonModule } from '@angular/common';
+import { AllTransByMerchantDto } from '../../../model/Transaction/all-trans-by-merchant-dto';
+import { FilterForMeTC } from './filter-for-me-tc/filter-for-me-tc';
 
 @Component({
   selector: 'app-me-ttranscation',
@@ -21,11 +23,13 @@ import { CommonModule } from '@angular/common';
   styleUrl: './me-ttranscation.scss',
 })
 export class MeTtranscation implements OnInit{
-  transctionList: TransactionDto[] = [];
+  orginalTransctionList: TransactionDto[] = [];
+  searchTransctionList: TransactionDto[] = [];
   materialTypeLst: MaterialTypeVM[] = [];
   merchantLst: MerchantDto[] = [];
   totalMoneyTaken = 0;
   moneyToBePaid = 0;
+  totalWight = 0;
   titleName = 'معاملات ';
 balance: number = 0;
   total = 0;
@@ -33,17 +37,17 @@ balance: number = 0;
   columns = [
     'نوع المعاملة',
     'نوع المادة',
+    'المخزن',
     'الكمية',
-    'السعر للوحدة',
     'الإجمالي',
     'المبلغ المدفوع',
   ];
 
   columnKeys = [
-    'typeName',
+    'typeNameAr',
     'materialTypeName',
+    'warehouseName',
     'quantity',
-    'pricePerUnit',
     'totalAmount',
     'amountPaid',
   ];
@@ -51,37 +55,19 @@ balance: number = 0;
     private toast: ToastService,
     private dialogRef: MatDialogRef<MeTtranscation>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialog:MatDialog,
     private transactionService: TransactionServices,
-    private materialService: MaterialTypeServices,
-    private merchantService: MerchantServices,
     private cdr: ChangeDetectorRef
   ) {
   }
   async ngOnInit(): Promise<void> {
-    await this.loadReferenceData();
     this.loadTransactions();
-  }
-
-  /** Load all lookup data (materials + merchants) */
-  private async loadReferenceData(): Promise<void> {
-    try {
-      const [matRes, merRes] = await Promise.all([
-        firstValueFrom(this.materialService.getAll()),
-        firstValueFrom(this.merchantService.getAll()),
-      ]);
-
-      if (matRes?.success) this.materialTypeLst = matRes.data ?? [];
-      if (merRes?.success) this.merchantLst = merRes.data ?? [];
-    } catch (err) {
-      this.toast.error('فشل تحميل البيانات المرجعية.');
-      console.error(err);
-    }
   }
 
   onPageChange(pageEvent: PageEvent): void {
     const start = (pageEvent.pageIndex - 1) * pageEvent.pageSize;
     const end = start + pageEvent.pageSize;
-    console.log(`عرض البيانات من ${start} إلى ${end}`);
+    this.searchTransctionList = this.orginalTransctionList.slice(start,end);
   }
 
   /** Load all transactions */
@@ -89,26 +75,16 @@ balance: number = 0;
     const merchantID = this.data.merchantID;
     console.log(merchantID, 'معرف التاجر');
     this.transactionService.GetAllByMerchantId(merchantID).subscribe({
-      next: (res: ApiResponse<TransactionDto[]>) => {
+      next: (res: ApiResponse<AllTransByMerchantDto>) => {
+        console.log(res, 'استجابة المعاملات');
         if (res.success && res.data) {
-          this.transctionList = res.data.map((t) => ({
-            ...t,
-            merchantName: this.getMerchantName(t.merchantId),
-            materialTypeName: this.getMaterialTypeName(t.materialTypeId),
-            typeName: t.type === 'Income' ? 'وارد' : 'صادر',
-            totalAmount: t.quantity * t.pricePerUnit,
-          }));
-          this.total = res.data.length;
-        this.moneyToBePaid = this.transctionList
-          .filter(x => x.type === 'Income')                  // merchant sells to you
-          .reduce((sum, t) => sum + t.quantity * t.pricePerUnit - t.amountPaid, 0);
-
-        this.totalMoneyTaken = this.transctionList
-          .filter(x => x.type === 'Outcome')                  // merchant buys from you
-          .reduce((sum, t) => sum + t.quantity * t.pricePerUnit - t.amountPaid, 0);
-
-        this.balance = this.totalMoneyTaken - this.moneyToBePaid;
-        this.titleName += this.transctionList[0]?.merchantId ? ` - ${this.getMerchantName(this.transctionList[0].merchantId)}` : '';
+          this.orginalTransctionList = res.data.transactions;
+          this.searchTransctionList = res.data.transactions;
+          this.totalMoneyTaken = res.data.totalMoneypay
+          this.moneyToBePaid = res.data.totalMoneyProcessed
+          this.totalWight = res.data.totalWight;
+          this.balance = this.moneyToBePaid - this.totalMoneyTaken;
+          this.titleName = `معاملات ${this.orginalTransctionList[0]?.merchantName || ''}`;
           this.cdr.markForCheck();
 
         } else {
@@ -121,14 +97,29 @@ balance: number = 0;
       },
     });
   }
-  /** Safe lookup helpers */
-  private getMerchantName(id: string): string {
-    return this.merchantLst.find((x) => x.id === id)?.name ?? 'غير معروف';
-  }
+  onFilter() {
+  this.dialog.open(FilterForMeTC, { width: '400px' })
+    .afterClosed()
+    .subscribe((filterData: any) => {
+      if (!filterData) return;
 
-  private getMaterialTypeName(id: string): string {
-    return this.materialTypeLst.find((x) => x.id === id)?.name ?? 'غير معروف';
-  }
+      console.log(filterData, 'بيانات التصفية');
+
+      const fromDate = filterData.from ? new Date(filterData.from + 'T00:00:00') : null;
+      const toDate = filterData.to ? new Date(filterData.to + 'T23:59:59') : null;
+
+      this.searchTransctionList = this.orginalTransctionList.filter(t => {
+        const transactionDate = new Date(t.createDate);
+
+        if (fromDate && transactionDate < fromDate) return false;
+        if (toDate && transactionDate > toDate) return false;
+
+        return true;
+      });
+      this.cdr.markForCheck();
+    });
+}
+
 
   close(): void {
     this.dialogRef.close();

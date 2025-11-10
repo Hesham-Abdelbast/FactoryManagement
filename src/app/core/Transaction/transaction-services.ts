@@ -7,6 +7,7 @@ import { TransactionURLs } from '../../shared/helper/urls';
 import { PaginationEntity } from '../../model/pagination-entity';
 import { CreateTransactionDto } from '../../model/Transaction/create-transaction-dto';
 import { InvoiceDto } from '../../model/Transaction/invoice-dto';
+import { AllTransByMerchantDto } from '../../model/Transaction/all-trans-by-merchant-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -29,12 +30,12 @@ export class TransactionServices {
     /**
        * Fetch Transaction by ID
        */
-      GetAllByMerchantId(id: string): Observable<ApiResponse<TransactionDto[]>> {
+      GetAllByMerchantId(id: string): Observable<ApiResponse<AllTransByMerchantDto>> {
         return this.baseService
-          .GetRequest<ApiResponse<TransactionDto[]>>(TransactionURLs.GetAllByMerchantId(id))
+          .GetRequest<ApiResponse<AllTransByMerchantDto>>(TransactionURLs.GetAllByMerchantId(id))
           .pipe(
             catchError(error =>
-              this.handleError<TransactionDto[]>(
+              this.handleError<AllTransByMerchantDto>(
                 `fetching Transaction by ID ${id}`,
                 error,
                 null
