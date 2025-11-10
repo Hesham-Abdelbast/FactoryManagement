@@ -1,9 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastService } from '../../../core/shared/toast.service';
 import { TransactionServices } from '../../../core/Transaction/transaction-services';
-import { TransactionDto } from '../../../model/Transaction/transaction-dto';
 import { HModalComponent } from '../../../shared/Component/h-modal/h-modal.component';
 import { CommonModule } from '@angular/common';
 import { CreateTransactionDto } from '../../../model/Transaction/create-transaction-dto';
@@ -12,7 +11,7 @@ import { CreateTransactionDto } from '../../../model/Transaction/create-transact
   selector: 'app-add-edit-transaction',
   templateUrl: './add-edit-transaction.html',
   styleUrl: './add-edit-transaction.scss',
-  imports: [CommonModule, ReactiveFormsModule, HModalComponent]
+  imports: [CommonModule, ReactiveFormsModule, HModalComponent, FormsModule]
 })
 export class AddEditTransaction implements OnInit {
 
@@ -20,7 +19,6 @@ export class AddEditTransaction implements OnInit {
   isEditMode = false;
   loading = false;
 
-  totalAmount = 0;
   remaining = 0;
 
   constructor(
@@ -44,7 +42,7 @@ export class AddEditTransaction implements OnInit {
       carDriverName: [''],
 
       carAndMatrerialWeight: [null, [Validators.required, Validators.min(1)]],
-      carWeight: [null, [Validators.required, Validators.min(1)]],
+      carWeight: [null, [ Validators.min(0)]],
 
       quantity: [{ value: 0, disabled: true }],
       percentageOfImpurities: [0, [Validators.min(0), Validators.max(100)]],
@@ -54,6 +52,7 @@ export class AddEditTransaction implements OnInit {
       amountPaid: [0, [Validators.min(0)]],
 
       notes: ['', Validators.maxLength(500)],
+      totalAmount: [ 0, [ Validators.min(1)] ]
     });
 
     // ✅ Editing mode
@@ -106,13 +105,15 @@ export class AddEditTransaction implements OnInit {
     const quantity = this.numeric(this.transactionForm.get('quantity')?.value);
     const price = this.numeric(this.transactionForm.get('pricePerUnit')?.value);
 
-    this.totalAmount = Number((quantity * price).toFixed(2));
+    const totalAmount = Number((quantity * price).toFixed(2));
+    this.transactionForm.get('totalAmount')?.setValue(Number(totalAmount.toFixed(2)), { emitEvent: false });
     this.updateRemaining();
   }
 
   updateRemaining() {
     const paid = this.numeric(this.transactionForm.get('amountPaid')?.value);
-    this.remaining = Number((this.totalAmount - paid).toFixed(2));
+    const totalAmount = this.numeric(this.transactionForm.get('totalAmount')?.value)??0;
+    this.remaining = Number((totalAmount - paid).toFixed(2));
   }
 
   onSubmit() {
@@ -124,7 +125,6 @@ export class AddEditTransaction implements OnInit {
 
   const payload: CreateTransactionDto = {
     ...this.transactionForm.getRawValue(),
-    totalAmount: this.totalAmount
   };
   console.log('Payload:', payload);
 
@@ -141,15 +141,23 @@ export class AddEditTransaction implements OnInit {
   }
 }
 
-private handleResponse(res: any, isEdit: boolean) {
-  if (res.success) {
-    this.toast.success(isEdit ? 'تم التحديث بنجاح' : 'تم الحفظ بنجاح');
-    this.dialogRef.close(true);
-  } else {
-    this.toast.error(res.returnMsg || 'فشل العملية');
+  private handleResponse(res: any, isEdit: boolean) {
+    if (res.success) {
+      this.toast.success(isEdit ? 'تم التحديث بنجاح' : 'تم الحفظ بنجاح');
+      this.dialogRef.close(true);
+    } else {
+      this.toast.error(res.returnMsg || 'فشل العملية');
+    }
   }
-}
-
+  UpdatePricePerUnit(){
+    const quantity = this.numeric(this.transactionForm.get('quantity')?.value);
+    const totalAmount = this.numeric(this.transactionForm.get('totalAmount')?.value)??0;
+    if(quantity > 0){
+      this.transactionForm.get('pricePerUnit')?.setValue(Number((totalAmount / quantity).toFixed(2)), { emitEvent: false });
+    } else {
+      this.transactionForm.get('pricePerUnit')?.setValue(0, { emitEvent: false });
+    }
+  }
   close() {
     this.dialogRef.close(false);
   }

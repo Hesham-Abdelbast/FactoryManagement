@@ -129,7 +129,7 @@
         <!-- الإجمالي -->
         <div class="col-md-6 text-end">
           <label class="form-label fw-bold">الإجمالي</label>
-          <input type="number" class="form-control text-end" [value]="totalAmount" readonly>
+          <input type="number" class="form-control text-end"  formControlName="totalAmount" (input)="UpdatePricePerUnit()">
         </div>
 
         <!-- المبلغ المدفوع -->
