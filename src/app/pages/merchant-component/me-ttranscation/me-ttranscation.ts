@@ -9,9 +9,6 @@ import { MaterialTypeVM } from '../../../model/MaterialType/material-type-vm';
 import { MerchantDto } from '../../../model/Merchant/merchant-dto';
 import { HTableComponent } from "../../../shared/Component/h-table/h-table.component";
 import { PageEvent } from '../../../model/page-event';
-import { firstValueFrom } from 'rxjs';
-import { MaterialTypeServices } from '../../../core/MaterialType/material-type-services';
-import { MerchantServices } from '../../../core/Merchant/merchant-services';
 import { CommonModule } from '@angular/common';
 import { AllTransByMerchantDto } from '../../../model/Transaction/all-trans-by-merchant-dto';
 import { FilterForMeTC } from './filter-for-me-tc/filter-for-me-tc';
@@ -22,7 +19,7 @@ import { FilterForMeTC } from './filter-for-me-tc/filter-for-me-tc';
   templateUrl: './me-ttranscation.html',
   styleUrl: './me-ttranscation.scss',
 })
-export class MeTtranscation implements OnInit{
+export class MeTtranscation implements OnInit {
   orginalTransctionList: TransactionDto[] = [];
   searchTransctionList: TransactionDto[] = [];
   materialTypeLst: MaterialTypeVM[] = [];
@@ -32,7 +29,7 @@ export class MeTtranscation implements OnInit{
   totalWight = 0;
   totalImp = 0;
   titleName = 'معاملات ';
-balance: number = 0;
+  balance: number = 0;
   total = 0;
   /** Table Columns */
   columns = [
@@ -56,7 +53,7 @@ balance: number = 0;
     private toast: ToastService,
     private dialogRef: MatDialogRef<MeTtranscation>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialog:MatDialog,
+    private dialog: MatDialog,
     private transactionService: TransactionServices,
     private cdr: ChangeDetectorRef
   ) {
@@ -68,7 +65,7 @@ balance: number = 0;
   onPageChange(pageEvent: PageEvent): void {
     const start = (pageEvent.pageIndex - 1) * pageEvent.pageSize;
     const end = start + pageEvent.pageSize;
-    this.searchTransctionList = this.orginalTransctionList.slice(start,end);
+    this.searchTransctionList = this.orginalTransctionList.slice(start, end);
   }
 
   /** Load all transactions */
@@ -100,29 +97,27 @@ balance: number = 0;
     });
   }
   onFilter() {
-  this.dialog.open(FilterForMeTC, { width: '400px' })
-    .afterClosed()
-    .subscribe((filterData: any) => {
-      if (!filterData) return;
+    this.dialog.open(FilterForMeTC, { width: '400px' })
+      .afterClosed()
+      .subscribe((filterData: any) => {
+        if (!filterData) return;
 
-      console.log(filterData, 'بيانات التصفية');
+        console.log(filterData, 'بيانات التصفية');
 
-      const fromDate = filterData.from ? new Date(filterData.from + 'T00:00:00') : null;
-      const toDate = filterData.to ? new Date(filterData.to + 'T23:59:59') : null;
+        const fromDate = filterData.from ? new Date(filterData.from + 'T00:00:00') : null;
+        const toDate = filterData.to ? new Date(filterData.to + 'T23:59:59') : null;
 
-      this.searchTransctionList = this.orginalTransctionList.filter(t => {
-        const transactionDate = new Date(t.createDate);
+        this.searchTransctionList = this.orginalTransctionList.filter(t => {
+          const transactionDate = new Date(t.createDate);
 
-        if (fromDate && transactionDate < fromDate) return false;
-        if (toDate && transactionDate > toDate) return false;
+          if (fromDate && transactionDate < fromDate) return false;
+          if (toDate && transactionDate > toDate) return false;
 
-        return true;
+          return true;
+        });
+        this.cdr.markForCheck();
       });
-      this.cdr.markForCheck();
-    });
-}
-
-
+  }
   close(): void {
     this.dialogRef.close();
   }

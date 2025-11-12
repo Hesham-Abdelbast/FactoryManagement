@@ -62,6 +62,7 @@ export class WarehouseURLs{
   static readonly GetAll = Base_URL + 'api/Warehouse/GetAll';
   static readonly GetAllWithPagination = Base_URL + 'api/Warehouse/GetAllWithPagination';
   static GetByID(id:string):string {return `${Base_URL}api/Warehouse/GetById/${id}`};
+  static GetStoreByWarehouseId(id:string):string {return `${Base_URL}api/Warehouse/GetStoreByWarehouseId/${id}`};
   static Delete(id:string):string {return `${Base_URL}api/Warehouse/Delete/${id}`};
   static readonly Add = Base_URL + 'api/Warehouse/Add';
   static readonly Update = Base_URL + 'api/Warehouse/Update';

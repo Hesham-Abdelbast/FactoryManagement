@@ -11,6 +11,8 @@ import { HTableComponent } from "../../shared/Component/h-table/h-table.componen
 import { LoaderService } from '../../core/shared/loader.service';
 import { AsyncPipe } from '@angular/common';
 import { PaginationEntity } from '../../model/pagination-entity';
+import { WarehouseInventoryDto } from '../../model/Warehouse/warehouse-inventory-dto';
+import { MeMaterials } from './me-materials/me-materials';
 
 @Component({
   selector: 'app-warehouse-component',
@@ -19,7 +21,7 @@ import { PaginationEntity } from '../../model/pagination-entity';
   styleUrl: './warehouse-component.scss',
 })
 export class WarehouseComponent {
-/** Table Columns */
+  /** Table Columns */
   columns = [
     'اسم المستودع',
     'الموقع',
@@ -40,12 +42,12 @@ export class WarehouseComponent {
 
   /** Data sources */
   warehouseList: WarehouseDto[] = [];
-  pagination:PaginationEntity = {pageIndex:1,pageSize:10,totalCount:10};
+  pagination: PaginationEntity = { pageIndex: 1, pageSize: 10, totalCount: 10 };
   /** Table actions */
   actions: TableAction[] = [
     {
       icon: 'fa-solid fa-file-invoice-dollar',
-      label: 'الفاتوره',
+      label: 'المواد',
       type: 'view',
       style: 'btn btn-outline-primary btn-sm',
     }, {
@@ -71,10 +73,11 @@ export class WarehouseComponent {
   async ngOnInit(): Promise<void> {
     this.loadWarehouse();
   }
+
   public loadWarehouse(): void {
     this.warehouseServices.GetAllWithPagination(this.pagination).subscribe({
       next: (res: ApiResponse<WarehouseDto[]>) => {
-        console.log(res,'res');
+        console.log(res, 'res');
         if (res.success && res.data) {
           this.warehouseList = res.data;
           this.pagination.totalCount = res.totalCount ?? 0;
@@ -88,11 +91,12 @@ export class WarehouseComponent {
       },
     });
   }
+
   /** Table Actions */
   onTableAction(event: { action: string; row: WarehouseDto }): void {
     if (event.action === 'edit') this.editTransaction(event.row);
     if (event.action === 'delete') this.deleteTransaction(event.row.id);
-    if (event.action === 'view') this.viewTransaction(event.row.id);
+    if (event.action === 'view') this.loadMaterials(event.row.id);
   }
 
   onPageChange(pageEvent: PageEvent): void {
@@ -116,9 +120,28 @@ export class WarehouseComponent {
       if (result) this.loadWarehouse();
     });
   }
-  
-  viewTransaction(id: string) {
-   
+
+  loadMaterials(warehouseId: string): void {
+    this.warehouseServices.GetStoreByWarehouseId(warehouseId).subscribe({
+      next: (res: ApiResponse<WarehouseInventoryDto[]>) => {
+        if (res.success) {
+          const materials = res.data;
+          this.dialog.open(MeMaterials, {
+            width: '900px',
+            maxWidth: '90vw',
+            maxHeight: '90vh',
+            data: {
+              materials: materials
+            },
+          });
+        } else {
+          this.toast.error('فشل في تحميل المواد.');
+        }
+      },
+      error: () => {
+        this.toast.error('حدث خطأ أثناء تحميل المواد.');
+      }
+    });
   }
 
   editTransaction(item: WarehouseDto): void {

@@ -5,6 +5,7 @@ import { BaseServicesService } from '../shared/base-services.service';
 import { WarehouseDto } from '../../model/Warehouse/warehouse-dto';
 import { WarehouseURLs } from '../../shared/helper/urls';
 import { PaginationEntity } from '../../model/pagination-entity';
+import { WarehouseInventoryDto } from '../../model/Warehouse/warehouse-inventory-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +55,21 @@ export class WarehouseServices {
             )
           );
       }
-    
+  
+      GetStoreByWarehouseId(id: string): Observable<ApiResponse<WarehouseInventoryDto[]>> {
+        return this.baseService
+          .GetRequest<ApiResponse<WarehouseInventoryDto[]>>(WarehouseURLs.GetStoreByWarehouseId(id))
+          .pipe(
+            catchError(error =>
+              this.handleError<WarehouseInventoryDto[]>(
+                `fetching Merchant by ID ${id}`,
+                error,
+                null
+              )
+            )
+          );
+      }
+
       /**
        * Add new Merchant
        */

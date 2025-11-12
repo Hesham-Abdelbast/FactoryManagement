@@ -32,9 +32,6 @@ export class HTableComponent<T = any> {
   /** Actions column header text (only required if enableActions = true) */
   @Input() actionName = 'Actions';
 
-  /** Primary key field name (e.g., "id") */
-  @Input({ required: true }) P_Key = '';
-
   /** Show / hide Search Input */
   @Input() enableSearch = false;
 

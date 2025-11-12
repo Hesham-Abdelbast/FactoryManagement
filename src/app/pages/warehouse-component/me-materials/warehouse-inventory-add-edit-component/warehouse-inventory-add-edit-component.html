@@ -1,0 +1,45 @@
+<app-h-modal (closeEvent)="close()" [headerTitle]="isEditMode ? 'تعديل المخزون' : 'إضافة مخزون'">
+  <div class="container mt-4" dir="rtl">
+    <div class="card shadow p-4">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <!-- Warehouse ID -->
+        <div class="mb-3 text-end">
+          <label class="form-label">المخزن <span class="text-danger">*</span></label>
+          <input type="text" formControlName="warehouseId" class="form-control text-end"
+            placeholder="أدخل رقم المخزن"
+            [ngClass]="{'is-invalid': form.get('warehouseId')?.invalid && form.get('warehouseId')?.touched}" />
+          <div class="invalid-feedback text-end">هذا الحقل مطلوب.</div>
+        </div>
+
+        <!-- Material Type -->
+        <div class="mb-3 text-end">
+          <label class="form-label">نوع المادة <span class="text-danger">*</span></label>
+          <input type="text" formControlName="materialTypeId" class="form-control text-end"
+            placeholder="أدخل رقم نوع المادة"
+            [ngClass]="{'is-invalid': form.get('materialTypeId')?.invalid && form.get('materialTypeId')?.touched}">
+          <div class="invalid-feedback text-end">هذا الحقل مطلوب.</div>
+        </div>
+
+        <!-- Current Quantity -->
+        <div class="mb-3 text-end">
+          <label class="form-label">الكمية الحالية <span class="text-danger">*</span></label>
+          <input type="number" formControlName="currentQuantity" class="form-control text-end"
+            placeholder="أدخل الكمية"
+            [ngClass]="{'is-invalid': form.get('currentQuantity')?.invalid && form.get('currentQuantity')?.touched}">
+          <div class="invalid-feedback text-end">
+            يجب إدخال كمية صحيحة أكبر أو تساوي 0.
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-primary ms-2" type="submit" [disabled]="form.invalid">
+            {{ isEditMode ? 'تحديث' : 'حفظ' }}
+          </button>
+          <button class="btn btn-secondary" type="button" (click)="close()">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</app-h-modal>
