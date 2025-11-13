@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditQuantity } from './edit-quantity';
+import { TrxFilter } from './trx-filter';
 
-describe('EditQuantity', () => {
-  let component: EditQuantity;
-  let fixture: ComponentFixture<EditQuantity>;
+describe('TrxFilter', () => {
+  let component: TrxFilter;
+  let fixture: ComponentFixture<TrxFilter>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditQuantity]
+      imports: [TrxFilter]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(EditQuantity);
+    fixture = TestBed.createComponent(TrxFilter);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

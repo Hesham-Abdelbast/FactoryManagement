@@ -5,49 +5,66 @@ import { ToastService } from '../../core/shared/toast.service';
 import { StoreServices } from '../../core/Store/store-services';
 import { StoreDto } from '../../model/StoreInventory/store-dto';
 import { Subject, takeUntil } from 'rxjs';
+import { WarehouseInventoryServices } from '../../core/WarehouseInventory/warehouse-inventory-services';
+import { WarehouseServices } from '../../core/Warehouse/warehouse-services';
+import { WarehouseDto } from '../../model/Warehouse/warehouse-dto';
+import { ApiResponse } from '../../model/api-response';
+import { WarehouseInventoryDto } from '../../model/Warehouse/warehouse-inventory-dto';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-store-component',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule,FormsModule],
   templateUrl: './store-component.html',
   styleUrl: './store-component.scss',
 })
 export class StoreComponent implements OnInit {
-  materialStocks: StoreDto[] = [];
-  filteredStocks: StoreDto[] = [];
-  isLoading: boolean = false;
-  searchTerm: string = '';
-  sortBy: 'name' | 'quantity' = 'name';
-  sortOrder: 'asc' | 'desc' = 'asc';
 
-  private destroy$ = new Subject<void>();
-
+  warehouseLst:WarehouseDto[] = [];
+  materialStocks : WarehouseInventoryDto[] = []
+  warehouseId = ''
   constructor(
     private storeService: StoreServices,
+    private warehouseInventoryServices:WarehouseInventoryServices,
+    private warehouseServices:WarehouseServices,
     private toast: ToastService,
   ) { }
 
   ngOnInit(): void {
-    this.fetchMaterialStocks();
+    this.GetAllWarhouses();
+  }
+
+  GetAllWarhouses(){
+    this.warehouseServices.getAll().subscribe( (res:ApiResponse<WarehouseDto[]>) =>{
+      if(res.success && res.data){
+        this.warehouseLst = res.data;
+        this.warehouseId = res.data[0].id
+        this.fetchMaterialStocks(res.data[0].id);
+      }
+      else{
+        this.toast.error('فشل في جلب المستودعات')
+      }
+    })
+  }
+
+  onWarehouseChange(event: Event): void {
+    const selectedId = (event.target as HTMLSelectElement).value;
+    if (selectedId) {
+      this.fetchMaterialStocks(selectedId);
+    }
   }
 
   /** Fetch material stocks from the server with loading state */
-  private fetchMaterialStocks(): void {
-    this.isLoading = true;
-
-    this.storeService.getAll().subscribe({
-      next: (res) => {
-        this.isLoading = false;
+  private fetchMaterialStocks(id:string): void {
+    this.warehouseInventoryServices.getByWarehouseId(id).subscribe({
+      next: (res:ApiResponse<WarehouseInventoryDto[]>) => {
         if (res.success && res.data) {
           this.materialStocks = res.data;
-          console.log('Fetched material stocks:', this.materialStocks);
-          // this.applyFilters();
         } else {
           this.toast.warning('لا توجد بيانات متاحة');
         }
       },
       error: (error) => {
-        this.isLoading = false;
         console.error('Error fetching material stocks:', error);
         this.toast.error('فشل في جلب مخزون المواد من الخادم.');
       }

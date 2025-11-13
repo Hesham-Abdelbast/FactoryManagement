@@ -1,0 +1,39 @@
+<app-h-modal headerTitle="بحث المعاملات" (closeEvent)="close()">
+    <div class="p-4">
+        <form [formGroup]="searchForm">
+            <div class=" d-flex justify-content-between gap-2">
+               <div class="w-50">
+                  <label for="merchantName">اسم التاجر</label>
+                  <input type="text" class="form-control border-gray" placeholder=" اسم التاجر" formControlName="merchantName" id="merchantName">
+               </div>
+               <div class="w-50">
+                  <label for="materialTypeName">نوع الماده</label>
+                  <input type="text" class="form-control border-gray" placeholder=" نوع الماده" formControlName="materialTypeName" id="materialTypeName">
+               </div>
+            </div>
+             <div class=" d-flex justify-content-between gap-2 mt-3">
+               <div class="w-50">
+                  <label for="fromDate">التاريخ من</label>
+                  <input type="date" class="form-control border-gray" placeholder=" اسم التاجر" formControlName="fromDate" id="fromDate">
+               </div>
+               <div class="w-50">
+                  <label for="toDate">التاريخ الى</label>
+                  <input type="date" class="form-control border-gray" placeholder=" نوع الماده" formControlName="toDate" id="toDate">
+               </div>
+            </div>
+
+            <div class=" d-flex justify-content-around gap-2 mt-3">
+               <div class="w-50">
+                  <label for="warehouseName">اسم المستودع</label>
+                  <input type="text" class="form-control border-gray" placeholder=" اسم المستودع" formControlName="warehouseName" id="warehouseName">
+               </div>
+              
+            </div>
+
+            <div class=" d-flex justify-content-end gap-2 mt-4">
+               <button type="button" class="btn btn-secondary" (click)="close()">إلغاء</button>
+               <button type="button" class="btn btn-primary" (click)="onSearch()">بحث</button>
+            </div>
+        </form>
+    </div>
+</app-h-modal>

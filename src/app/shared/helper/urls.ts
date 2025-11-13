@@ -36,6 +36,7 @@ export class MerchantURLs{
 }
 
 export class TransactionURLs{
+  static readonly Search = Base_URL + 'api/Transactions/Search';
   static readonly GetAll = Base_URL + 'api/Transactions/GetAll';
   static GetByID(id:string):string {return `${Base_URL}api/Transactions/GetById/${id}`};
   static GetInvoiceById(id:string):string {return `${Base_URL}api/Transactions/GetInvoiceById/${id}`};
@@ -66,4 +67,14 @@ export class WarehouseURLs{
   static Delete(id:string):string {return `${Base_URL}api/Warehouse/Delete/${id}`};
   static readonly Add = Base_URL + 'api/Warehouse/Add';
   static readonly Update = Base_URL + 'api/Warehouse/Update';
+}
+
+export class WarehouseInventoryURLs{
+  static readonly GetAll = Base_URL + 'api/WarehouseInventory/GetAll';
+  static readonly GetAllWithPagination = Base_URL + 'api/WarehouseInventory/GetAllWithPagination';
+  static GetByID(id:string):string {return `${Base_URL}api/WarehouseInventory/GetById/${id}`};
+  static GetByWarehouseInventoryId(id:string):string {return `${Base_URL}api/WarehouseInventory/GetByWarehouseId/${id}`};
+  static Delete(id:string):string {return `${Base_URL}api/WarehouseInventory/Delete/${id}`};
+  static readonly Add = Base_URL + 'api/WarehouseInventory/Add';
+  static readonly Update = Base_URL + 'api/WarehouseInventory/Update';
 }

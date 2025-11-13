@@ -8,13 +8,25 @@ import { PaginationEntity } from '../../model/pagination-entity';
 import { CreateTransactionDto } from '../../model/Transaction/create-transaction-dto';
 import { InvoiceDto } from '../../model/Transaction/invoice-dto';
 import { AllTransByMerchantDto } from '../../model/Transaction/all-trans-by-merchant-dto';
+import { TxnSearchDto } from '../../model/Transaction/txn-search-dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransactionServices {
   constructor(private baseService: BaseServicesService) {}
-    
+    /**
+   * 🔍 Search Transactions with filters
+   */
+  search(data: TxnSearchDto): Observable<ApiResponse<TransactionDto[]>> {
+    return this.baseService
+      .PostRequest<ApiResponse<TransactionDto[]>>(TransactionURLs.Search, data)
+      .pipe(
+        catchError(error =>
+          this.handleError<TransactionDto[]>('searching transactions', error, [])
+        )
+      );
+  }
       /**
        * Fetch all Transactions
        */

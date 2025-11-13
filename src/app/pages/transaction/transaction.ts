@@ -19,6 +19,8 @@ import { PaginationEntity } from '../../model/pagination-entity';
 import { WarehouseDto } from '../../model/Warehouse/warehouse-dto';
 import { WarehouseServices } from '../../core/Warehouse/warehouse-services';
 import { ViewTransactionComponent } from './view-transaction-component/view-transaction-component';
+import { TxnSearchDto } from '../../model/Transaction/txn-search-dto';
+import { TrxFilter } from './trx-filter/trx-filter';
 
 @Component({
   selector: 'app-transaction',
@@ -225,6 +227,33 @@ export class Transaction implements OnInit {
             }
           },
           error: () => this.toast.error('حدث خطأ أثناء حذف المعاملة.'),
+        });
+      }
+    });
+  }
+  onFilter(): void {
+    this.dialog.open(TrxFilter, {
+      width: '800px',
+      maxHeight: '90vh',
+      maxWidth: '90vw',
+      data: {
+        pageIngo: this.pagination
+      }
+    }).afterClosed().subscribe((filterData: TxnSearchDto) => {
+      if (filterData) {
+        filterData.pageIndex = this.pagination.pageIndex;
+        filterData.pageSize = this.pagination.pageSize;
+        filterData.totalCount = this.pagination.totalCount;
+        this.transactionServices.search(filterData).subscribe({
+          next: (res: ApiResponse<TransactionDto[]>) => {
+            if (res.success && res.data) {
+              this.transctionList = res.data;
+            }
+          },
+          error: (err:any) => {
+            console.error(err);
+            this.toast.error('حدث خطأ أثناء تحميل المعاملات.');
+          },
         });
       }
     });

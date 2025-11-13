@@ -1,21 +1,12 @@
 <app-h-modal [headerTitle]="titleName" (closeEvent)="clsoe()">
-        <app-h-table 
-        entityName=""
-        headerText="قائمة المواد"
-        [keyColumns]="columnKeys"
-        [displayColumns]="columns"
-        [data]="data.materials"
-
-        [enableActions]="true"
-        actionName="الإجراءات"
-        [actions]="actions"
-        (actionClick)="onTableAction($event)"
-
-        [showPagination]="true"
-        [total]="0"
-        (pageChangeEvent)="onPageChange($event)"
-        page="صفحة"
-        ItemPerPage="عدد العناصر في الصفحة">
-</app-h-table>
+        <div class="p-2">
+                <app-h-table entityName="" headerText="قائمة المواد" [keyColumns]="columnKeys"
+                        [displayColumns]="columns" [data]="data.materials" [enableActions]="true" actionName="الإجراءات"
+                        [actions]="actions" (actionClick)="onTableAction($event)" [showPagination]="true" [total]="0"
+                        (pageChangeEvent)="onPageChange($event)" page="صفحة" ItemPerPage="عدد العناصر في الصفحة"
+                        [enableAdd]="true" addIcon="fa-solid fa-square-plus" addText="إضافة مادة جديدة"
+                        (onAddEvent)="addWInv()">
+                </app-h-table>
+        </div>
 
 </app-h-modal>

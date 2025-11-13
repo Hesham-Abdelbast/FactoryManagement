@@ -6,26 +6,33 @@
         <!-- Warehouse ID -->
         <div class="mb-3 text-end">
           <label class="form-label">المخزن <span class="text-danger">*</span></label>
-          <input type="text" formControlName="warehouseId" class="form-control text-end"
-            placeholder="أدخل رقم المخزن"
-            [ngClass]="{'is-invalid': form.get('warehouseId')?.invalid && form.get('warehouseId')?.touched}" />
+          <select formControlName="warehouseId" class="form-select text-end" [disabled]="true"
+            [ngClass]="{'is-invalid': form.get('warehouseId')?.invalid && form.get('warehouseId')?.touched}">
+            <option value="" disabled selected>اختر المخزن</option>
+            <option *ngFor="let warehouse of warehouseLst" [value]="warehouse.id">
+              {{ warehouse.name }}
+            </option>
+          </select>
           <div class="invalid-feedback text-end">هذا الحقل مطلوب.</div>
         </div>
 
         <!-- Material Type -->
         <div class="mb-3 text-end">
           <label class="form-label">نوع المادة <span class="text-danger">*</span></label>
-          <input type="text" formControlName="materialTypeId" class="form-control text-end"
-            placeholder="أدخل رقم نوع المادة"
+          <select formControlName="materialTypeId" class="form-select text-end"
             [ngClass]="{'is-invalid': form.get('materialTypeId')?.invalid && form.get('materialTypeId')?.touched}">
+            <option value="" disabled selected>اختر نوع المادة</option>
+            <option *ngFor="let materialType of materialTypeLst" [value]="materialType.id">
+              {{ materialType.name }}
+            </option>
+          </select>
           <div class="invalid-feedback text-end">هذا الحقل مطلوب.</div>
         </div>
 
         <!-- Current Quantity -->
         <div class="mb-3 text-end">
           <label class="form-label">الكمية الحالية <span class="text-danger">*</span></label>
-          <input type="number" formControlName="currentQuantity" class="form-control text-end"
-            placeholder="أدخل الكمية"
+          <input type="number" formControlName="currentQuantity" class="form-control text-end" placeholder="أدخل الكمية"
             [ngClass]="{'is-invalid': form.get('currentQuantity')?.invalid && form.get('currentQuantity')?.touched}">
           <div class="invalid-feedback text-end">
             يجب إدخال كمية صحيحة أكبر أو تساوي 0.

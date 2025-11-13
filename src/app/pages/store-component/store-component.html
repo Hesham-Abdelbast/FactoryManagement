@@ -1,22 +1,36 @@
-<div class="store-container">
+<div class="store-container" dir="rtl">
   <!-- Header Section -->
-  <div class="row mb-4">
-    <div class="col-12">
-      <div class="d-flex justify-content-between align-items-center">
-        <h2 class="page-title">
-          <i class="fas fa-warehouse me-2"></i>
-          مخزون المواد
-        </h2>
-
-      </div>
+  <div class="row mb-4 align-items-center">
+    <div class="col-md-6">
+      <h2 class="page-title mb-0">
+        <i class="fas fa-warehouse me-2"></i>
+        مخزون المواد
+      </h2>
     </div>
   </div>
-  <div class="row g-3">
 
+   <div class="row mb-4">
+    <div class="col-12 col-md-6">
+      <label class="fw-semibold mb-2">اختر المستودع:</label>
+      <select
+        class="form-select"
+        [(ngModel)]="warehouseId"
+        (change)="onWarehouseChange($event)"
+      >
+        <option value="" disabled selected>-- اختر مستودعاً --</option>
+        <option *ngFor="let wh of warehouseLst" [value]="wh.id">
+          {{ wh.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Material Cards -->
+  <div class="row g-3">
     <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *ngFor="let item of materialStocks">
       <div class="material-card" [class]="getStockStatus(item.currentQuantity)">
-        <div class="card-header">
-          <h5 class="material-name">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="material-name mb-0">
             <i class="fas fa-box me-2"></i>
             {{ item.materialTypeName || 'غير معروف' }}
           </h5>
@@ -26,21 +40,22 @@
         </div>
 
         <div class="card-body">
-          <div class="quantity-section">
-            <p class="quantity-label">الكمية الحالية</p>
-            <h3 class="quantity-value">{{ item.currentQuantity || 0 }}</h3>
+          <div class="quantity-section text-center">
+            <p class="quantity-label mb-1">الكمية الحالية</p>
+            <h3 class="quantity-value fw-bold">
+              {{ item.currentQuantity || 0 }}
+            </h3>
           </div>
 
-          <div class="stock-indicator">
+          <div class="stock-indicator mt-2">
             <div class="progress">
               <div class="progress-bar" [class]="getStockStatus(item.currentQuantity)"
-                [style.width.%]="getStockPercentage(item.currentQuantity)">
-              </div>
+                [style.width.%]="getStockPercentage(item.currentQuantity)"></div>
             </div>
           </div>
         </div>
 
-        <div class="card-footer">
+        <div class="card-footer text-end">
           <small class="text-muted">
             آخر تحديث: {{ getCurrentTime() }}
           </small>
@@ -48,5 +63,4 @@
       </div>
     </div>
   </div>
-
 </div>

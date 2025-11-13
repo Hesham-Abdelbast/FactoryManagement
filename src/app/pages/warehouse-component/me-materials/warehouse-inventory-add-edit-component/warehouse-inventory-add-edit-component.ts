@@ -1,13 +1,14 @@
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
-import { WarehouseServices } from '../../../../core/Warehouse/warehouse-services';
 import { ToastService } from '../../../../core/shared/toast.service';
 import { WarehouseInventoryDto } from '../../../../model/Warehouse/warehouse-inventory-dto';
 import { CommonModule } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { HModalComponent } from "../../../../shared/Component/h-modal/h-modal.component";
+import { MaterialTypeVM } from '../../../../model/MaterialType/material-type-vm';
+import { WarehouseDto } from '../../../../model/Warehouse/warehouse-dto';
+import { WarehouseInventoryServices } from '../../../../core/WarehouseInventory/warehouse-inventory-services';
+import { ApiResponse } from '../../../../model/api-response';
 
 
 @Component({
@@ -18,18 +19,19 @@ import { HModalComponent } from "../../../../shared/Component/h-modal/h-modal.co
 })
 export class WarehouseInventoryAddEditComponent implements OnInit {
 
- item: WarehouseInventoryDto | null = null;
-  
+  item: WarehouseInventoryDto | null = null;
+  materialTypeLst: MaterialTypeVM[] = [];
+  warehouseLst: WarehouseDto[] = [];
+
 
   form!: FormGroup;
   isEditMode = false;
 
   constructor(
+    private service: WarehouseInventoryServices,
     private fb: FormBuilder,
-    private service: WarehouseServices,
     private toast: ToastService,
     private dialogRef: MatDialogRef<WarehouseInventoryAddEditComponent>,
-    private cdr: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.item = data?.item ?? null;
@@ -38,12 +40,24 @@ export class WarehouseInventoryAddEditComponent implements OnInit {
   ngOnInit(): void {
     this.isEditMode = !!this.item;
 
-    this.form = this.fb.group({
-      id: [this.item?.id ?? null],
-      warehouseId: [this.item?.warehouseId ?? null, Validators.required],
-      materialTypeId: [this.item?.materialTypeId ?? null, Validators.required],
-      currentQuantity: [this.item?.currentQuantity ?? 0, [Validators.required, Validators.min(0)]]
-    });
+    if (this.isEditMode) {
+      this.form = this.fb.group({
+        id: [this.item?.id ?? null],
+        warehouseId: [{ value: this.item?.warehouseId ?? null, disabled: true }, Validators.required],
+        materialTypeId: [{ value: this.item?.materialTypeId ?? null, disabled: true }, Validators.required],
+        currentQuantity: [this.item?.currentQuantity ?? 0, [Validators.required, Validators.min(0)]]
+      });
+    }
+    else {
+      this.form = this.fb.group({
+        warehouseId: ['', Validators.required],
+        materialTypeId: ['', Validators.required],
+        currentQuantity: [0, [Validators.required, Validators.min(0)]]
+      });
+    }
+
+    this.materialTypeLst = this.data.materialTypeLst ?? [];
+    this.warehouseLst = this.data.warehouseLst ?? [];
   }
 
   onSubmit(): void {
@@ -54,23 +68,27 @@ export class WarehouseInventoryAddEditComponent implements OnInit {
     }
 
     const dto: WarehouseInventoryDto = this.form.value;
-
+    console.log(dto);
     if (this.isEditMode) {
-      // this.service.update(dto).subscribe({
-      //   next: () => {
-      //     this.toast.success('تم التعديل بنجاح');
-      //     this.dialogRef.close(true);
-      //   },
-      //   error: () => this.toast.error('فشل في عملية التعديل')
-      // });
+      this.service.update(dto).subscribe({
+        next: (res: ApiResponse<boolean>) => {
+          if (res.success) {
+            this.toast.success('تم التعديل بنجاح');
+            this.dialogRef.close(true);
+          }
+        },
+        error: () => this.toast.error('فشل في عملية التعديل')
+      });
     } else {
-      // this.service.create(dto).subscribe({
-      //   next: () => {
-      //     this.toast.success('تم الحفظ بنجاح');
-      //     this.closeEvent.emit(true);
-      //   },
-      //   error: () => this.toast.error('فشل في عملية الحفظ')
-      // });
+      this.service.add(dto).subscribe({
+        next: (res: ApiResponse<string>) => {
+          if (res.success) {
+            this.toast.success('تم الحفظ بنجاح');
+            this.dialogRef.close(true);
+          }
+        },
+        error: () => this.toast.error('فشل في عملية الحفظ')
+      });
     }
   }
 

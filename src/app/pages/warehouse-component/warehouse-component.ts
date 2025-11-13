@@ -13,6 +13,7 @@ import { AsyncPipe } from '@angular/common';
 import { PaginationEntity } from '../../model/pagination-entity';
 import { WarehouseInventoryDto } from '../../model/Warehouse/warehouse-inventory-dto';
 import { MeMaterials } from './me-materials/me-materials';
+import { WarehouseInventoryServices } from '../../core/WarehouseInventory/warehouse-inventory-services';
 
 @Component({
   selector: 'app-warehouse-component',
@@ -66,6 +67,7 @@ export class WarehouseComponent {
 
   constructor(
     private warehouseServices: WarehouseServices,
+    private warehouseInServices: WarehouseInventoryServices,
     private dialog: MatDialog,
     private toast: ToastService,
   ) { }
@@ -122,7 +124,7 @@ export class WarehouseComponent {
   }
 
   loadMaterials(warehouseId: string): void {
-    this.warehouseServices.GetStoreByWarehouseId(warehouseId).subscribe({
+    this.warehouseInServices.getByWarehouseId(warehouseId).subscribe({
       next: (res: ApiResponse<WarehouseInventoryDto[]>) => {
         if (res.success) {
           const materials = res.data;
@@ -160,7 +162,7 @@ export class WarehouseComponent {
   }
 
   deleteTransaction(id: string): void {
-    this.toast.confirm('هل أنت متأكد من حذف هذا النوع؟', 'نعم', 'إلغاء').then((confirmed) => {
+    this.toast.confirm('سيتم حذف جميع المعاملات المربوطه بالمستودع. هل أنت متأكد من حذف هذا المستودع', 'نعم', 'إلغاء').then((confirmed) => {
       if (confirmed) {
         this.warehouseServices.delete(id).subscribe({
           next: (res: ApiResponse<boolean>) => {

@@ -20,5 +20,9 @@
   [total]="pagination.totalCount"
   (pageChangeEvent)="onPageChange($event)"
   page="صفحة"
-  ItemPerPage="عدد العناصر في الصفحة">
+  ItemPerPage="عدد العناصر في الصفحة"
+  
+  [enableFilter]="true"
+  (onFilterEvent)="onFilter()"
+  filterIcon="fa-solid fa-arrow-down-wide-short">
 </app-h-table>
