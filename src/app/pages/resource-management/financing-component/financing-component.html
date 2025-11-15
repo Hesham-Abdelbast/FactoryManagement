@@ -1,0 +1,24 @@
+<app-h-table 
+  entityName=""
+  headerText="قائمة التمويلات "
+  [keyColumns]="columnKeys"
+  [displayColumns]="columns"
+  [data]="eqpsData"
+  P_Key="id"
+
+  [enableActions]="true"
+  actionName="الإجراءات"
+  [actions]="actions"
+  (actionClick)="onTableAction($event)"
+
+  [enableAdd]="true"
+  addIcon="fa-solid fa-square-plus"
+  addText="إضافة تمويل "
+  (onAddEvent)="addEqps()"
+
+  [showPagination]="true"
+  [total]="paginationeqps.totalCount"
+  (pageChangeEvent)="onPageChange($event)"
+  page="صفحة"
+  ItemPerPage="عدد العناصر في الصفحة">
+</app-h-table>

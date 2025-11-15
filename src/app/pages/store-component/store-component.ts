@@ -2,9 +2,6 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ToastService } from '../../core/shared/toast.service';
-import { StoreServices } from '../../core/Store/store-services';
-import { StoreDto } from '../../model/StoreInventory/store-dto';
-import { Subject, takeUntil } from 'rxjs';
 import { WarehouseInventoryServices } from '../../core/WarehouseInventory/warehouse-inventory-services';
 import { WarehouseServices } from '../../core/Warehouse/warehouse-services';
 import { WarehouseDto } from '../../model/Warehouse/warehouse-dto';
@@ -24,7 +21,6 @@ export class StoreComponent implements OnInit {
   materialStocks : WarehouseInventoryDto[] = []
   warehouseId = ''
   constructor(
-    private storeService: StoreServices,
     private warehouseInventoryServices:WarehouseInventoryServices,
     private warehouseServices:WarehouseServices,
     private toast: ToastService,

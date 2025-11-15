@@ -6,6 +6,7 @@ import { InvoiceComponent } from './pages/transaction/invoice-component/invoice-
 import { ContactComponent } from './pages/contact-component/contact-component';
 import { StoreComponent } from './pages/store-component/store-component';
 import { WarehouseComponent } from './pages/warehouse-component/warehouse-component';
+import { ResourceManagement } from './pages/resource-management/resource-management';
 
 export const routes: Routes = [
 
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'invoice/:id', component: InvoiceComponent },
   { path: 'store', component: StoreComponent },
   { path: 'warehouses', component: WarehouseComponent },
+  { path: 'resources', component: ResourceManagement },
 
 ];

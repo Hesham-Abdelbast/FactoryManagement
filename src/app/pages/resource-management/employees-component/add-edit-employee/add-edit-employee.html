@@ -1,0 +1,76 @@
+<app-h-modal 
+  (closeEvent)="close()" 
+  [headerTitle]="isEditMode ? 'تعديل موظف' : 'إضافة موظف'">
+
+  <div class="container mt-4" dir="rtl">
+    <div class="card shadow p-4">
+      <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+
+        <!-- الاسم -->
+        <div class="mb-3 text-end">
+          <label class="form-label">
+            الاسم <span class="text-danger">*</span>
+          </label>
+          <input
+            type="text"
+            formControlName="name"
+            class="form-control text-end"
+            [ngClass]="{'is-invalid': employeeForm.get('name')?.invalid && employeeForm.get('name')?.touched}"
+            placeholder="أدخل اسم الموظف"
+          />
+          <div class="invalid-feedback text-end" *ngIf="employeeForm.get('name')?.errors?.['required']">
+            الاسم مطلوب.
+          </div>
+          <div class="invalid-feedback text-end" *ngIf="employeeForm.get('name')?.errors?.['maxlength']">
+            لا يمكن أن يتجاوز الاسم 50 حرفًا.
+          </div>
+        </div>
+
+        <!-- تاريخ البداية -->
+        <div class="mb-3 text-end">
+          <label class="form-label">
+            تاريخ البداية <span class="text-danger">*</span>
+          </label>
+          <input
+            type="date"
+            formControlName="startDate"
+            class="form-control text-end"
+            [ngClass]="{'is-invalid': employeeForm.get('startDate')?.invalid && employeeForm.get('startDate')?.touched}"
+          />
+          <div class="invalid-feedback text-end" *ngIf="employeeForm.get('startDate')?.errors?.['required']">
+            تاريخ البداية مطلوب.
+          </div>
+        </div>
+
+        <!-- الراتب الأساسي -->
+        <div class="mb-3 text-end">
+          <label class="form-label">
+            الراتب الأساسي <span class="text-danger">*</span>
+          </label>
+          <input
+            type="number"
+            formControlName="baseSalary"
+            class="form-control text-end"
+            [ngClass]="{'is-invalid': employeeForm.get('baseSalary')?.invalid && employeeForm.get('baseSalary')?.touched}"
+            placeholder="أدخل الراتب الأساسي"
+          />
+          <div class="invalid-feedback text-end" *ngIf="employeeForm.get('baseSalary')?.errors?.['required']">
+            الراتب الأساسي مطلوب.
+          </div>
+          <div class="invalid-feedback text-end" *ngIf="employeeForm.get('baseSalary')?.errors?.['min']">
+            يجب أن يكون الراتب 0 أو أكثر.
+          </div>
+        </div>
+
+        <!-- أزرار الإجراءات -->
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-primary ms-2" type="submit">
+            {{ isEditMode ? 'تحديث' : 'حفظ' }}
+          </button>
+          <button class="btn btn-secondary" type="button" (click)="close()">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</app-h-modal>

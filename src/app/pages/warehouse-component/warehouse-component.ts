@@ -51,7 +51,14 @@ export class WarehouseComponent {
       label: 'المواد',
       type: 'view',
       style: 'btn btn-outline-primary btn-sm',
-    }, {
+    },
+    {
+      icon: 'fa-solid fa-file-invoice-dollar',
+      label: 'مصاريفي',
+      type: 'me-expense',
+      style: 'btn btn-outline-primary btn-sm',
+    }, 
+    {
       icon: 'fa fa-edit',
       label: 'تعديل',
       type: 'edit',
@@ -99,6 +106,7 @@ export class WarehouseComponent {
     if (event.action === 'edit') this.editTransaction(event.row);
     if (event.action === 'delete') this.deleteTransaction(event.row.id);
     if (event.action === 'view') this.loadMaterials(event.row.id);
+    if (event.action === 'me-expense') this.meExpense(event.row.id);
   }
 
   onPageChange(pageEvent: PageEvent): void {
@@ -107,7 +115,6 @@ export class WarehouseComponent {
     this.loadWarehouse();
   }
 
-  /** Add / Edit / Delete / view logic */
   addTransaction(): void {
     const dialogRef = this.dialog.open(AddEditWarehouse, {
       width: '900px',
@@ -121,6 +128,10 @@ export class WarehouseComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) this.loadWarehouse();
     });
+  }
+
+  meExpense(id:string){
+
   }
 
   loadMaterials(warehouseId: string): void {

@@ -35,12 +35,12 @@ export class MeMaterials implements OnInit {
   ];
 
   actions: TableAction[] = [
-    {
-      icon: 'fa fa-edit',
-      label: 'تعديل الكمية',
-      type: 'edit',
-      style: 'btn btn-outline-success btn-sm',
-    },
+    // {
+    //   icon: 'fa fa-edit',
+    //   label: 'تعديل الكمية',
+    //   type: 'edit',
+    //   style: 'btn btn-outline-success btn-sm',
+    // },
     {
       icon: 'fa fa-trash',
       label: ' حذف',

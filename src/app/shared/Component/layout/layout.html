@@ -4,6 +4,7 @@
     <i [ngClass]=" isOpened? 'bx bx-menu-alt-right':'bx bx-menu'" (click)="isOpened= !isOpened" id="btn"></i>
   </div>
   <ul class="nav-list">
+
     <li>
       <a routerLink="store">
         <i class='bx bx-grid-alt'></i>
@@ -11,6 +12,7 @@
       </a>
       <span class="tooltip">لوحه التحكم</span>
     </li>
+
     <li>
       <a routerLink="transactions">
         <i class='bx bx-grid-alt'></i>
@@ -27,19 +29,30 @@
       <span class="tooltip">المعادن</span>
     </li>
 
-     <li>
+    <li>
       <a routerLink="merchants">
         <i class='bx bx-grid-alt'></i>
         <span class="links_name">التجار</span>
       </a>
       <span class="tooltip">التجار</span>
     </li>
-     <li>
+
+    <li>
       <a routerLink="warehouses">
         <i class='bx bx-grid-alt'></i>
         <span class="links_name">المخازن</span>
       </a>
       <span class="tooltip">المخازن</span>
+    </li>
+    
+    <li>
+      <a routerLink="resources">
+        <i class='bx bx-grid-alt'></i>
+        <span class="links_name">إدارة الموارد</span>
+      </a>
+      <span class="tooltip">إدارة الموارد</span>
+    </li>
+
     <li>
       <a routerLink="contact">
         <i class='bx bx-grid-alt'></i>
