@@ -1,0 +1,70 @@
+<app-h-modal (closeEvent)="close()" [headerTitle]="isEditMode ? 'تعديل التمويل' : 'إضافة تمويل'">
+
+    <div class="container mt-4" dir="rtl">
+        <div class="card shadow p-4">
+            <form [formGroup]="financingForm" (ngSubmit)="onSubmit()" class="p-3">
+
+                <!-- Provider Name -->
+                <div class="mb-3">
+                    <label class="form-label">اسم المزود</label>
+                    <input type="text" class="form-control" formControlName="providerName"
+                        placeholder="ادخل اسم المزود">
+
+                    <div class="text-danger mt-1"
+                        *ngIf="financingForm.get('providerName')?.touched && financingForm.get('providerName')?.invalid">
+                        <small *ngIf="financingForm.get('providerName')?.errors?.['required']">
+                            هذا الحقل مطلوب
+                        </small>
+                        <small *ngIf="financingForm.get('providerName')?.errors?.['maxlength']">
+                            الحد الأقصى للأحرف هو 100
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Amount -->
+                <div class="mb-3">
+                    <label class="form-label">قيمة التمويل</label>
+                    <input type="number" class="form-control" formControlName="amount" placeholder="ادخل قيمة التمويل">
+
+                    <div class="text-danger mt-1"
+                        *ngIf="financingForm.get('amount')?.touched && financingForm.get('amount')?.invalid">
+                        <small *ngIf="financingForm.get('amount')?.errors?.['required']">
+                            هذا الحقل مطلوب
+                        </small>
+                        <small *ngIf="financingForm.get('amount')?.errors?.['min']">
+                            يجب أن تكون القيمة أكبر من 0
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Date -->
+                <div class="mb-3">
+                    <label class="form-label">تاريخ الإنشاء</label>
+                    <input type="date" class="form-control" formControlName="createDate" dir="rtl" lang="ar-LY">
+
+                    <div class="text-danger mt-1"
+                        *ngIf="financingForm.get('createDate')?.touched && financingForm.get('createDate')?.invalid">
+                        <small *ngIf="financingForm.get('createDate')?.errors?.['required']">
+                            هذا الحقل مطلوب
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Notes -->
+                <div class="mb-3">
+                    <label class="form-label">ملاحظات</label>
+                    <textarea class="form-control" formControlName="notes" rows="3"
+                        placeholder="مثال: دفعة أولى أو شروط إضافية"></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-secondary" (click)="close()">إلغاء</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="financingForm.invalid">
+                        {{ isEditMode ? 'تعديل' : 'إضافة' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</app-h-modal>

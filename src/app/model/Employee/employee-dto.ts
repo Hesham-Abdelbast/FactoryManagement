@@ -3,4 +3,5 @@ export interface EmployeeDto {
   name: string;
   startDate: string; // DateOnly -> ISO string
   baseSalary: number;
+  notes:string
 }

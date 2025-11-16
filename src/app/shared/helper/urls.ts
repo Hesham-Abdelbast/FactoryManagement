@@ -175,8 +175,8 @@ export class EquipmentManagementURLs {
 export class FinancingURLs {
   private static readonly base = Base_URL + 'api/Financing/';
 
-  static readonly GetAllWithPagination = this.base + 'GetAll'; // POST with pagination
-  static readonly GetAll = this.base + 'All'; // GET all
+  static readonly GetAllWithPagination = this.base + 'GetAllWithPagination'; // POST with pagination
+  static readonly GetAll = this.base + 'GetAll'; // GET all
   static GetById(id: string): string { return `${this.base}${id}` }
   static readonly Add = this.base + 'Add';
   static readonly Update = this.base + 'Update';

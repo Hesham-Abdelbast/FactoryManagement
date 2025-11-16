@@ -17,26 +17,26 @@ import { AddEditEmployee } from './add-edit-employee/add-edit-employee';
   styleUrl: './employees-component.scss',
 })
 export class EmployeesComponent implements OnInit {
-  EmpsData :EmployeeDto[] = [];
-  paginationEmp : PaginationEntity = {
-    pageIndex : 1,
-    pageSize : 10,
-    totalCount:0
-   }
- /** أعمدة الجدول */
-  columns = ['الاسم', 'تاريخ بداء العمل' , 'المرتب'];
-  columnKeys = ['name', 'startDate','baseSalary'];
+  EmpsData: EmployeeDto[] = [];
+  paginationEmp: PaginationEntity = {
+    pageIndex: 1,
+    pageSize: 10,
+    totalCount: 0
+  }
+  /** أعمدة الجدول */
+  columns = ['الاسم', 'تاريخ بداء العمل', 'المرتب'];
+  columnKeys = ['name', 'startDate', 'baseSalary'];
 
   constructor(
-    private EmpServices:EmployeeManagementService,
-    private toast:ToastService,
+    private EmpServices: EmployeeManagementService,
+    private toast: ToastService,
     private dialog: MatDialog,
-  ){}
+  ) { }
 
   ngOnInit(): void {
     this.GetAllEmps();
   }
-/** إجراءات الجدول */
+  /** إجراءات الجدول */
   actions: TableAction[] = [
     {
       icon: 'fa fa-edit',
@@ -68,38 +68,57 @@ export class EmployeesComponent implements OnInit {
 
   /** تغيير الصفحة */
   onPageChange(pageEvent: PageEvent) {
-    const start = (pageEvent.pageIndex - 1) * pageEvent.pageSize;
-    const end = start + pageEvent.pageSize;
-    console.log(`عرض البيانات من ${start} إلى ${end}`);
+    this.paginationEmp.pageIndex = pageEvent.pageIndex;
+    this.paginationEmp.pageSize = pageEvent.pageIndex;
+    this.GetAllEmps();
   }
 
-  editEmp(emp :EmployeeDto){
-
-  }
-
-  deleteEmp(id:string){
-
-  }
-
-  addEmps(){
+  editEmp(emp: EmployeeDto) {
     const dialogRef = this.dialog.open(AddEditEmployee, {
-          width: '900px',
-          height: 'auto'
-        });
-    
-        dialogRef.afterClosed().subscribe(res => {
-          if (res)
-            this.GetAllEmps();
-        });
+      width: '900px',
+      height: 'auto',
+      data: { isEdit: true, Item: emp }
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res)
+        this.GetAllEmps();
+    });
   }
 
-  GetAllEmps(){
-    this.EmpServices.getAllEmployeesWithPagination(this.paginationEmp).subscribe( (res : ApiResponse<EmployeeDto[]>) =>{
-      if(res.success && res.data){
-          this.EmpsData = res.data
-          this.paginationEmp.totalCount = res.data.length;
+  deleteEmp(id: string) {
+    this.toast.confirm('هل أنت متأكد من حذف هذا العامل', 'نعم', 'إلغاء').then((confirmed) => {
+      if (confirmed) {
+        this.EmpServices.deleteEmployee(id).subscribe((res: ApiResponse<boolean>) => {
+          if (res.success) {
+            this.toast.success('تم حذف العامل بنجاح.');
+            this.GetAllEmps();
+          } else {
+            this.toast.error('فشل حذف العامل.');
+          }
+        });
       }
-      else{
+    });
+  }
+
+  addEmps() {
+    const dialogRef = this.dialog.open(AddEditEmployee, {
+      width: '900px',
+      height: 'auto'
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if (res)
+        this.GetAllEmps();
+    });
+  }
+
+  GetAllEmps() {
+    this.EmpServices.getAllEmployeesWithPagination(this.paginationEmp).subscribe((res: ApiResponse<EmployeeDto[]>) => {
+      if (res.success && res.data) {
+        this.EmpsData = res.data
+        this.paginationEmp.totalCount = res.data.length;
+      }
+      else {
         this.toast.error(res.returnMsg);
       }
     });

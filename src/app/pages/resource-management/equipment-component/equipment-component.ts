@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TableAction } from '../../../model/table-action';
 import { PageEvent } from '../../../model/page-event';
 import { HTableComponent } from "../../../shared/Component/h-table/h-table.component";
+import { AddEditEquipment } from './add-edit-equipment/add-edit-equipment';
 
 @Component({
   selector: 'app-equipment-component',
@@ -16,26 +17,30 @@ import { HTableComponent } from "../../../shared/Component/h-table/h-table.compo
   styleUrl: './equipment-component.scss',
 })
 export class EquipmentComponent {
- eqpsData :EquipmentDto[] = [];
-  paginationeqps : PaginationEntity = {
-    pageIndex : 1,
-    pageSize : 10,
-    totalCount:0
-   }
- /** أعمدة الجدول */
-  columns = ['اسم المعدة', 'نوع المعدة' ];
-  columnKeys = ['name', 'category'];
+  categoryLabels: { [key: string]: string } = {
+    Internal: 'معدة داخلية',
+    External: 'معدة خارجية'
+  };
+  eqpsData: EquipmentDto[] = [];
+  paginationeqps: PaginationEntity = {
+    pageIndex: 1,
+    pageSize: 10,
+    totalCount: 0
+  }
+  /** أعمدة الجدول */
+  columns = ['اسم المعدة', 'نوع المعدة'];
+  columnKeys = ['name', 'categoryName'];
 
   constructor(
-    private eqpServices:EquipmentManagementService,
-    private toast:ToastService,
+    private eqpServices: EquipmentManagementService,
+    private toast: ToastService,
     private dialog: MatDialog,
-  ){}
+  ) { }
 
   ngOnInit(): void {
     this.GetAllEquipment();
   }
-/** إجراءات الجدول */
+  /** إجراءات الجدول */
   actions: TableAction[] = [
     {
       icon: 'fa fa-edit',
@@ -73,29 +78,55 @@ export class EquipmentComponent {
   }
 
 
-  editeqps(eqps :EquipmentDto){
-
+  editeqps(eqps: EquipmentDto) {
+    const dialogRef = this.dialog.open(AddEditEquipment, {
+      width: '900px',
+      height: 'auto',
+      data: { isEdit: true, Item: eqps }
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res)
+        this.GetAllEquipment();
+    });
   }
 
-  deleteeqps(id:string){
-
-  }
-
-  addEqps(){
-
-  }
-
-  GetAllEquipment(){
-    this.eqpServices.getAllEquipmentsWithPagination(this.paginationeqps).subscribe( (res : ApiResponse<EquipmentDto[]>) =>{
-      if(res.success){
-        if(res.data && res.data.length>0){
-          this.eqpsData = res.data
-        }
-        else{
-          this.toast.warning('لا توجد بيانات عمال...!')
-        }
+  deleteeqps(id: string) {
+    this.toast.confirm('هل أنت متأكد من حذف هذا المعدة', 'نعم', 'إلغاء').then((confirmed) => {
+      if (confirmed) {
+        this.eqpServices.deleteEquipment(id).subscribe((res: ApiResponse<boolean>) => {
+          if (res.success) {
+            this.toast.success('تم حذف المعدة بنجاح.');
+            this.GetAllEquipment();
+          } else {
+            this.toast.error('فشل حذف المعدة.');
+          }
+        });
       }
-      else{
+    });
+  }
+
+  addEqps() {
+    const dialogRef = this.dialog.open(AddEditEquipment, {
+      width: '900px',
+      height: 'auto'
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if (res)
+        this.GetAllEquipment();
+    });
+  }
+
+  GetAllEquipment() {
+    this.eqpServices.getAllEquipmentsWithPagination(this.paginationeqps).subscribe((res: ApiResponse<EquipmentDto[]>) => {
+      if (res.success && res.data) {
+       this.eqpsData = res.data.map(item => ({
+          ...item,
+          categoryName: this.categoryLabels[item.category] ?? item.category
+        }));
+        console.log(this.eqpsData)
+      }
+      else {
         this.toast.error(res.returnMsg);
       }
     });

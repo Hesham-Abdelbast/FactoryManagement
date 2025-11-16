@@ -6,4 +6,5 @@ export interface EquipmentDto {
   category: EquipmentCategory;
   ownerPartner?: string;
   rentalValue?: number;
+  notes:string
 }

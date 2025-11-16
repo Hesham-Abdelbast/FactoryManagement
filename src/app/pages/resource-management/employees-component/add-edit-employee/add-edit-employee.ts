@@ -37,12 +37,14 @@ export class AddEditEmployee {
         name: [this.employee?.name, [Validators.required, Validators.maxLength(50)]],
         startDate: [this.employee?.startDate, [Validators.required]],
         baseSalary: [this.employee?.baseSalary, [Validators.required, Validators.min(0)]],
+        notes: [this.employee?.notes],
       });
     } else {
       this.employeeForm = this.fb.group({
         name: ['', [Validators.required, Validators.maxLength(50)]],
         startDate: ['', [Validators.required]],
         baseSalary: [0, [Validators.required, Validators.min(0)]],
+        notes: ['']
       });
     }
   }

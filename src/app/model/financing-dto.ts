@@ -1,5 +1,5 @@
 export interface FinancingDto {
-    id?: string;
+  id?: string;
   amount: number;
   providerName: string;
   notes?: string;

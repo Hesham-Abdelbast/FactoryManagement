@@ -1,0 +1,63 @@
+<app-h-modal 
+  (closeEvent)="close()" 
+  [headerTitle]="isEditMode ? 'تعديل معدة' : 'إضافة معدة'">
+
+  <div class="container mt-4" dir="rtl">
+    <div class="card shadow p-4">
+      <form [formGroup]="equipmentForm" (ngSubmit)="onSubmit()">
+
+        <!-- الاسم -->
+        <div class="mb-3 text-end">
+          <label class="form-label">اسم المعدة <span class="text-danger">*</span></label>
+          <input type="text" class="form-control text-end"
+            formControlName="name"
+            placeholder="أدخل اسم المعدة" />
+        </div>
+
+        <!-- الفئة -->
+        <div class="mb-3 text-end">
+          <label class="form-label">الفئة <span class="text-danger">*</span></label>
+          <select class="form-control text-end" formControlName="category">
+            <option value="" disabled="true">اختر الفئة</option>
+            <option value="0">معدة داخلية</option>
+            <option value="1">معدة خارجية</option>
+          </select>
+        </div>
+
+        <!-- المالك -->
+        <div class="mb-3 text-end">
+          <label class="form-label">المالك</label>
+          <input type="text" class="form-control text-end"
+            formControlName="ownerPartner"
+            placeholder="اسم الشريك إن وجد" />
+        </div>
+
+        <!-- القيمة الإيجارية -->
+        <div class="mb-3 text-end">
+          <label class="form-label">القيمة الإيجارية</label>
+          <input type="number" class="form-control text-end"
+            formControlName="rentalValue"
+            placeholder="0.00" />
+        </div>
+
+        <!-- الملاحظات -->
+        <div class="mb-3 text-end">
+          <label class="form-label">الملاحظات</label>
+          <textarea rows="3" class="form-control text-end"
+            formControlName="notes"
+            placeholder="ملاحظات إضافية"></textarea>
+        </div>
+
+        <!-- أزرار -->
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary ms-2">
+            {{ isEditMode ? 'تحديث' : 'حفظ' }}
+          </button>
+          <button class="btn btn-secondary" type="button" (click)="close()">إلغاء</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</app-h-modal>
