@@ -1,0 +1,29 @@
+<app-h-modal [headerTitle]="title" (closeEvent)="close()">
+  <div class="p-3">
+    <app-h-table
+      entityName=""
+      headerText=""
+
+      [keyColumns]="columnKeys"
+      [displayColumns]="columns"
+      [data]="data"
+      P_Key="id"
+
+      [enableActions]="true"
+      actionName="الإجراءات"
+      [actions]="actions"
+      (actionClick)="onTableAction($event)"
+
+      [enableAdd]="true"
+      addIcon="fa-solid fa-plus"
+      addText="إضافة مصروف"
+      (onAddEvent)="onAdd()"
+
+      [showPagination]="true"
+      [total]="pagination.totalCount"
+      (pageChangeEvent)="onPageChange($event)"
+      page="صفحة"
+      ItemPerPage="عدد العناصر">
+    </app-h-table>
+  </div>
+</app-h-modal>

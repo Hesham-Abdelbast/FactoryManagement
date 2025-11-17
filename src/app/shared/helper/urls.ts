@@ -130,11 +130,13 @@ export class EmployeeManagementURLs {
   static readonly AddCashAdvance = this.base + 'AddCashAdvance';
   static DeleteCashAdvance(id: string): string { return `${this.base}DeleteCashAdvance/${id}` }
   static GetCashAdvances(employeeId: string): string { return `${this.base}GetCashAdvances/${employeeId}` }
-
+  static readonly UpdateEmployeeCashAdvance = this.base + 'UpdateEmployeeCashAdvance';
+  
   // 🧾 Personal Expenses
   static readonly AddPersonalExpense = this.base + 'AddPersonalExpense';
   static DeletePersonalExpense(id: string): string { return `${this.base}DeletePersonalExpense/${id}` }
   static GetPersonalExpenses(employeeId: string): string { return `${this.base}GetPersonalExpenses/${employeeId}` }
+  static readonly UpdatePersonalExpense = this.base + 'UpdatePersonalExpense';
 
   // 📌 Payroll
   static GeneratePayroll(employeeId: string, year: number, month: number): string {
@@ -165,11 +167,13 @@ export class EquipmentManagementURLs {
   static readonly AddExpense = this.base + 'AddExpense';
   static DeleteExpense(id: string): string { return `${this.base}DeleteExpense/${id}` }
   static GetExpenses(equipmentId: string): string { return `${this.base}GetExpenses/${equipmentId}` }
+  static readonly UpdateEquipmentExpense = this.base + 'UpdateEquipmentExpense';
 
   // Income
   static readonly AddIncome = this.base + 'AddIncome';
   static DeleteIncome(id: string): string { return `${this.base}DeleteIncome/${id}` }
   static GetIncomes(equipmentId: string): string { return `${this.base}GetIncomes/${equipmentId}` }
+  static readonly UpdateEquipmentIncome = this.base + 'UpdateEquipmentIncome';
 }
 
 export class FinancingURLs {

@@ -64,11 +64,14 @@ export class EmployeeManagementService {
       .pipe(catchError(err => this.handleError<boolean>(`حذف السلفة المالية بالمعرف ${id}`, err, false)));
   }
 
-  getCashAdvances(employeeId: string): Observable<ApiResponse<EmployeeCashAdvanceDto[]>> {
-    return this.baseService.GetRequest<ApiResponse<EmployeeCashAdvanceDto[]>>(EmployeeManagementURLs.GetCashAdvances(employeeId))
+  getCashAdvances(employeeId: string,param: PaginationEntity): Observable<ApiResponse<EmployeeCashAdvanceDto[]>> {
+    return this.baseService.PostRequest<ApiResponse<EmployeeCashAdvanceDto[]>>(EmployeeManagementURLs.GetCashAdvances(employeeId),param)
       .pipe(catchError(err => this.handleError<EmployeeCashAdvanceDto[]>('جلب جميع السلف المالية', err, [])));
   }
-
+  UpdateEmployeeCashAdvance(dto: EmployeeCashAdvanceDto): Observable<ApiResponse<boolean>> {
+    return this.baseService.PutRequest<ApiResponse<boolean>>(EmployeeManagementURLs.UpdateEmployeeCashAdvance, dto)
+      .pipe(catchError(err => this.handleError<boolean>('تحديث بيانات الموظف', err, null)));
+  }
   // ---------------- Personal Expense ----------------
   addPersonalExpense(dto: EmployeePersonalExpenseDto): Observable<ApiResponse<string>> {
     return this.baseService.PostRequest<ApiResponse<string>>(EmployeeManagementURLs.AddPersonalExpense, dto)
@@ -80,11 +83,14 @@ export class EmployeeManagementService {
       .pipe(catchError(err => this.handleError<boolean>(`حذف المصروف الشخصي بالمعرف ${id}`, err, false)));
   }
 
-  getPersonalExpenses(employeeId: string): Observable<ApiResponse<EmployeePersonalExpenseDto[]>> {
-    return this.baseService.GetRequest<ApiResponse<EmployeePersonalExpenseDto[]>>(EmployeeManagementURLs.GetPersonalExpenses(employeeId))
+  getPersonalExpenses(employeeId: string,param: PaginationEntity): Observable<ApiResponse<EmployeePersonalExpenseDto[]>> {
+    return this.baseService.PostRequest<ApiResponse<EmployeePersonalExpenseDto[]>>(EmployeeManagementURLs.GetPersonalExpenses(employeeId),param)
       .pipe(catchError(err => this.handleError<EmployeePersonalExpenseDto[]>('جلب جميع المصاريف الشخصية', err, [])));
   }
-
+  UpdatePersonalExpense(dto: EmployeePersonalExpenseDto): Observable<ApiResponse<boolean>> {
+    return this.baseService.PutRequest<ApiResponse<boolean>>(EmployeeManagementURLs.UpdatePersonalExpense, dto)
+      .pipe(catchError(err => this.handleError<boolean>('تحديث بيانات الموظف', err, null)));
+  }
   // ---------------- Payroll ----------------
   generatePayroll(employeeId: string, year: number, month: number): Observable<ApiResponse<string>> {
     return this.baseService.PostRequest<ApiResponse<string>>(EmployeeManagementURLs.GeneratePayroll(employeeId, year, month), null)

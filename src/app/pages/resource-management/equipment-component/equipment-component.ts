@@ -9,6 +9,7 @@ import { TableAction } from '../../../model/table-action';
 import { PageEvent } from '../../../model/page-event';
 import { HTableComponent } from "../../../shared/Component/h-table/h-table.component";
 import { AddEditEquipment } from './add-edit-equipment/add-edit-equipment';
+import { EquipmentExpenseComponent } from './equipment-expense-component/equipment-expense-component';
 
 @Component({
   selector: 'app-equipment-component',
@@ -17,10 +18,12 @@ import { AddEditEquipment } from './add-edit-equipment/add-edit-equipment';
   styleUrl: './equipment-component.scss',
 })
 export class EquipmentComponent {
+
   categoryLabels: { [key: string]: string } = {
     Internal: 'معدة داخلية',
     External: 'معدة خارجية'
   };
+
   eqpsData: EquipmentDto[] = [];
   paginationeqps: PaginationEntity = {
     pageIndex: 1,
@@ -45,6 +48,20 @@ export class EquipmentComponent {
     {
       icon: 'fa fa-edit',
       iconColor: '',
+      label: 'نفقات المعدات',
+      type: 'EquipmentExpenses',
+      style: 'btn btn-outline-primary btn-sm'
+    },
+     {
+      icon: 'fa fa-edit',
+      iconColor: '',
+      label: 'إيرادات المعدات',
+      type: 'EquipmentIncomes',
+      style: 'btn btn-outline-primary btn-sm'
+    },
+     {
+      icon: 'fa fa-edit',
+      iconColor: '',
       label: 'تعديل',
       type: 'edit',
       style: 'btn btn-outline-success btn-sm'
@@ -67,16 +84,34 @@ export class EquipmentComponent {
       case 'delete':
         this.deleteeqps(event.row.id);
         break;
+      case 'EquipmentIncomes':
+        this.EquipmentIncomes(event.row.id,event.row.name);
+        break;
+      case 'EquipmentExpenses':
+        this.EquipmentExpenses(event.row.id,event.row.name);
+        break;
     }
   }
 
+  EquipmentExpenses(id:string,name:string){
+  this.dialog.open(EquipmentExpenseComponent, {
+      width: '1000px',          
+      height: 'auto',
+      maxHeight: '90vh',
+      maxWidth: '90vw',
+      data: { Id: id,Name:name }         
+    });
+  }
+
+  EquipmentIncomes(id:string,name:string){
+  
+  }
   /** تغيير الصفحة */
   onPageChange(pageEvent: PageEvent) {
     this.paginationeqps.pageIndex = pageEvent.pageIndex;
     this.paginationeqps.pageSize = pageEvent.pageIndex;
     this.GetAllEquipment();
   }
-
 
   editeqps(eqps: EquipmentDto) {
     const dialogRef = this.dialog.open(AddEditEquipment, {

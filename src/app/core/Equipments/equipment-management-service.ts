@@ -15,7 +15,7 @@ import { PaginationEntity } from '../../model/pagination-entity';
   providedIn: 'root'
 })
 export class EquipmentManagementService {
-  constructor(private baseService: BaseServicesService) {}
+  constructor(private baseService: BaseServicesService) { }
 
   // ---------------- Equipment CRUD ----------------
 
@@ -67,11 +67,14 @@ export class EquipmentManagementService {
       .pipe(catchError(err => this.handleError<boolean>(`حذف مصروف المعدة بالمعرف ${id}`, err, false)));
   }
 
-  getEquipmentExpenses(equipmentId: string): Observable<ApiResponse<EquipmentExpenseDto[]>> {
-    return this.baseService.GetRequest<ApiResponse<EquipmentExpenseDto[]>>(EquipmentManagementURLs.GetExpenses(equipmentId))
+  getEquipmentExpenses(equipmentId: string, param: PaginationEntity): Observable<ApiResponse<EquipmentExpenseDto[]>> {
+    return this.baseService.PostRequest<ApiResponse<EquipmentExpenseDto[]>>(EquipmentManagementURLs.GetExpenses(equipmentId), param)
       .pipe(catchError(err => this.handleError<EquipmentExpenseDto[]>('جلب جميع مصاريف المعدة', err, [])));
   }
-
+  UpdateEquipmentExpense(dto: EquipmentDto): Observable<ApiResponse<boolean>> {
+    return this.baseService.PutRequest<ApiResponse<boolean>>(EquipmentManagementURLs.UpdateEquipmentExpense, dto)
+      .pipe(catchError(err => this.handleError<boolean>('تحديث بيانات المعدة', err, null)));
+  }
   // ---------------- Equipment Incomes ----------------
   addEquipmentIncome(dto: EquipmentIncomeDto): Observable<ApiResponse<string>> {
     return this.baseService.PostRequest<ApiResponse<string>>(EquipmentManagementURLs.AddIncome, dto)
@@ -83,11 +86,14 @@ export class EquipmentManagementService {
       .pipe(catchError(err => this.handleError<boolean>(`حذف دخل المعدة بالمعرف ${id}`, err, false)));
   }
 
-  getEquipmentIncomes(equipmentId: string): Observable<ApiResponse<EquipmentIncomeDto[]>> {
-    return this.baseService.GetRequest<ApiResponse<EquipmentIncomeDto[]>>(EquipmentManagementURLs.GetIncomes(equipmentId))
+  getEquipmentIncomes(equipmentId: string, param: PaginationEntity): Observable<ApiResponse<EquipmentIncomeDto[]>> {
+    return this.baseService.PostRequest<ApiResponse<EquipmentIncomeDto[]>>(EquipmentManagementURLs.GetIncomes(equipmentId), param)
       .pipe(catchError(err => this.handleError<EquipmentIncomeDto[]>('جلب جميع دخول المعدة', err, [])));
   }
-
+  UpdateEquipmentIncome(dto: EquipmentDto): Observable<ApiResponse<boolean>> {
+    return this.baseService.PutRequest<ApiResponse<boolean>>(EquipmentManagementURLs.UpdateEquipmentIncome, dto)
+      .pipe(catchError(err => this.handleError<boolean>('تحديث بيانات المعدة', err, null)));
+  }
   // ---------------- Financial Summary ----------------
   getEquipmentFinancialSummary(equipmentId: string, request: ExpenseSummaryRequest): Observable<ApiResponse<EquipmentFinancialSummaryDto>> {
     return this.baseService.PostRequest<ApiResponse<EquipmentFinancialSummaryDto>>(

@@ -1,7 +1,7 @@
 import { EquipmentExpenseType } from "../Enums/equipment-expense-type";
 
 export interface EquipmentExpenseDto {
-     id: string;
+  id: string;
   equipmentId: string;
   equipmentName?: string;
   type: EquipmentExpenseType;

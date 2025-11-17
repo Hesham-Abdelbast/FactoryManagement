@@ -3,4 +3,5 @@ export interface EmployeeCashAdvanceDto {
     employeeId: string;
     amount: number;
     note?: string;
+    createDate:string
 }

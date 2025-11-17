@@ -1,0 +1,36 @@
+<app-h-modal (closeEvent)="close()" [headerTitle]="headerLabel">
+
+  <div class="container mt-4" dir="rtl">
+    <div class="card shadow p-4">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <!-- المبلغ -->
+        <div class="mb-3 text-end">
+          <label class="form-label">
+            المبلغ <span class="text-danger">*</span>
+          </label>
+          <input type="number"
+                 formControlName="amount"
+                 class="form-control text-end"
+                 placeholder="أدخل المبلغ" />
+        </div>
+
+        <!-- الملاحظات -->
+        <div class="mb-3 text-end">
+          <label class="form-label">ملاحظات</label>
+          <textarea formControlName="note" rows="3" class="form-control text-end"></textarea>
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-primary ms-2" type="submit">
+            {{ isEditMode ? 'تحديث' : 'حفظ' }}
+          </button>
+          <button class="btn btn-secondary" type="button" (click)="close()">إلغاء</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</app-h-modal>

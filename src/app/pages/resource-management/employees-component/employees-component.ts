@@ -9,6 +9,8 @@ import { TableAction } from '../../../model/table-action';
 import { PageEvent } from '../../../model/page-event';
 import { HTableComponent } from "../../../shared/Component/h-table/h-table.component";
 import { AddEditEmployee } from './add-edit-employee/add-edit-employee';
+import { EmployeePersonalExpenseComponent } from './employee-personal-expense-component/employee-personal-expense-component';
+import { EmployeeCashAdvanceComponent } from './employee-cash-advance-component/employee-cash-advance-component';
 
 @Component({
   selector: 'app-employees-component',
@@ -41,6 +43,20 @@ export class EmployeesComponent implements OnInit {
     {
       icon: 'fa fa-edit',
       iconColor: '',
+      label: 'المصريف الشخصية',
+      type: 'PersonalExpense',
+      style: 'btn btn-outline-primary btn-sm'
+    },
+    {
+      icon: 'fa fa-edit',
+      iconColor: '',
+      label: 'السلف',
+      type: 'CashAdvance',
+      style: 'btn btn-outline-primary btn-sm'
+    },
+    {
+      icon: 'fa fa-edit',
+      iconColor: '',
       label: 'تعديل',
       type: 'edit',
       style: 'btn btn-outline-success btn-sm'
@@ -63,6 +79,12 @@ export class EmployeesComponent implements OnInit {
       case 'delete':
         this.deleteEmp(event.row.id);
         break;
+      case 'CashAdvance':
+        this.CashAdvance(event.row.id,event.row.name);
+        break;
+      case 'PersonalExpense':
+        this.PersonalExpense(event.row.id,event.row.name);
+        break;
     }
   }
 
@@ -72,6 +94,27 @@ export class EmployeesComponent implements OnInit {
     this.paginationEmp.pageSize = pageEvent.pageIndex;
     this.GetAllEmps();
   }
+
+  PersonalExpense(id: string , name:string) {
+  this.dialog.open(EmployeePersonalExpenseComponent, {
+    width: '1000px',          
+    height: 'auto',
+    maxHeight: '90vh',
+    maxWidth: '90vw',
+    data: { Id: id,Name:name }         
+  });
+}
+
+  CashAdvance(employeeId: string,name:string) {
+  this.dialog.open(EmployeeCashAdvanceComponent, {
+    width: '900px',
+    height: 'auto',
+    maxHeight: '90vh',
+    maxWidth: '90vw',
+    data: { Id: employeeId ,Name:name}
+  });
+}
+
 
   editEmp(emp: EmployeeDto) {
     const dialogRef = this.dialog.open(AddEditEmployee, {

@@ -1,6 +1,7 @@
 export interface EmployeePersonalExpenseDto {
-    id: string;
+  id: string;
   employeeId: string;
   amount: number;
   note?: string;
+  createDate: string
 }
