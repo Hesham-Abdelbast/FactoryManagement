@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddEditMaterialType } from './add-edit-material-type/add-edit-material-type';
 import { ToastService } from '../../core/shared/toast.service';
 import { MaterialTypeServices } from '../../core/MaterialType/material-type-services';
+import { PaginationEntity } from '../../model/pagination-entity';
 
 @Component({
   selector: 'app-material-type',
@@ -17,7 +18,7 @@ import { MaterialTypeServices } from '../../core/MaterialType/material-type-serv
   styleUrls: ['./material-type.scss']
 })
 export class MaterialType implements OnInit {
-
+  pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
   /** أعمدة الجدول */
   columns = ['الاسم', 'الوصف'];
   columnKeys = ['name', 'description'];
@@ -72,9 +73,8 @@ export class MaterialType implements OnInit {
 
   /** تغيير الصفحة */
   onPageChange(pageEvent: PageEvent) {
-    const start = (pageEvent.pageIndex - 1) * pageEvent.pageSize;
-    const end = start + pageEvent.pageSize;
-    console.log(`عرض البيانات من ${start} إلى ${end}`);
+    this.pagination.pageIndex = pageEvent.pageIndex;
+    this.pagination.pageSize = pageEvent.pageSize;
   }
 
   /** إضافة نوع جديد */

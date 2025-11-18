@@ -1,0 +1,67 @@
+<app-h-modal
+  (closeEvent)="close()"
+  [headerTitle]="isEditMode ? 'تعديل إيراد المعدة' : 'إضافة إيراد المعدة'">
+
+  <div class="container mt-4" dir="rtl">
+    <div class="card shadow p-4">
+      <form [formGroup]="form" (ngSubmit)="save()">
+
+        <!-- اسم المستأجر -->
+        <div class="mb-3 text-end">
+          <label class="form-label">
+            اسم المستأجر <span class="text-danger">*</span>
+          </label>
+          <input
+            type="text"
+            class="form-control text-end"
+            formControlName="rentalName"
+            [ngClass]="{'is-invalid': form.get('rentalName')?.invalid && form.get('rentalName')?.touched}"
+            placeholder="أدخل اسم المستأجر" />
+          <div class="invalid-feedback text-end" *ngIf="form.get('rentalName')?.errors?.['required']">
+            اسم المستأجر مطلوب.
+          </div>
+        </div>
+
+        <!-- المبلغ -->
+        <div class="mb-3 text-end">
+          <label class="form-label">
+            المبلغ <span class="text-danger">*</span>
+          </label>
+          <input
+            type="number"
+            class="form-control text-end"
+            formControlName="amount"
+            [ngClass]="{'is-invalid': form.get('amount')?.invalid && form.get('amount')?.touched}"
+            placeholder="أدخل المبلغ" />
+          <div class="invalid-feedback text-end" *ngIf="form.get('amount')?.errors?.['required']">
+            المبلغ مطلوب.
+          </div>
+          <div class="invalid-feedback text-end" *ngIf="form.get('amount')?.errors?.['min']">
+            يجب أن يكون المبلغ أكبر من 0.
+          </div>
+        </div>
+
+        <!-- الملاحظات -->
+        <div class="mb-3 text-end">
+          <label class="form-label">ملاحظات</label>
+          <textarea
+            rows="3"
+            class="form-control text-end"
+            formControlName="note"
+            placeholder="اكتب ملاحظات إن وجدت...">
+          </textarea>
+        </div>
+
+        <!-- أزرار الإجراءات -->
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-primary ms-2" type="submit">
+            {{ isEditMode ? 'تحديث' : 'حفظ' }}
+          </button>
+
+          <button type="button" class="btn btn-secondary" (click)="close()">إلغاء</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</app-h-modal>

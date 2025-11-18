@@ -7,9 +7,6 @@ import { ToastService } from '../../../core/shared/toast.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HModalComponent } from '../../../shared/Component/h-modal/h-modal.component';
 import { CommonModule } from '@angular/common';
-import { MaterialTypeServices } from '../../../core/MaterialType/material-type-services';
-import { MaterialType } from '../../material-type/material-type';
-import { MaterialTypeVM } from '../../../model/MaterialType/material-type-vm';
 
 @Component({
   selector: 'app-add-edit-warehouse',

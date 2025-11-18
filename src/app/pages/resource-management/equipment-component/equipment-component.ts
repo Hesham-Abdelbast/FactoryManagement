@@ -10,6 +10,7 @@ import { PageEvent } from '../../../model/page-event';
 import { HTableComponent } from "../../../shared/Component/h-table/h-table.component";
 import { AddEditEquipment } from './add-edit-equipment/add-edit-equipment';
 import { EquipmentExpenseComponent } from './equipment-expense-component/equipment-expense-component';
+import { EquipmentIncomesComponent } from './equipment-incomes-component/equipment-incomes-component';
 
 @Component({
   selector: 'app-equipment-component',
@@ -104,7 +105,13 @@ export class EquipmentComponent {
   }
 
   EquipmentIncomes(id:string,name:string){
-  
+  this.dialog.open(EquipmentIncomesComponent, {
+      width: '1000px',          
+      height: 'auto',
+      maxHeight: '90vh',
+      maxWidth: '90vw',
+      data: { Id: id,Name:name }         
+    });
   }
   /** تغيير الصفحة */
   onPageChange(pageEvent: PageEvent) {

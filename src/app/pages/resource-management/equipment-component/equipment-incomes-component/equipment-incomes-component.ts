@@ -7,21 +7,20 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { ApiResponse } from '../../../../model/api-response';
 import { PageEvent } from '../../../../model/page-event';
 import { HModalComponent } from "../../../../shared/Component/h-modal/h-modal.component";
-import { EquipmentExpenseDto } from '../../../../model/Equipments/equipment-expense-dto';
+import { EquipmentIncomeDto } from '../../../../model/Equipments/equipment-income-dto';
 import { EquipmentManagementService } from '../../../../core/Equipments/equipment-management-service';
-import { AddEditEquipmentExpenseComponent } from './add-edit-equipment-expense-component/add-edit-equipment-expense-component';
+import { AddEditEquipmentIncomeComponent } from './add-edit-equipment-income-component/add-edit-equipment-income-component';
 
 @Component({
-  selector: 'app-equipment-expense',
+  selector: 'app-equipment-incomes',
   imports: [HTableComponent, HModalComponent],
-  templateUrl: './equipment-expense-component.html',
-  styleUrl: './equipment-expense-component.scss',
+  templateUrl: './equipment-incomes-component.html',
+  styleUrl: './equipment-incomes-component.scss',
 })
+export class EquipmentIncomesComponent implements OnInit {
 
-export class EquipmentExpenseComponent implements OnInit {
-
-  title: string = 'مصروفات المعدة ';
-  data: EquipmentExpenseDto[] = [];
+  title: string = 'إيرادات المعدة ';
+  data: EquipmentIncomeDto[] = [];
 
   pagination: PaginationEntity = {
     pageIndex: 1,
@@ -32,8 +31,8 @@ export class EquipmentExpenseComponent implements OnInit {
   equipmentId: string = '';
 
   /** Table Columns */
-  columns = ['نوع المصروف', 'المبلغ', 'ملاحظات'];
-  columnKeys = ['typeLabel', 'amount', 'note'];
+  columns = ['المبلغ', 'اسم المستأجر', 'ملاحظات'];
+  columnKeys = ['amount', 'rentalName', 'note'];
 
   /** Table Actions */
   actions: TableAction[] = [
@@ -45,7 +44,7 @@ export class EquipmentExpenseComponent implements OnInit {
     private service: EquipmentManagementService,
     private toast: ToastService,
     private dialog: MatDialog,
-    private dialogRef: MatDialogRef<EquipmentExpenseComponent>,
+    private dialogRef: MatDialogRef<EquipmentIncomesComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
     private cdr: ChangeDetectorRef
   ) {}
@@ -59,14 +58,10 @@ export class EquipmentExpenseComponent implements OnInit {
   getAll() {
     this.equipmentId = this.dialogData.Id;
 
-    this.service.getEquipmentExpenses(this.equipmentId, this.pagination)
-      .subscribe((res: ApiResponse<EquipmentExpenseDto[]>) => {
+    this.service.getEquipmentIncomes(this.equipmentId, this.pagination)
+      .subscribe((res: ApiResponse<EquipmentIncomeDto[]>) => {
         if (res.success && res.data) {
-          this.data = res.data.map(item => ({
-            ...item,
-            typeLabel: EquipmentExpenseTypeArabic[item.type]
-          }));
-
+          this.data = res.data;
           this.pagination.totalCount = res.totalCount;
           this.cdr.detectChanges();
         } else {
@@ -75,13 +70,13 @@ export class EquipmentExpenseComponent implements OnInit {
       });
   }
 
-  onTableAction(event: { action: string; row: EquipmentExpenseDto }) {
+  onTableAction(event: { action: string; row: EquipmentIncomeDto }) {
     if (event.action === 'edit') this.openDialog(true, event.row);
     else if (event.action === 'delete') this.delete(event.row.id);
   }
 
-  openDialog(isEdit: boolean, item?: EquipmentExpenseDto) {
-    const dialogRef = this.dialog.open(AddEditEquipmentExpenseComponent, {
+  openDialog(isEdit: boolean, item?: EquipmentIncomeDto) {
+    const dialogRef = this.dialog.open(AddEditEquipmentIncomeComponent, {
       width: '750px',
       data: { isEdit, item, equipmentId: this.equipmentId }
     });
@@ -89,20 +84,18 @@ export class EquipmentExpenseComponent implements OnInit {
     dialogRef.afterClosed().subscribe(res => res && this.getAll());
   }
 
-  /** Delete Item */
   delete(id: string) {
-    this.toast.confirm('هل تريد حذف المصروف؟', 'نعم', 'إلغاء')
-      .then((confirmed) => {
-        if (confirmed) {
-          this.service.deleteEquipmentExpense(id).subscribe(res => {
-            res.success ? this.toast.success('تم الحذف بنجاح') : this.toast.error('فشل الحذف');
-            this.getAll();
-          });
-        }
-      });
+    this.toast.confirm('هل تريد حذف الإيراد؟', 'نعم', 'إلغاء')
+    .then((confirmed) => {
+      if (confirmed) {
+        this.service.deleteEquipmentIncome(id).subscribe(res => {
+          res.success ? this.toast.success('تم الحذف بنجاح') : this.toast.error('فشل الحذف');
+          this.getAll();
+        });
+      }
+    });
   }
 
-  /** Add */
   onAdd() {
     this.openDialog(false);
   }
@@ -118,8 +111,3 @@ export class EquipmentExpenseComponent implements OnInit {
     this.dialogRef.close(false);
   }
 }
-export const EquipmentExpenseTypeArabic: Record<string, string> = {
-  ['Maintenance']: 'صيانة',
-  ['Fuel']: 'وقود',
-  ['Oil']: 'زيت',
-};

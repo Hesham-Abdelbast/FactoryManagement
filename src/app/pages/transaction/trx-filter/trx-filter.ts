@@ -22,8 +22,8 @@ export class TrxFilter implements OnInit {
   constructor(
     private fb: FormBuilder,
     private toast: ToastService,
-    private dialogRef: MatDialogRef<TrxFilter>, 
-  ) {}
+    private dialogRef: MatDialogRef<TrxFilter>,
+  ) { }
 
   ngOnInit(): void {
     this.initForm();

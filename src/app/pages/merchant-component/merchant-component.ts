@@ -9,6 +9,7 @@ import { HTableComponent } from '../../shared/Component/h-table/h-table.componen
 import { PageEvent } from '../../model/page-event';
 import { MatDialog } from '@angular/material/dialog';
 import { MeTtranscation } from './me-ttranscation/me-ttranscation';
+import { PaginationEntity } from '../../model/pagination-entity';
 
 @Component({
   selector: 'app-merchant-component',
@@ -20,7 +21,7 @@ export class MerchantComponent {
 /** أعمدة الجدول */
  columns = ['الاسم', 'رقم الهاتف', 'البريد الإلكتروني', 'العنوان'];
  columnKeys = ['name', 'phone', 'email', 'address'];
-
+pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
 
   /** قائمة الأنواع */
   orgnialMerchantList: any;
@@ -83,9 +84,8 @@ export class MerchantComponent {
 
   /** تغيير الصفحة */
   onPageChange(pageEvent: PageEvent) {
-    const start = (pageEvent.pageIndex - 1) * pageEvent.pageSize;
-    const end = start + pageEvent.pageSize;
-    this.searchMerchantList = this.orgnialMerchantList.slice(start, end);
+     this.pagination.pageIndex = pageEvent.pageIndex;
+    this.pagination.pageSize = pageEvent.pageSize;
   }
 
   /** إضافة نوع جديد */

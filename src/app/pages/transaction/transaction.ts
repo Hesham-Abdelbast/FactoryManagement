@@ -56,7 +56,7 @@ export class Transaction implements OnInit {
   materialTypeLst: MaterialTypeVM[] = [];
   merchantLst: MerchantDto[] = [];
   warehouseLst: WarehouseDto[] = [];
-  pagination:PaginationEntity = {pageIndex:1,pageSize:10,totalCount:10};
+  pagination: PaginationEntity = { pageIndex: 1, pageSize: 10, totalCount: 10 };
   /** Table actions */
   actions: TableAction[] = [
     {
@@ -64,8 +64,8 @@ export class Transaction implements OnInit {
       label: 'الفاتوره',
       type: 'invoice',
       style: 'btn btn-outline-primary btn-sm',
-    }, 
-     {
+    },
+    {
       icon: 'fa-solid fa-eye',
       label: 'التفاصيل',
       type: 'view',
@@ -102,7 +102,7 @@ export class Transaction implements OnInit {
   /** Load all lookup data (materials + merchants) */
   private async loadReferenceData(): Promise<void> {
     try {
-      const [matRes, merRes,warRes] = await Promise.all([
+      const [matRes, merRes, warRes] = await Promise.all([
         firstValueFrom(this.materialService.getAll()),
         firstValueFrom(this.merchantService.getAll()),
         firstValueFrom(this.warehouseService.getAll()),
@@ -122,14 +122,15 @@ export class Transaction implements OnInit {
     this.transactionServices.getAll(this.pagination).subscribe({
       next: (res: ApiResponse<TransactionDto[]>) => {
         if (res.success && res.data) {
-          console.log(res,'res');
           this.transctionList = res.data.map((t) => ({
             ...t,
             typeName: t.type === 'Income' ? 'وارد' : 'صادر',
             totalAmount: t.quantity * t.pricePerUnit,
           }));
 
-          this.pagination.totalCount = res.totalCount ?? 0;
+          this.pagination.totalCount = res.totalCount
+
+          console.log(res,'resalut')
         } else {
           this.toast.error('فشل تحميل المعاملات.');
         }
@@ -149,8 +150,9 @@ export class Transaction implements OnInit {
   }
 
   onPageChange(pageEvent: PageEvent): void {
-    this.pagination.pageIndex = pageEvent.pageIndex + 1;
+    this.pagination.pageIndex = pageEvent.pageIndex ;
     this.pagination.pageSize = pageEvent.pageSize;
+    console.log(this.pagination,'pagination');
     this.loadTransactions();
   }
 
@@ -172,22 +174,22 @@ export class Transaction implements OnInit {
       if (result) this.loadTransactions();
     });
   }
-  
+
   InvoiceTransaction(id: string) {
-  this.dialog.open(InvoiceComponent, {
-    panelClass: 'invoice-dialog',
-    width: '90vw',
-    height: '100vh',
-    maxWidth: '90vw',
-    maxHeight: '100vh',
-    autoFocus: false,
-    data: { Id: id },
-  });
-}
+    this.dialog.open(InvoiceComponent, {
+      panelClass: 'invoice-dialog',
+      width: '90vw',
+      height: '100vh',
+      maxWidth: '90vw',
+      maxHeight: '100vh',
+      autoFocus: false,
+      data: { Id: id },
+    });
+  }
   viewTransaction(item: TransactionDto) {
     this.dialog.open(ViewTransactionComponent, {
       width: 'auto',
-      height:'90%',
+      height: '90%',
       maxWidth: 'none',
       maxHeight: 'none',
       data: {
@@ -250,7 +252,7 @@ export class Transaction implements OnInit {
               this.transctionList = res.data;
             }
           },
-          error: (err:any) => {
+          error: (err: any) => {
             console.error(err);
             this.toast.error('حدث خطأ أثناء تحميل المعاملات.');
           },

@@ -8,8 +8,6 @@ import { ToastService } from '../../core/shared/toast.service';
 import { PageEvent } from '../../model/page-event';
 import { AddEditWarehouse } from './add-edit-warehouse/add-edit-warehouse';
 import { HTableComponent } from "../../shared/Component/h-table/h-table.component";
-import { LoaderService } from '../../core/shared/loader.service';
-import { AsyncPipe } from '@angular/common';
 import { PaginationEntity } from '../../model/pagination-entity';
 import { WarehouseInventoryDto } from '../../model/Warehouse/warehouse-inventory-dto';
 import { MeMaterials } from './me-materials/me-materials';
@@ -110,7 +108,7 @@ export class WarehouseComponent {
   }
 
   onPageChange(pageEvent: PageEvent): void {
-    this.pagination.pageIndex = pageEvent.pageIndex + 1;
+    this.pagination.pageIndex = pageEvent.pageIndex ;
     this.pagination.pageSize = pageEvent.pageSize;
     this.loadWarehouse();
   }

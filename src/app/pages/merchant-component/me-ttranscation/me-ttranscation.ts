@@ -12,6 +12,7 @@ import { PageEvent } from '../../../model/page-event';
 import { CommonModule } from '@angular/common';
 import { AllTransByMerchantDto } from '../../../model/Transaction/all-trans-by-merchant-dto';
 import { FilterForMeTC } from './filter-for-me-tc/filter-for-me-tc';
+import { PaginationEntity } from '../../../model/pagination-entity';
 
 @Component({
   selector: 'app-me-ttranscation',
@@ -20,6 +21,7 @@ import { FilterForMeTC } from './filter-for-me-tc/filter-for-me-tc';
   styleUrl: './me-ttranscation.scss',
 })
 export class MeTtranscation implements OnInit {
+  pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
   orginalTransctionList: TransactionDto[] = [];
   searchTransctionList: TransactionDto[] = [];
   materialTypeLst: MaterialTypeVM[] = [];
@@ -63,9 +65,8 @@ export class MeTtranscation implements OnInit {
   }
 
   onPageChange(pageEvent: PageEvent): void {
-    const start = (pageEvent.pageIndex - 1) * pageEvent.pageSize;
-    const end = start + pageEvent.pageSize;
-    this.searchTransctionList = this.orginalTransctionList.slice(start, end);
+    this.pagination.pageIndex = pageEvent.pageIndex;
+    this.pagination.pageSize = pageEvent.pageSize;
   }
 
   /** Load all transactions */
