@@ -1,0 +1,159 @@
+<div class="container" dir="rtl">
+  <header>
+    <div class="logo">
+      <i class="fas fa-user-tie"></i>
+      <h1>{{text.title}} {{employeeData.employeeName}}</h1>
+    </div>
+    
+  </header>
+
+  <div class="period-card">
+    <div class="period-header">
+      <i class="far fa-calendar-alt"></i>
+      <h3>{{text.period}}</h3>
+    </div>
+    <div class="period-dates">
+      <div class="date-range">
+        <span class="date-label">{{text.from}}:</span>
+        <span class="date-value">{{formatDate(employeeData.periodFrom)}}</span>
+      </div>
+      <div class="date-range">
+        <span class="date-label">{{text.to}}:</span>
+        <span class="date-value">{{formatDate(employeeData.periodTo)}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="financial-grid">
+    <!-- Salary Card -->
+    <div class="financial-card salary-card">
+      <div class="card-header">
+        <div class="card-title">
+          <i class="fas fa-money-bill-wave"></i>
+          {{text.baseSalary}}
+        </div>
+        <div class="card-icon">
+          <i class="fas fa-wallet"></i>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="amount">{{formatCurrency(employeeData.baseSalary)}}</div>
+        <div class="card-label">الراتب الشهري الأساسي</div>
+      </div>
+    </div>
+
+    <!-- Deductions Card -->
+    <div class="financial-card deductions-card">
+      <div class="card-header">
+        <div class="card-title">
+          <i class="fas fa-hand-holding-usd"></i>
+          {{text.deductions}}
+        </div>
+        <div class="card-icon">
+          <i class="fas fa-receipt"></i>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="amount">{{formatCurrency(totalDeductions)}}</div>
+        <div class="card-label">إجمالي المقتطع من الراتب</div>
+      </div>
+    </div>
+
+    <!-- Net Salary Card -->
+    <div class="financial-card net-salary-card">
+      <div class="card-header">
+        <div class="card-title">
+          <i class="fas fa-calculator"></i>
+          {{text.netSalary}}
+        </div>
+        <div class="card-icon">
+          <i class="fas fa-file-invoice-dollar"></i>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="amount">{{formatCurrency(netSalary)}}</div>
+        <div class="card-label">المبلغ المستحق بعد الخصم</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="details-grid">
+    <!-- Salary Breakdown -->
+    <div class="details-card">
+      <div class="details-header">
+        <i class="fas fa-chart-pie"></i>
+        <h3>تفصيل الراتب</h3>
+      </div>
+      <div class="details-content">
+        <div class="breakdown-item">
+          <div class="breakdown-label">{{text.baseSalary}}</div>
+          <div class="breakdown-amount positive">{{formatCurrency(employeeData.baseSalary)}}</div>
+        </div>
+        
+        <div class="breakdown-separator"></div>
+        
+        <div class="breakdown-subtitle">الخصومات:</div>
+        
+        <div class="breakdown-item">
+          <div class="breakdown-label">{{text.totalCashAdvances}}</div>
+          <div class="breakdown-amount negative">- {{formatCurrency(employeeData.totalCashAdvances)}}</div>
+        </div>
+        
+        <div class="breakdown-item">
+          <div class="breakdown-label">{{text.totalPersonalExpenses}}</div>
+          <div class="breakdown-amount negative">- {{formatCurrency(employeeData.totalPersonalExpenses)}}</div>
+        </div>
+        
+        <div class="breakdown-separator"></div>
+        
+        <div class="breakdown-item total">
+          <div class="breakdown-label">{{text.totalDeductions}}</div>
+          <div class="breakdown-amount negative">- {{formatCurrency(totalDeductions)}}</div>
+        </div>
+        
+        <div class="breakdown-separator final"></div>
+        
+        <div class="breakdown-item final">
+          <div class="breakdown-label">{{text.finalSalary}}</div>
+          <div class="breakdown-amount final-amount">{{formatCurrency(netSalary)}}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deductions Details -->
+    <div class="details-card">
+      <div class="details-header">
+        <i class="fas fa-list-alt"></i>
+        <h3>تفاصيل الخصومات</h3>
+      </div>
+      <div class="details-content">
+        <div class="deduction-item">
+          <div class="deduction-icon">
+            <i class="fas fa-money-check-alt"></i>
+          </div>
+          <div class="deduction-details">
+            <div class="deduction-title">{{text.totalCashAdvances}}</div>
+            <div class="deduction-description">سلف نقدية مسحوبة خلال الفترة</div>
+          </div>
+          <div class="deduction-amount negative">{{formatCurrency(employeeData.totalCashAdvances)}}</div>
+        </div>
+        
+        <div class="deduction-item">
+          <div class="deduction-icon">
+            <i class="fas fa-receipt"></i>
+          </div>
+          <div class="deduction-details">
+            <div class="deduction-title">{{text.totalPersonalExpenses}}</div>
+            <div class="deduction-description">مصروفات شخصية مسجلة على الموظف</div>
+          </div>
+          <div class="deduction-amount negative">{{formatCurrency(employeeData.totalPersonalExpenses)}}</div>
+        </div>
+        
+        <div class="deduction-total">
+          <div class="deduction-total-label">{{text.totalDeductions}}</div>
+          <div class="deduction-total-amount negative">{{formatCurrency(totalDeductions)}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

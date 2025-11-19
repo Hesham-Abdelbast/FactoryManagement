@@ -137,20 +137,6 @@ export class EmployeeManagementURLs {
   static DeletePersonalExpense(id: string): string { return `${this.base}DeletePersonalExpense/${id}` }
   static GetPersonalExpenses(employeeId: string): string { return `${this.base}GetPersonalExpenses/${employeeId}` }
   static readonly UpdatePersonalExpense = this.base + 'UpdatePersonalExpense';
-
-  // 📌 Payroll
-  static GeneratePayroll(employeeId: string, year: number, month: number): string {
-    return `${this.base}GeneratePayroll/${employeeId}/${year}/${month}`;
-  }
-
-  static GetPayroll(employeeId: string, year: number, month: number): string {
-    return `${this.base}GetPayroll/${employeeId}/${year}/${month}`;
-  }
-
-  // 📊 Reports
-  static FinancialReport(employeeId: string): string {
-    return `${this.base}FinancialReport/${employeeId}`;
-  }
 }
 
 export class EquipmentManagementURLs {
@@ -186,4 +172,13 @@ export class FinancingURLs {
   static readonly Update = this.base + 'Update';
   static Delete(id: string): string { return `${this.base}Delete/${id}` }
   static Exists(id: string): string { return `${this.base}Exists/${id}` }
+}
+export class SystemInventoryURLs {
+  private static readonly base = Base_URL + 'api/SystemInventory/';
+  static GetTrnxReport(from: Date,to:Date): string {
+     return `${this.base}GetTrnxReport?from=${from}&to=${to}` 
+  }
+  static GetEmployeeFullFinancialReport(empId:string,from: Date,to:Date): string {
+     return `${this.base}GetEmployeeFullFinancialReport?empId=${empId}&from=${from}&to=${to}` 
+  }
 }

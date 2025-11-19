@@ -1,0 +1,292 @@
+<div class="container" dir="rtl">
+  <header>
+    <div class="logo">
+      <i class="fas fa-boxes"></i>
+      <h1>{{text.title}}</h1>
+    </div>
+    <div class="date-range">
+      <i class="far fa-calendar-alt"></i>
+      <span>{{formatDate(data.from)}} - {{formatDate(data.to)}}</span>
+    </div>
+  </header>
+
+  <div class="dashboard-grid">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">{{text.totalTransactions}}</div>
+        <div class="card-icon" style="background: #4361ee;">
+          <i class="fas fa-exchange-alt"></i>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="stat">
+          <div class="stat-value">{{data.totalTransactions}}</div>
+          <div class="stat-change">+0%</div>
+        </div>
+        <div class="stat-label">{{text.allTransactionsInPeriod}}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">{{text.netQuantity}}</div>
+        <div class="card-icon" style="background:#4361ee">
+          <i class="fas fa-weight-hanging"></i>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="stat">
+          <div class="stat-value">{{data.netQuantity}}</div>
+          <div class="stat-change">+0%</div>
+        </div>
+        <div class="stat-label">{{text.incomeMinusOutcome}}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">{{text.totalImpurities}}</div>
+        <div class="card-icon" style="background: #f72585;">
+          <i class="fas fa-tint"></i>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="stat">
+          <div class="stat-value">{{data.totalImpurities}}</div>
+          <div class="stat-change">0%</div>
+        </div>
+        <div class="stat-label">{{text.average}}: {{data.averageImpurityPercentage}}%</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">{{text.paymentStatus}}</div>
+        <div class="card-icon" style="background: #4895ef;">
+          <i class="fas fa-money-bill-wave"></i>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="stat">
+          <div class="stat-value">{{data.paymentSummary.fullyPaidCount}}</div>
+          <div class="stat-change">{{text.paid}}</div>
+        </div>
+        <div class="stat-label">
+          {{data.paymentSummary.unpaidCount}} {{text.unpaid}}, 
+          {{formatCurrency(data.paymentSummary.totalRemainingAmount)}} {{text.remaining}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-title">
+        <i class="fas fa-arrow-down" style="color: #4cc9f0;"></i>
+        {{text.incomeSummary}}
+      </div>
+      <div class="summary-stats">
+        <div class="summary-stat">
+          <div class="summary-value">{{data.incomeSummary.transactionCount}}</div>
+          <div class="summary-label">{{text.transactions}}</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-value">{{formatCurrency(data.incomeSummary.totalAmount)}}</div>
+          <div class="summary-label">{{text.totalAmount}}</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-value">{{formatCurrency(data.incomeSummary.totalPaid)}}</div>
+          <div class="summary-label">{{text.totalPaid}}</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-value">{{formatCurrency(data.incomeSummary.totalRemaining)}}</div>
+          <div class="summary-label">{{text.totalRemaining}}</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-value">{{data.incomeSummary.totalQuantity}}</div>
+          <div class="summary-label">{{text.totalQuantity}}</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-value">{{data.incomeSummary.totalImpurities}}</div>
+          <div class="summary-label">{{text.totalImpurities}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-title">
+        <i class="fas fa-arrow-up" style="color: #f72585;"></i>
+        {{text.outcomeSummary}}
+      </div>
+      <div class="summary-stats">
+        <div class="summary-stat">
+          <div class="summary-value">{{data.outcomeSummary.transactionCount}}</div>
+          <div class="summary-label">{{text.transactions}}</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-value">{{formatCurrency(data.outcomeSummary.totalAmount)}}</div>
+          <div class="summary-label">{{text.totalAmount}}</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-value">{{formatCurrency(data.outcomeSummary.totalPaid)}}</div>
+          <div class="summary-label">{{text.totalPaid}}</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-value">{{formatCurrency(data.outcomeSummary.totalRemaining)}}</div>
+          <div class="summary-label">{{text.totalRemaining}}</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-value">{{data.outcomeSummary.totalQuantity}}</div>
+          <div class="summary-label">{{text.totalQuantity}}</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-value">{{data.outcomeSummary.totalImpurities}}</div>
+          <div class="summary-label">{{text.totalImpurities}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="material-grid">
+    <div class="table-container">
+      <div class="table-title">
+        <i class="fas fa-arrow-down" style="color: #4cc9f0;"></i>
+        {{text.incomeByMaterial}}
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>{{text.materialType}}</th>
+            <th>{{text.transactions}}</th>
+            <th>{{text.quantity}}</th>
+            <th>{{text.totalAmount}}</th>
+            <th>{{text.avgPrice}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let material of data.incomeByMaterial">
+            <td>{{material.materialTypeName}}</td>
+            <td>{{material.transactionCount}}</td>
+            <td>{{material.totalQuantity}}</td>
+            <td>{{formatCurrency(material.totalAmount)}}</td>
+            <td>{{formatCurrency(material.avgPricePerUnit)}}</td>
+          </tr>
+          <tr *ngIf="data.incomeByMaterial.length === 0">
+            <td colspan="5" style="text-align: center;">{{text.noDataAvailable}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-container">
+      <div class="table-title">
+        <i class="fas fa-arrow-up" style="color: #f72585;"></i>
+        {{text.outcomeByMaterial}}
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>{{text.materialType}}</th>
+            <th>{{text.transactions}}</th>
+            <th>{{text.quantity}}</th>
+            <th>{{text.totalAmount}}</th>
+            <th>{{text.avgPrice}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let material of data.outcomeByMaterial">
+            <td>{{material.materialTypeName}}</td>
+            <td>{{material.transactionCount}}</td>
+            <td>{{material.totalQuantity}}</td>
+            <td>{{formatCurrency(material.totalAmount)}}</td>
+            <td>{{formatCurrency(material.avgPricePerUnit)}}</td>
+          </tr>
+          <tr *ngIf="data.outcomeByMaterial.length === 0">
+            <td colspan="5" style="text-align: center;">{{text.noDataAvailable}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <div class="table-title">
+      <i class="fas fa-warehouse"></i>
+      {{text.warehouseSummaries}}
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>{{text.warehouse}}</th>
+          <th>{{text.transactions}}</th>
+          <th>{{text.totalQuantity}}</th>
+          <th>{{text.totalAmount}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let warehouse of data.warehouseSummaries">
+          <td>{{warehouse.warehouseName}}</td>
+          <td>{{warehouse.transactionCount}}</td>
+          <td>{{warehouse.totalQuantity}}</td>
+          <td>{{formatCurrency(warehouse.totalAmount)}}</td>
+        </tr>
+        <tr *ngIf="data.warehouseSummaries.length === 0">
+          <td colspan="4" style="text-align: center;">{{text.noDataAvailable}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-container">
+    <div class="table-title">
+      <i class="fas fa-crown"></i>
+      {{text.topMerchants}}
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>{{text.merchant}}</th>
+          <th>{{text.transactions}}</th>
+          <th>{{text.totalAmount}}</th>
+          <th>{{text.totalPaid}}</th>
+          <th>{{text.totalQuantity}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let merchant of data.topMerchants">
+          <td>{{merchant.merchantName}}</td>
+          <td>{{merchant.transactionCount}}</td>
+          <td>{{formatCurrency(merchant.totalAmount)}}</td>
+          <td>{{formatCurrency(merchant.totalPaid)}}</td>
+          <td>{{merchant.totalQuantity}}</td>
+        </tr>
+        <tr *ngIf="data.topMerchants.length === 0">
+          <td colspan="5" style="text-align: center;">{{text.noDataAvailable}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- <div class="table-container">
+    <div class="table-title">
+      <i class="fas fa-exclamation-triangle" style="color: #f72585;"></i>
+      {{text.anomalies}}
+    </div>
+    <div class="anomalies-container">
+      <div class="anomaly-item" *ngFor="let anomaly of data.anomalies">
+        <div class="anomaly-details">
+          <div class="anomaly-title">{{anomaly.transactionIdentifier}} - {{anomaly.materialTypeName}}</div>
+          <div class="anomaly-info">{{anomaly.merchantName}} • {{formatDate(anomaly.createDate)}}</div>
+        </div>
+        <div class="anomaly-difference">{{anomaly.difference > 0 ? '+' : ''}}{{anomaly.difference}}</div>
+      </div>
+      <div class="anomaly-item" *ngIf="data.anomalies.length === 0">
+        <div class="anomaly-details">
+          <div class="anomaly-title">{{text.noAnomaliesDetected}}</div>
+          <div class="anomaly-info">{{text.allTransactionsNormal}}</div>
+        </div>
+        <div class="anomaly-difference">0</div>
+      </div>
+    </div>
+  </div> -->
+</div>

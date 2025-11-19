@@ -91,26 +91,6 @@ export class EmployeeManagementService {
     return this.baseService.PutRequest<ApiResponse<boolean>>(EmployeeManagementURLs.UpdatePersonalExpense, dto)
       .pipe(catchError(err => this.handleError<boolean>('تحديث بيانات الموظف', err, null)));
   }
-  // ---------------- Payroll ----------------
-  generatePayroll(employeeId: string, year: number, month: number): Observable<ApiResponse<string>> {
-    return this.baseService.PostRequest<ApiResponse<string>>(EmployeeManagementURLs.GeneratePayroll(employeeId, year, month), null)
-      .pipe(catchError(err => this.handleError<string>('توليد كشف الراتب', err, null)));
-  }
-
-  getPayroll(employeeId: string, year: number, month: number): Observable<ApiResponse<EmployeeMonthlyPayrollDto>> {
-    return this.baseService.GetRequest<ApiResponse<EmployeeMonthlyPayrollDto>>(EmployeeManagementURLs.GetPayroll(employeeId, year, month))
-      .pipe(catchError(err => this.handleError<EmployeeMonthlyPayrollDto>('جلب كشف الراتب', err, null)));
-  }
-
-  // ---------------- Reporting ----------------
-  getEmployeeFinancialSummary(employeeId: string, from?: string, to?: string): Observable<ApiResponse<EmployeeFinancialReportDto>> {
-    let url = EmployeeManagementURLs.FinancialReport(employeeId);
-    if (from && to) {
-      url += `?from=${from}&to=${to}`;
-    }
-    return this.baseService.GetRequest<ApiResponse<EmployeeFinancialReportDto>>(url)
-      .pipe(catchError(err => this.handleError<EmployeeFinancialReportDto>('جلب التقرير المالي للموظف', err, null)));
-  }
 
   // 🔒 Centralized reusable error handler
   private handleError<T>(context: string, error: any, fallbackData: T | null): Observable<ApiResponse<T>> {

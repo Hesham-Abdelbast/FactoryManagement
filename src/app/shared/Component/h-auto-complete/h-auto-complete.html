@@ -1,0 +1,16 @@
+<div class="h-auto-complete" dir="rtl">
+  <input
+    type="text"
+    [placeholder]="placeholder"
+    [formControl]="control"
+    (focus)="showDropdown = filteredItems.length > 0"
+    autocomplete="off"
+  />
+
+  <ul class="dropdown" *ngIf="showDropdown">
+    <li *ngFor="let item of filteredItems" (click)="selectItem(item)">
+      {{ item.value }}
+    </li>
+    <li *ngIf="filteredItems.length === 0">لا توجد نتائج</li>
+  </ul>
+</div>
