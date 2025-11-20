@@ -125,7 +125,7 @@ export class Transaction implements OnInit {
           this.transctionList = res.data.map((t) => ({
             ...t,
             typeName: t.type === 'Income' ? 'وارد' : 'صادر',
-            totalAmount: t.quantity * t.pricePerUnit,
+            totalAmount: !t.totalAmount?t.quantity * t.pricePerUnit:t.totalAmount,
           }));
 
           this.pagination.totalCount = res.totalCount
@@ -186,6 +186,7 @@ export class Transaction implements OnInit {
       data: { Id: id },
     });
   }
+
   viewTransaction(item: TransactionDto) {
     this.dialog.open(ViewTransactionComponent, {
       width: 'auto',
@@ -233,6 +234,7 @@ export class Transaction implements OnInit {
       }
     });
   }
+
   onFilter(): void {
     this.dialog.open(TrxFilter, {
       width: '800px',

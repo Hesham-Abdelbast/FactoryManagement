@@ -76,7 +76,6 @@ export class AddEditTransaction implements OnInit {
 
   }
 
-  // ✅ Helper: avoid NaN
   numeric(val: any): number {
     const v = Number(val);
     return isNaN(v) || v < 0 ? 0 : v;
@@ -87,7 +86,6 @@ export class AddEditTransaction implements OnInit {
     return !!(c && c.touched && c.invalid);
   }
 
-  // ✅ Quantity recalculation with check
   recalculateQuantity() {
     const total = this.numeric(this.transactionForm.get('carAndMatrerialWeight')?.value);
     const empty = this.numeric(this.transactionForm.get('carWeight')?.value);
@@ -115,9 +113,11 @@ export class AddEditTransaction implements OnInit {
   updateTotalAmount() {
     const quantity = this.numeric(this.transactionForm.get('quantity')?.value);
     const price = this.numeric(this.transactionForm.get('pricePerUnit')?.value);
-
-    const totalAmount = Number((quantity * price).toFixed(2));
-    this.transactionForm.get('totalAmount')?.setValue(Number(totalAmount.toFixed(2)), { emitEvent: false });
+    const totalAmount = this.numeric(this.transactionForm.get('totalAmount')?.value);
+    if(!totalAmount){
+      const totalAmount = Number((quantity * price).toFixed(2));
+      this.transactionForm.get('totalAmount')?.setValue(Number(totalAmount.toFixed(2)), { emitEvent: false });
+    }
     this.updateRemaining();
   }
 
@@ -162,6 +162,7 @@ export class AddEditTransaction implements OnInit {
       this.toast.error(res.returnMsg || 'فشل العملية');
     }
   }
+
   UpdatePricePerUnit() {
     const quantity = this.numeric(this.transactionForm.get('quantity')?.value);
     const totalAmount = this.numeric(this.transactionForm.get('totalAmount')?.value) ?? 0;
@@ -171,6 +172,7 @@ export class AddEditTransaction implements OnInit {
       this.transactionForm.get('pricePerUnit')?.setValue(0, { emitEvent: false });
     }
   }
+
   close() {
     this.dialogRef.close(false);
   }
