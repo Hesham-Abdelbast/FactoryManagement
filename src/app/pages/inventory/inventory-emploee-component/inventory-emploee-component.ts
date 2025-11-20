@@ -7,11 +7,7 @@ import { EmployeeManagementService } from '../../../core/Employees/employee-mana
 import { ApiResponse } from '../../../model/api-response';
 import { EmployeeDto } from '../../../model/Employee/employee-dto';
 import { SystemInventoryServices } from '../../../core/SystemInventory/system-inventory-services';
-
-export interface Employee {
-  key: string;   // empId
-  value: string; // empName
-}
+import { DicKeyValue } from '../../../model/dic-key-value';
 
 @Component({
   selector: 'app-inventory-emploee-component',
@@ -24,7 +20,7 @@ export class InventoryEmploeeComponent implements OnInit {
   form!: FormGroup;
   result: any;
 
-  employees: Employee[] = [];
+  employees: DicKeyValue[] = [];
 
   selectedEmployeeId?: string;
 
@@ -43,7 +39,7 @@ export class InventoryEmploeeComponent implements OnInit {
     this.getAllEmployees();
   }
 
-  onEmployeeSelected(empId: string) {
+  onSelected(empId: string) {
     this.selectedEmployeeId = empId;
 
     if (this.form.contains('employee')) {
@@ -75,7 +71,7 @@ export class InventoryEmploeeComponent implements OnInit {
       .subscribe(
         (res: ApiResponse<EmployeeDto[]>) => {
           if (res.success && res.data?.length) {
-            this.employees = res.data.map(e => ({ key: e.id, value: e.name } as Employee));
+            this.employees = res.data.map(e => ({ key: e.id, value: e.name } as DicKeyValue));
           } else {
             this.employees = [];
             console.warn('لا توجد موظفين للعرض');

@@ -105,10 +105,10 @@ pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
   /** عرض المعاملات الخاصة بالتاجر */
   show(id: string) {
     this.dialog.open(MeTtranscation, {
-      width: '900px',
+      width: '80vw',
       height: 'auto',
       maxHeight: '90vh',
-      maxWidth: '100%',
+      maxWidth: '90vw',
       data: { merchantID: id }
 
     });

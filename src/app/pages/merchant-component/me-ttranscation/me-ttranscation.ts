@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { AllTransByMerchantDto } from '../../../model/Transaction/all-trans-by-merchant-dto';
 import { FilterForMeTC } from './filter-for-me-tc/filter-for-me-tc';
 import { PaginationEntity } from '../../../model/pagination-entity';
+import { CommonService } from '../../../core/common-service';
 
 @Component({
   selector: 'app-me-ttranscation',
@@ -21,7 +22,7 @@ import { PaginationEntity } from '../../../model/pagination-entity';
   styleUrl: './me-ttranscation.scss',
 })
 export class MeTtranscation implements OnInit {
-  pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
+  pagination: PaginationEntity = { pageIndex: 1, pageSize: 10, totalCount: 0 }
   orginalTransctionList: TransactionDto[] = [];
   searchTransctionList: TransactionDto[] = [];
   materialTypeLst: MaterialTypeVM[] = [];
@@ -41,6 +42,7 @@ export class MeTtranscation implements OnInit {
     'الكمية',
     'الإجمالي',
     'المبلغ المدفوع',
+    'تاريخ المعامله'
   ];
 
   columnKeys = [
@@ -50,6 +52,7 @@ export class MeTtranscation implements OnInit {
     'quantity',
     'totalAmount',
     'amountPaid',
+    'formattedDate'
   ];
   constructor(
     private toast: ToastService,
@@ -57,6 +60,7 @@ export class MeTtranscation implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialog: MatDialog,
     private transactionService: TransactionServices,
+    private commonServices: CommonService,
     private cdr: ChangeDetectorRef
   ) {
   }
@@ -78,7 +82,10 @@ export class MeTtranscation implements OnInit {
         console.log(res, 'استجابة المعاملات');
         if (res.success && res.data) {
           this.orginalTransctionList = res.data.transactions;
-          this.searchTransctionList = res.data.transactions;
+          this.searchTransctionList = res.data.transactions.map(item => ({
+            ...item,
+            formattedDate: this.commonServices.formatDateOnly(item.createDate)
+          }));
           this.totalMoneyTaken = res.data.totalMoneypay
           this.moneyToBePaid = res.data.totalMoneyProcessed
           this.totalWight = res.data.totalWight;

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastService } from '../../../core/shared/toast.service';
@@ -6,27 +6,30 @@ import { TransactionServices } from '../../../core/Transaction/transaction-servi
 import { HModalComponent } from '../../../shared/Component/h-modal/h-modal.component';
 import { CommonModule } from '@angular/common';
 import { CreateTransactionDto } from '../../../model/Transaction/create-transaction-dto';
+import { HAutoCompleteComponent } from "../../../shared/Component/h-auto-complete/h-auto-complete";
+import { DicKeyValue } from '../../../model/dic-key-value';
 
 @Component({
   selector: 'app-add-edit-transaction',
   templateUrl: './add-edit-transaction.html',
   styleUrl: './add-edit-transaction.scss',
-  imports: [CommonModule, ReactiveFormsModule, HModalComponent, FormsModule]
+  imports: [CommonModule, ReactiveFormsModule, HModalComponent, FormsModule, HAutoCompleteComponent]
 })
 export class AddEditTransaction implements OnInit {
 
   transactionForm!: FormGroup;
   isEditMode = false;
   loading = false;
-
   remaining = 0;
+  merchantKeyValue:DicKeyValue[] = [];
 
   constructor(
     private fb: FormBuilder,
     private service: TransactionServices,
     private toast: ToastService,
     private dialogRef: MatDialogRef<AddEditTransaction>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private cdr:ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -74,6 +77,10 @@ export class AddEditTransaction implements OnInit {
       this.updateTotalAmount();
     }
 
+    this.merchantKeyValue = this.data.merchantLst.map((e:any) => ({ key: e.id, value: e.name } as DicKeyValue));
+    console.log(this.merchantKeyValue)
+    
+    this.cdr.detectChanges();
   }
 
   numeric(val: any): number {
@@ -170,6 +177,11 @@ export class AddEditTransaction implements OnInit {
       this.transactionForm.get('pricePerUnit')?.setValue(Number((totalAmount / quantity).toFixed(2)), { emitEvent: false });
     } else {
       this.transactionForm.get('pricePerUnit')?.setValue(0, { emitEvent: false });
+    }
+  }
+   onSelected(id: string) {
+    if (this.transactionForm.contains('merchantId')) {
+      this.transactionForm.get('merchantId')?.setValue(id);
     }
   }
 

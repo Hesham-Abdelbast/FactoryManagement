@@ -1,10 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, OnInit, HostListener } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-export interface AutoItem {
-  key: any;
-  value: string;
-}
+import { DicKeyValue } from '../../../model/dic-key-value';
 
 @Component({
   selector: 'app-h-auto-complete',
@@ -18,24 +15,25 @@ export interface AutoItem {
 })
 export class HAutoCompleteComponent implements OnInit {
 
-  @Input() data: AutoItem[] = [];
+  @Input() data: DicKeyValue[] = [];
   @Input() placeholder: string = 'اختر عنصر...';
 
   @Output() valueSelected = new EventEmitter<any>();
 
   control = new FormControl('');
-  filteredItems: AutoItem[] = [];
+  filteredItems: DicKeyValue[] = [];
   showDropdown: boolean = false;
 
   ngOnInit() {
     this.control.valueChanges.subscribe(value => {
       const val = value?.toLowerCase() || '';
+      console.log(this.data,'daaaaaaaaaaaata')
       this.filteredItems = this.data.filter(item => item.value.toLowerCase().includes(val));
       this.showDropdown = this.filteredItems.length > 0;
     });
   }
 
-  selectItem(item: AutoItem) {
+  selectItem(item: DicKeyValue) {
     this.control.setValue(item.value);
     this.valueSelected.emit(item.key);
     this.showDropdown = false;
