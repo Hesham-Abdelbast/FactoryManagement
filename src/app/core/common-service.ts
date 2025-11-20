@@ -14,5 +14,8 @@ export class CommonService {
     return date.toLocaleDateString('en-GB');
   }
 
-  
+  formatForInputDate(date: string | undefined): string {
+    if (!date) return '';
+    return date.split('T')[0]; // yyyy-MM-dd
+  }
 }

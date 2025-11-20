@@ -1,0 +1,39 @@
+<app-h-modal [headerTitle]="isEditMode ? 'تعديل المصروف' : 'إضافة مصروف'" (closeEvent)="close()">
+  <div class="container mt-4" dir="rtl">
+    <div class="card shadow p-4">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <!-- Notes -->
+        <div class="mb-3 text-end">
+          <label class="form-label">ملاحظات</label>
+          <input type="text" formControlName="notes" class="form-control text-end" placeholder="أدخل ملاحظات">
+        </div>
+
+        <!-- Amount -->
+        <div class="mb-3 text-end">
+          <label class="form-label">المبلغ <span class="text-danger">*</span></label>
+          <input type="number" formControlName="amount" class="form-control text-end" placeholder="أدخل المبلغ"
+                 [ngClass]="{'is-invalid': form.get('amount')?.invalid && form.get('amount')?.touched}">
+          <div class="invalid-feedback text-end">يجب إدخال مبلغ صحيح أكبر أو يساوي 0.</div>
+        </div>
+
+        <!-- Create Date -->
+        <div class="mb-3 text-end">
+          <label class="form-label">التاريخ <span class="text-danger">*</span></label>
+          <input type="date" formControlName="createDate" class="form-control text-end"
+                 [ngClass]="{'is-invalid': form.get('createDate')?.invalid && form.get('createDate')?.touched}">
+          <div class="invalid-feedback text-end">هذا الحقل مطلوب.</div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-primary ms-2" type="submit" [disabled]="form.invalid">
+            {{ isEditMode ? 'تحديث' : 'حفظ' }}
+          </button>
+          <button class="btn btn-secondary" type="button" (click)="close()">إلغاء</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</app-h-modal>

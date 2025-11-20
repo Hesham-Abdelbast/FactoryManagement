@@ -1,1 +1,23 @@
-<p>me-expense works!</p>
+<app-h-modal [headerTitle]="titleName" (closeEvent)="close()">
+  <div class="p-2">
+    <app-h-table
+      entityName=""
+      headerText="قائمة المصروفات"
+      [keyColumns]="columnKeys"
+      [displayColumns]="columns"
+      [data]="expenses"
+      [enableActions]="true"
+      actionName="الإجراءات"
+      [actions]="actions"
+      (actionClick)="onTableAction($event)"
+      [showPagination]="true"
+      [total]="pagination.totalCount"
+      (pageChangeEvent)="onPageChange($event)"
+      [enableAdd]="true"
+      addIcon="fa-solid fa-square-plus"
+      addText="إضافة مصروف جديد"
+      (onAddEvent)="addExpense()"
+    >
+    </app-h-table>
+  </div>
+</app-h-modal>

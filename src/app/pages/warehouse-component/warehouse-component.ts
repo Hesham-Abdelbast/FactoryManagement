@@ -12,6 +12,8 @@ import { PaginationEntity } from '../../model/pagination-entity';
 import { WarehouseInventoryDto } from '../../model/Warehouse/warehouse-inventory-dto';
 import { MeMaterials } from './me-materials/me-materials';
 import { WarehouseInventoryServices } from '../../core/WarehouseInventory/warehouse-inventory-services';
+import { MeExpense } from './me-expense/me-expense';
+import { CommonService } from '../../core/common-service';
 
 @Component({
   selector: 'app-warehouse-component',
@@ -36,7 +38,7 @@ export class WarehouseComponent {
     'managerName',
     'phoneNumber',
     'email',
-    'createDate',
+    'formattedDate',
   ];
 
   /** Data sources */
@@ -55,7 +57,7 @@ export class WarehouseComponent {
       label: 'مصاريفي',
       type: 'me-expense',
       style: 'btn btn-outline-primary btn-sm',
-    }, 
+    },
     {
       icon: 'fa fa-edit',
       label: 'تعديل',
@@ -74,6 +76,7 @@ export class WarehouseComponent {
     private warehouseServices: WarehouseServices,
     private warehouseInServices: WarehouseInventoryServices,
     private dialog: MatDialog,
+    private commonServices: CommonService,
     private toast: ToastService,
   ) { }
 
@@ -84,9 +87,12 @@ export class WarehouseComponent {
   public loadWarehouse(): void {
     this.warehouseServices.GetAllWithPagination(this.pagination).subscribe({
       next: (res: ApiResponse<WarehouseDto[]>) => {
-        console.log(res, 'res');
         if (res.success && res.data) {
           this.warehouseList = res.data;
+          this.warehouseList = res.data.map(item => ({
+            ...item,
+            formattedDate: this.commonServices.formatDateOnly(item.createDate.toString())
+          }));
           this.pagination.totalCount = res.totalCount ?? 0;
         } else {
           this.toast.error('فشل في تحميل المستودعات .');
@@ -108,7 +114,7 @@ export class WarehouseComponent {
   }
 
   onPageChange(pageEvent: PageEvent): void {
-    this.pagination.pageIndex = pageEvent.pageIndex ;
+    this.pagination.pageIndex = pageEvent.pageIndex;
     this.pagination.pageSize = pageEvent.pageSize;
     this.loadWarehouse();
   }
@@ -128,8 +134,19 @@ export class WarehouseComponent {
     });
   }
 
-  meExpense(id:string){
+  meExpense(id: string) {
+    const dialogRef = this.dialog.open(MeExpense, {
+      width: '70Vw',
+      maxWidth:'90Vw',
+      maxHeight: '90vh',
+      data:{
+        Id:id
+      }
+    });
 
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) this.loadWarehouse();
+    });
   }
 
   loadMaterials(warehouseId: string): void {
