@@ -21,7 +21,7 @@ export class AddEditTransaction implements OnInit {
   isEditMode = false;
   loading = false;
   remaining = 0;
-  merchantKeyValue:DicKeyValue[] = [];
+  merchantKeyValue: DicKeyValue[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -29,7 +29,7 @@ export class AddEditTransaction implements OnInit {
     private toast: ToastService,
     private dialogRef: MatDialogRef<AddEditTransaction>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private cdr:ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -77,61 +77,10 @@ export class AddEditTransaction implements OnInit {
       this.updateTotalAmount();
     }
 
-    this.merchantKeyValue = this.data.merchantLst.map((e:any) => ({ key: e.id, value: e.name } as DicKeyValue));
+    this.merchantKeyValue = this.data.merchantLst.map((e: any) => ({ key: e.id, value: e.name } as DicKeyValue));
     console.log(this.merchantKeyValue)
-    
+
     this.cdr.detectChanges();
-  }
-
-  numeric(val: any): number {
-    const v = Number(val);
-    return isNaN(v) || v < 0 ? 0 : v;
-  }
-
-  invalid(control: string): boolean {
-    const c = this.transactionForm.get(control);
-    return !!(c && c.touched && c.invalid);
-  }
-
-  recalculateQuantity() {
-    const total = this.numeric(this.transactionForm.get('carAndMatrerialWeight')?.value);
-    const empty = this.numeric(this.transactionForm.get('carWeight')?.value);
-
-    // Prevent empty > loaded
-    const net = total > empty ? total - empty : 0;
-
-    this.transactionForm.get('quantity')?.setValue(Number(net.toFixed(2)), { emitEvent: false });
-    this.recalculateImpurities();
-
-  }
-
-  recalculateImpurities() {
-    const q = this.numeric(this.transactionForm.get('quantity')?.value);
-    const p = this.numeric(this.transactionForm.get('percentageOfImpurities')?.value);
-
-    const impurity = q * (p / 100);
-    this.transactionForm.get('weightOfImpurities')?.setValue(Number(impurity.toFixed(2)), { emitEvent: false });
-
-    const net = q > impurity ? q - impurity : 0;
-    this.transactionForm.get('quantity')?.setValue(Number(net.toFixed(2)), { emitEvent: false });
-    this.updateTotalAmount();
-  }
-
-  updateTotalAmount() {
-    const quantity = this.numeric(this.transactionForm.get('quantity')?.value);
-    const price = this.numeric(this.transactionForm.get('pricePerUnit')?.value);
-    const totalAmount = this.numeric(this.transactionForm.get('totalAmount')?.value);
-    if(!totalAmount){
-      const totalAmount = Number((quantity * price).toFixed(2));
-      this.transactionForm.get('totalAmount')?.setValue(Number(totalAmount.toFixed(2)), { emitEvent: false });
-    }
-    this.updateRemaining();
-  }
-
-  updateRemaining() {
-    const paid = this.numeric(this.transactionForm.get('amountPaid')?.value);
-    const totalAmount = this.numeric(this.transactionForm.get('totalAmount')?.value) ?? 0;
-    this.remaining = Number((totalAmount - paid).toFixed(2));
   }
 
   onSubmit() {
@@ -140,7 +89,7 @@ export class AddEditTransaction implements OnInit {
       this.toast.error("الرجاء تعبئة البيانات المطلوبة بشكل صحيح");
       return;
     }
-    console.log('showPhoneNumber: ',this.transactionForm.get('showPhoneNumber')?.value === 'true')
+    console.log('showPhoneNumber: ', this.transactionForm.get('showPhoneNumber')?.value === 'true')
     const payload: CreateTransactionDto = {
       ...this.transactionForm.getRawValue(),
       createDate: new Date(this.transactionForm.get('createDate')?.value).toISOString(),
@@ -179,10 +128,84 @@ export class AddEditTransaction implements OnInit {
       this.transactionForm.get('pricePerUnit')?.setValue(0, { emitEvent: false });
     }
   }
-   onSelected(id: string) {
+
+  onSelected(id: string) {
     if (this.transactionForm.contains('merchantId')) {
       this.transactionForm.get('merchantId')?.setValue(id);
     }
+  }
+
+  private getValue(control: string): number {
+    return this.numeric(this.transactionForm.get(control)?.value);
+  }
+
+  private setValue(control: string, value: number) {
+    const c = this.transactionForm.get(control);
+    if (!c) return;
+
+    c.setValue(Number(value.toFixed(2)), { emitEvent: false });
+
+    // Reset state so Angular does NOT block future automatic updates
+    c.markAsPristine();
+    c.markAsUntouched();
+  }
+
+  invalid(control: string): boolean {
+    const c = this.transactionForm.get(control);
+    return !!(c && c.touched && c.invalid);
+  }
+
+  recalculateQuantity() {
+    const total = this.getValue('carAndMatrerialWeight');
+    const empty = this.getValue('carWeight');
+
+    const net = Math.max(total - empty, 0);
+    this.setValue('quantity', net);
+
+    this.recalculateImpurities();
+  }
+
+  recalculateImpurities() {
+    const quantity = this.getValue('quantity');
+    const impuritiesPercent = this.getValue('percentageOfImpurities');
+
+    const impurityWeight = quantity * (impuritiesPercent / 100);
+    this.setValue('weightOfImpurities', impurityWeight);
+
+    const finalQuantity = Math.max(quantity - impurityWeight, 0);
+    this.setValue('quantity', finalQuantity);
+
+    this.updateTotalAmount();
+  }
+
+  updateTotalAmount() {
+    const quantity = this.getValue('quantity');
+    const price = this.getValue('pricePerUnit');
+
+    const totalControl = this.transactionForm.get('totalAmount');
+
+    // Only prevent auto-calculation if the user manually typed in the field
+    const userEdited = totalControl?.dirty;
+
+    if (!userEdited) {
+      const total = quantity * price;
+      this.setValue('totalAmount', total);
+    }
+
+    this.updateRemaining();
+  }
+
+
+  updateRemaining() {
+    const paid = this.getValue('amountPaid');
+    const totalAmount = this.getValue('totalAmount');
+
+    this.remaining = Number((totalAmount - paid).toFixed(2));
+  }
+
+  numeric(val: any): number {
+    const v = Number(val);
+    return isNaN(v) || v < 0 ? 0 : v;
   }
 
   close() {

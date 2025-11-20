@@ -6,6 +6,7 @@ import { MerchantExpenseDto } from '../../model/Merchant/merchant-expense-dto';
 import { MerchantExpenseURLs } from '../../shared/helper/urls';
 import { MerchantExpenseCreateDto } from '../../model/Merchant/merchant-expense-create-dto';
 import { ExpenseSummaryRequest } from '../../model/expense-summary-request';
+import { PaginationEntity } from '../../model/pagination-entity';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,31 @@ export class MerchantExpenseServices {
       );
   }
 
+  /**
+   * Fetch all merchant expenses
+   */
+  getAllWithPagination(param:PaginationEntity): Observable<ApiResponse<MerchantExpenseDto[]>> {
+    return this.baseService
+      .GetRequest<ApiResponse<MerchantExpenseDto[]>>(MerchantExpenseURLs.GetAll)
+      .pipe(
+        catchError(error =>
+          this.handleError<MerchantExpenseDto[]>('جلب جميع المصاريف', error, [])
+        )
+      );
+  }
+
+  /**
+   * Fetch all merchant expenses
+   */
+  GetAllByMerchantIdWithPagination(id:string,param:PaginationEntity): Observable<ApiResponse<MerchantExpenseDto[]>> {
+    return this.baseService
+      .PostRequest<ApiResponse<MerchantExpenseDto[]>>(MerchantExpenseURLs.GetAllByMerchantIdWithPagination(id),param)
+      .pipe(
+        catchError(error =>
+          this.handleError<MerchantExpenseDto[]>('جلب جميع المصاريف', error, [])
+        )
+      );
+  }
   /**
    * Fetch merchant expense by ID
    */

@@ -10,6 +10,7 @@ import { PageEvent } from '../../model/page-event';
 import { MatDialog } from '@angular/material/dialog';
 import { MeTtranscation } from './me-ttranscation/me-ttranscation';
 import { PaginationEntity } from '../../model/pagination-entity';
+import { MerchantExponseComponent } from './merchant-exponse-component/merchant-exponse-component';
 
 @Component({
   selector: 'app-merchant-component',
@@ -18,14 +19,14 @@ import { PaginationEntity } from '../../model/pagination-entity';
   styleUrl: './merchant-component.scss',
 })
 export class MerchantComponent {
-/** أعمدة الجدول */
- columns = ['الاسم', 'رقم الهاتف', 'البريد الإلكتروني', 'العنوان'];
- columnKeys = ['name', 'phone', 'email', 'address'];
-pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
+  /** أعمدة الجدول */
+  columns = ['الاسم', 'رقم الهاتف', 'البريد الإلكتروني', 'العنوان'];
+  columnKeys = ['name', 'phone', 'email', 'address'];
+  pagination: PaginationEntity = { pageIndex: 1, pageSize: 5, totalCount: 0 }
 
   /** قائمة الأنواع */
   orgnialMerchantList: any;
- searchMerchantList: any;
+  searchMerchantList: any;
 
   /** عدد السجلات */
   total = 0;
@@ -36,7 +37,6 @@ pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
     private toastService: ToastService
   ) {
     this.loadMerchants();
-
   }
 
   ngOnInit(): void {
@@ -45,11 +45,25 @@ pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
   /** إجراءات الجدول */
   actions: TableAction[] = [
     {
-      icon: 'fa fa-show',
+      icon: 'fa fa-eye',
       iconColor: '',
       label: 'معاملاتي',
       type: 'show',
       style: 'btn btn-outline-primary btn-sm'
+    },
+    {
+      icon: 'fa-solid fa-file-invoice-dollar',
+      iconColor: '',
+      label: 'جرد',
+      type: 'Gerd',
+      style: 'btn btn-outline-primary btn-sm'
+    },
+    {
+      icon: 'fa fa-show',
+      iconColor: '',
+      label: 'سداد',
+      type: 'Sdad',
+      style: 'btn btn-outline-secondary btn-sm'
     },
     {
       icon: 'fa fa-edit',
@@ -73,6 +87,12 @@ pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
       case 'show':
         this.show(event.row.id);
         break;
+      case 'Gerd':
+        this.Gerd(event.row.id);
+        break;
+      case 'Sdad':
+        this.Sdad(event.row.id,event.row.name);
+        break;
       case 'edit':
         this.editMerchant(event.row);
         break;
@@ -82,10 +102,25 @@ pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
     }
   }
 
+  Gerd(id: string){
+
+  }
+
+  Sdad(id: string,name:string){
+    this.dialog.open(MerchantExponseComponent, {
+      width: '80vw',
+      height: 'auto',
+      maxHeight: '90vh',
+      maxWidth: '90vw',
+      data: { merchantID: id ,Title : name}
+    });
+  }
+
   /** تغيير الصفحة */
   onPageChange(pageEvent: PageEvent) {
-     this.pagination.pageIndex = pageEvent.pageIndex;
+    this.pagination.pageIndex = pageEvent.pageIndex;
     this.pagination.pageSize = pageEvent.pageSize;
+    this.loadMerchants();
   }
 
   /** إضافة نوع جديد */
@@ -106,7 +141,7 @@ pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
   show(id: string) {
     this.dialog.open(MeTtranscation, {
       width: '80vw',
-      height: 'auto',
+      height: '90vh',
       maxHeight: '90vh',
       maxWidth: '90vw',
       data: { merchantID: id }
@@ -149,11 +184,11 @@ pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
 
   /** تحميل جميع الأنواع */
   public loadMerchants() {
-    this.MerchantServices.getAll().subscribe((res: ApiResponse<MerchantDto[]>) => {
+    this.MerchantServices.getAllByPagination(this.pagination).subscribe((res: ApiResponse<MerchantDto[]>) => {
       if (res.success && res.data) {
         this.orgnialMerchantList = res.data;
         this.searchMerchantList = res.data;
-        this.total = res.data.length;
+        this.pagination.totalCount = res.totalCount;
         console.log(res.data)
       } else {
         this.toastService.error('فشل تحميل التجار.');
@@ -161,10 +196,9 @@ pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
     });
   }
 
-  onSearch(event:string) {
-    this.searchMerchantList = this.orgnialMerchantList.filter((merchant: MerchantDto) =>
-      merchant.name.toLowerCase().includes(event.toLowerCase())
-    );
+  onSearch(event: string) {
+    this.pagination.search = event;
+    this.loadMerchants();
   }
 
 }

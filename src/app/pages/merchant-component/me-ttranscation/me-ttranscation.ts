@@ -71,6 +71,7 @@ export class MeTtranscation implements OnInit {
   onPageChange(pageEvent: PageEvent): void {
     this.pagination.pageIndex = pageEvent.pageIndex;
     this.pagination.pageSize = pageEvent.pageSize;
+    this.loadTransactions();
   }
 
   /** Load all transactions */

@@ -50,6 +50,11 @@ export class MerchantExpenseURLs {
     return `${this.base}${id}`;
   }
 
+  // GET by Id
+  static GetAllByMerchantIdWithPagination(id: string): string {
+    return `${this.base}GetAllByMerchantIdWithPagination/${id}`;
+  }
+
   // ADD new expense
   static readonly Add = this.base + 'Add';
 

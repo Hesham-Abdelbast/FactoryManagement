@@ -4,6 +4,7 @@ import { ApiResponse } from '../../model/api-response';
 import { BaseServicesService } from '../shared/base-services.service';
 import { MerchantDto } from '../../model/Merchant/merchant-dto';
 import { MerchantURLs } from '../../shared/helper/urls';
+import { PaginationEntity } from '../../model/pagination-entity';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,19 @@ export class MerchantServices {
     getAll(): Observable<ApiResponse<MerchantDto[]>> {
       return this.baseService
         .GetRequest<ApiResponse<MerchantDto[]>>(MerchantURLs.GetAll)
+        .pipe(
+          catchError(error =>
+            this.handleError<MerchantDto[]>('fetching all Merchants', error, [])
+          )
+        );
+    }
+
+    /**
+     * Fetch all Merchants
+     */
+    getAllByPagination(param:PaginationEntity): Observable<ApiResponse<MerchantDto[]>> {
+      return this.baseService
+        .PostRequest<ApiResponse<MerchantDto[]>>(MerchantURLs.GetAll,param)
         .pipe(
           catchError(error =>
             this.handleError<MerchantDto[]>('fetching all Merchants', error, [])
@@ -40,6 +54,7 @@ export class MerchantServices {
           )
         );
     }
+    
   
     /**
      * Add new Merchant

@@ -56,7 +56,7 @@ export class Transaction implements OnInit {
   materialTypeLst: MaterialTypeVM[] = [];
   merchantLst: MerchantDto[] = [];
   warehouseLst: WarehouseDto[] = [];
-  pagination: PaginationEntity = { pageIndex: 1, pageSize: 10, totalCount: 10 };
+  pagination: PaginationEntity = { pageIndex: 1, pageSize: 5, totalCount: 0 };
   /** Table actions */
   actions: TableAction[] = [
     {
@@ -91,7 +91,6 @@ export class Transaction implements OnInit {
     private materialService: MaterialTypeServices,
     private merchantService: MerchantServices,
     private warehouseService: WarehouseServices,
-    private router: Router
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -247,7 +246,6 @@ export class Transaction implements OnInit {
       if (filterData) {
         filterData.pageIndex = this.pagination.pageIndex;
         filterData.pageSize = this.pagination.pageSize;
-        filterData.totalCount = this.pagination.totalCount;
         this.transactionServices.search(filterData).subscribe({
           next: (res: ApiResponse<TransactionDto[]>) => {
             if (res.success && res.data) {

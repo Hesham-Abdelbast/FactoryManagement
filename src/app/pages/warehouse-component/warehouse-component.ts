@@ -110,7 +110,7 @@ export class WarehouseComponent {
     if (event.action === 'edit') this.editTransaction(event.row);
     if (event.action === 'delete') this.deleteTransaction(event.row.id);
     if (event.action === 'view') this.loadMaterials(event.row.id);
-    if (event.action === 'me-expense') this.meExpense(event.row.id);
+    if (event.action === 'me-expense') this.meExpense(event.row.id,event.row.name);
   }
 
   onPageChange(pageEvent: PageEvent): void {
@@ -134,13 +134,13 @@ export class WarehouseComponent {
     });
   }
 
-  meExpense(id: string) {
+  meExpense(id: string,title:string) {
     const dialogRef = this.dialog.open(MeExpense, {
       width: '70Vw',
       maxWidth:'90Vw',
       maxHeight: '90vh',
       data:{
-        Id:id
+        Id:id,title:title
       }
     });
 
