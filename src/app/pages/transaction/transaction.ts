@@ -250,7 +250,7 @@ export class Transaction implements OnInit {
     }).afterClosed().subscribe((filterData: TxnSearchDto) => {
       if (filterData) {
         this.pagination.fromDate = filterData.fromDate;
-        this.pagination.toDate = filterData.fromDate;
+        this.pagination.toDate = filterData.toDate;
 
         this.pagination.isPaid = filterData.isPaid;
         this.pagination.isUnPaid = filterData.isUnPaid;
