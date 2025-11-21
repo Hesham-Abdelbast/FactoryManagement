@@ -114,6 +114,9 @@ export class HTableComponent<T = any> {
   /** Pageination Item Per Page Text */
   @Input() ItemPerPage: string = '';
 
+  /** Show / hide Check mark */
+  @Input() showCheckMark = false;
+
   // =============================
   // Outputs
   // =============================
@@ -141,6 +144,9 @@ export class HTableComponent<T = any> {
 
   /** Fired when user click in up order button */
   @Output() onMoveDown = new EventEmitter<string>();
+
+  /** Fired when user change the check mark*/
+  @Output() onCheckMarkChange = new EventEmitter<string>();
 
   constructor(@Inject(DOCUMENT) private document: Document) {}
 

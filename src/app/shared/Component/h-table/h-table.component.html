@@ -53,9 +53,16 @@
       <table class="h_table">
         <thead>
           <tr>
+            <!-- Check mark column (optional) -->
+            @if(showCheckMark){
+               <th class="h_col-check-mark">{{ orderTitle }}</th>
+            }
+
+            <!-- Order column (optional) -->
             @if(showOrder){
               <th class="h_col-order">{{ orderTitle }}</th>
             }
+
             <!-- Dynamic columns -->
             @for (item of displayColumns; track $index) {
             <th [class]="'h_col-' + $index">{{ item }}</th>

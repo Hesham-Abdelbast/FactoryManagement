@@ -143,7 +143,11 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
-
+.h_col-check-mark{
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;
+}
 /* Column width management */
 .h_col-order {
     width: 120px;

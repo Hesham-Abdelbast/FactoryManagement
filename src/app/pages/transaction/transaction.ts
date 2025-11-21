@@ -59,7 +59,7 @@ export class Transaction implements OnInit {
   materialTypeLst: MaterialTypeVM[] = [];
   merchantLst: MerchantDto[] = [];
   warehouseLst: WarehouseDto[] = [];
-  pagination: PaginationEntity = { pageIndex: 1, pageSize: 5, totalCount: 0 };
+  pagination: TxnSearchDto = { pageIndex: 1, pageSize: 5, totalCount: 0 };
   /** Table actions */
   actions: TableAction[] = [
     {
@@ -122,7 +122,7 @@ export class Transaction implements OnInit {
 
   /** Load all transactions */
   public loadTransactions(): void {
-    this.transactionServices.getAll(this.pagination).subscribe({
+    this.transactionServices.search(this.pagination).subscribe({
       next: (res: ApiResponse<TransactionDto[]>) => {
         if (res.success && res.data) {
           this.transctionList = res.data.map((t) => ({
@@ -249,28 +249,16 @@ export class Transaction implements OnInit {
       }
     }).afterClosed().subscribe((filterData: TxnSearchDto) => {
       if (filterData) {
-        filterData.pageIndex = this.pagination.pageIndex;
-        filterData.pageSize = this.pagination.pageSize;
-        filterData.totalCount = this.pagination.totalCount;
-        this.transactionServices.search(filterData).subscribe({
-          next: (res: ApiResponse<TransactionDto[]>) => {
-            if (res.success && res.data) {
-              this.transctionList = res.data.map((t) => ({
-            ...t,
-            typeName: t.type === 'Income' ? 'وارد' : 'صادر',
-            totalAmount: !t.totalAmount?t.quantity * t.pricePerUnit:t.totalAmount,
-            formateDate:this.commonServices.formatDateOnly(t.createDate)
-          }));
-            }
-            else{
-              this.toast.error(res.returnMsg);
-            }
-          },
-          error: (err: any) => {
-            console.error(err);
-            this.toast.error('حدث خطأ أثناء تحميل المعاملات.');
-          },
-        });
+        this.pagination.fromDate = filterData.fromDate;
+        this.pagination.toDate = filterData.fromDate;
+
+        this.pagination.isPaid = filterData.isPaid;
+        this.pagination.isUnPaid = filterData.isUnPaid;
+
+        this.pagination.merchantName = filterData.merchantName;
+        this.pagination.warehouseeName = filterData.warehouseeName;
+        this.pagination.materialTypeName = filterData.materialTypeName;
+        this.loadTransactions();
       }
     });
   }
