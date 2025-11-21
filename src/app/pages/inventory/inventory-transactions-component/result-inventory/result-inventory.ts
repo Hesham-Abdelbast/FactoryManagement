@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, input } from '@angular/core';
+import { Component, Inject, Input, input, Optional } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-result-inventory',
@@ -9,7 +10,7 @@ import { Component, Input, input } from '@angular/core';
 })
 export class ResultInventory {
   @Input() data: any;
-
+   
   // Arabic text constants
   readonly arabicText = {
     title: 'نتائج الجرد',
@@ -45,6 +46,14 @@ export class ResultInventory {
     noAnomaliesDetected: 'لم يتم اكتشاف شذوذات',
     allTransactionsNormal: 'جميع المعاملات ضمن المعايير المتوقعة'
   };
+
+  constructor(@Optional() @Inject(MAT_DIALOG_DATA) private dialogData: any) {}
+
+  ngOnInit(): void {
+    if (!this.data && this.dialogData) {
+      this.data = this.dialogData.Items;
+    }
+  }
   // Format date for Arabic display
   formatDate(dateString: string): string {
     const date = new Date(dateString);

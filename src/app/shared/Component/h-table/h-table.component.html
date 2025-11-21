@@ -5,11 +5,22 @@
   <h3 class="top-title">{{ entityName }}</h3>
 
   <!-- Add button -->
+   <div class="d-flex gap-2">
+    <div class="d-flex gap-2">
+    <button *ngFor="let btn of buttons" class="btn btn-{{btn.type}}" type="button"
+      (click)="headerButtons.emit(btn.eventName)">
+
+      <i *ngIf="btn.icon" class="{{ btn.icon }}" style="margin-right:5px;"></i>
+      {{ btn.text }}
+    </button>
+  </div>
   @if(enableAdd){
-    <button class="btn btn-primary" type="button" (click)="onAddEvent.emit()">
+  <button class="btn btn-primary" type="button" (click)="onAddEvent.emit()">
     <i *ngIf="addIcon" class="{{addIcon}}" style="margin: 0 5px;"></i>{{ addText }}
   </button>
   }
+   </div>
+  
 </div>
 
 <!-- ===============================
@@ -25,9 +36,10 @@
     <!-- Right: Actions -->
     <div class="h_actions">
       <!-- Search -->
-       @if(enableSearch){
-         <input [(ngModel)]="textSearch" class="h_search" type="text" placeholder="{{placeholdeSearch}}" (change)="onSearchChange()"/>
-       }
+      @if(enableSearch){
+      <input [(ngModel)]="textSearch" class="h_search" type="text" placeholder="{{placeholdeSearch}}"
+        (change)="onSearchChange()" />
+      }
 
       <!-- Filter -->
       @if(enableFilter){
@@ -55,12 +67,12 @@
           <tr>
             <!-- Check mark column (optional) -->
             @if(showCheckMark){
-               <th class="h_col-check-mark">{{ orderTitle }}</th>
+            <th class="h_col-check-mark">{{ orderTitle }}</th>
             }
 
             <!-- Order column (optional) -->
             @if(showOrder){
-              <th class="h_col-order">{{ orderTitle }}</th>
+            <th class="h_col-order">{{ orderTitle }}</th>
             }
 
             <!-- Dynamic columns -->
@@ -78,30 +90,33 @@
         <tbody>
           @for (row of data; track $index) {
           <tr>
+            <!-- Check mark column (optional) -->
+            @if (showCheckMark) {
+            <td class="h_col-check-mark">
+              <input type="checkbox" [checked]="isSelected(getCellValue(row, 'id'))"
+                (change)="onSelectChange(getCellValue(row, 'id'), $event)">
+            </td>
+            }
             <!-- Order cell-->
-             @if(showOrder){
-              <td class="h_col-order">
-                <div class="order-controls">
-                  <!-- Move Up -->
-                  <button
-                    class="btn btn-sm btn-outline-secondary rounded-circle"
-                    matTooltip="Move Up" matTooltipPosition="above"
-                    [disabled]="getCellValue(row, orderKey) === 0"
-                    (click)="moveUp(getCellValue(row, orderKey))">
-                    ▲
-                  </button>
+            @if(showOrder){
+            <td class="h_col-order">
+              <div class="order-controls">
+                <!-- Move Up -->
+                <button class="btn btn-sm btn-outline-secondary rounded-circle" matTooltip="Move Up"
+                  matTooltipPosition="above" [disabled]="getCellValue(row, orderKey) === 0"
+                  (click)="moveUp(getCellValue(row, orderKey))">
+                  ▲
+                </button>
 
-                  <!-- Move Down -->
-                  <button
-                    class="btn btn-sm btn-outline-secondary rounded-circle"
-                    matTooltip="Move Down" matTooltipPosition="above"
-                    [disabled]="getCellValue(row, orderKey) === data.length - 1"
-                    (click)="moveDown(getCellValue(row, orderKey))">
-                    ▼
-                  </button>
-                </div>
-              </td>
-             }
+                <!-- Move Down -->
+                <button class="btn btn-sm btn-outline-secondary rounded-circle" matTooltip="Move Down"
+                  matTooltipPosition="above" [disabled]="getCellValue(row, orderKey) === data.length - 1"
+                  (click)="moveDown(getCellValue(row, orderKey))">
+                  ▼
+                </button>
+              </div>
+            </td>
+            }
 
             <!-- Dynamic cells -->
             @for (col of keyColumns; track $index) {
@@ -114,16 +129,17 @@
               <div class="table-actions">
                 @for (action of actions; track $index) {
                 @if (action.show !== false) {
-                <button type="button" [class]="action.style" [title]="action.label" (click)="onActionClick(action, row)">
+                <button type="button" [class]="action.style" [title]="action.label"
+                  (click)="onActionClick(action, row)">
                   <!-- Icon -->
-                   @if(action.icon){
-                     <i [class]="action.icon + ' ' + action.iconColor"></i>
-                   }
+                  @if(action.icon){
+                  <i [class]="action.icon + ' ' + action.iconColor"></i>
+                  }
 
                   <!-- Label -->
-                   @if(action.label){
-                     <span class="action-label">{{ action.label }}</span>
-                   }
+                  @if(action.label){
+                  <span class="action-label">{{ action.label }}</span>
+                  }
                 </button>
                 }
                 }
@@ -133,8 +149,9 @@
           </tr>
           }
           <tr *ngIf="!data || data.length === 0">
-              <td [attr.colspan]="(showOrder ? 1 : 0) + displayColumns.length + (enableActions ? 1 : 0)" class="text-muted py-4">لا توجد بيانات للعرض.</td>
-            </tr>
+            <td [attr.colspan]="(showOrder ? 1 : 0) + displayColumns.length + (enableActions ? 1 : 0)"
+              class="text-muted py-4">لا توجد بيانات للعرض.</td>
+          </tr>
         </tbody>
       </table>
     </div>

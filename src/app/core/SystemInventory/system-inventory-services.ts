@@ -21,6 +21,18 @@ export class SystemInventoryServices {
         )
       );
   }
+/**
+ * 📦 Get Transactions Report by IDs
+ */
+GetTrnxReportByIds(transactionIds: string[]): Observable<ApiResponse<any>> {
+  return this.baseService
+    .PostRequest<ApiResponse<any>>(SystemInventoryURLs.GetTrnxReportByIds, transactionIds)
+    .pipe(
+      catchError(error =>
+        this.handleError<any>('getting transaction report by IDs', error, [])
+      )
+    );
+}
 
 
   /**

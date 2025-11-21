@@ -22,6 +22,9 @@ import { ViewTransactionComponent } from './view-transaction-component/view-tran
 import { TxnSearchDto } from '../../model/Transaction/txn-search-dto';
 import { TrxFilter } from './trx-filter/trx-filter';
 import { CommonService } from '../../core/common-service';
+import { HeaderButton } from '../../model/header-button';
+import { SystemInventoryServices } from '../../core/SystemInventory/system-inventory-services';
+import { ResultInventory } from '../inventory/inventory-transactions-component/result-inventory/result-inventory';
 
 @Component({
   selector: 'app-transaction',
@@ -31,6 +34,8 @@ import { CommonService } from '../../core/common-service';
   styleUrls: ['./transaction.scss'],
 })
 export class Transaction implements OnInit {
+
+  selectedFromChild: string[] = [];
   /** Table Columns */
   columns = [
     'نوع المعاملة',
@@ -94,7 +99,8 @@ export class Transaction implements OnInit {
     private materialService: MaterialTypeServices,
     private merchantService: MerchantServices,
     private warehouseService: WarehouseServices,
-    private commonServices:CommonService
+    private commonServices: CommonService,
+    private systemInventoryServices: SystemInventoryServices
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -128,13 +134,13 @@ export class Transaction implements OnInit {
           this.transctionList = res.data.map((t) => ({
             ...t,
             typeName: t.type === 'Income' ? 'وارد' : 'صادر',
-            totalAmount: !t.totalAmount?t.quantity * t.pricePerUnit:t.totalAmount,
-            formateDate:this.commonServices.formatDateOnly(t.createDate)
+            totalAmount: !t.totalAmount ? t.quantity * t.pricePerUnit : t.totalAmount,
+            formateDate: this.commonServices.formatDateOnly(t.createDate)
           }));
 
           this.pagination.totalCount = res.totalCount
 
-          console.log(res,'resalut')
+          console.log(res, 'resalut')
         } else {
           this.toast.error('فشل تحميل المعاملات.');
         }
@@ -154,9 +160,9 @@ export class Transaction implements OnInit {
   }
 
   onPageChange(pageEvent: PageEvent): void {
-    this.pagination.pageIndex = pageEvent.pageIndex ;
+    this.pagination.pageIndex = pageEvent.pageIndex;
     this.pagination.pageSize = pageEvent.pageSize;
-    console.log(this.pagination,'pagination');
+    console.log(this.pagination, 'pagination');
     this.loadTransactions();
   }
 
@@ -262,4 +268,48 @@ export class Transaction implements OnInit {
       }
     });
   }
+  onSelectionUpdated(ids: string[]) {
+    this.selectedFromChild = ids;
+  }
+
+  actionButtons: HeaderButton[] = [
+    { text: 'جرد', icon: 'fa-solid fa-file-invoice-dollar', type: 'primary', eventName: 'gard' },
+  ];
+
+  onHeaderButtonsClicked(action: string) {
+    console.log('Action triggered:', action);
+
+    if (action === 'gard') {
+      this.gard();
+    }
+  }
+
+  gard() {
+    console.log("Selected values from child:", this.selectedFromChild);
+    if (!this.selectedFromChild || this.selectedFromChild.length == 0) {
+      this.toast.warning('اختر اولا المعاملات التي تريد جردها..!');
+      return;
+    }
+
+    this.systemInventoryServices.GetTrnxReportByIds(this.selectedFromChild).subscribe((res: ApiResponse<any>) => {
+
+      if (res.success && res.data) {
+        this.dialog.open(ResultInventory,
+          {
+            width:'70vw',
+            maxWidth:'90vw',
+            height:'auto',
+            maxHeight:'95vh',
+            data:{
+              Items : res.data
+            }
+          }
+        )
+      }
+      else{
+        this.toast.error(res.returnMsg)
+      }
+    })
+  }
+
 }

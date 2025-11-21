@@ -26,5 +26,11 @@
   
   [enableFilter]="true"
   (onFilterEvent)="onFilter()"
-  filterIcon="fa-solid fa-arrow-down-wide-short">
+  filterIcon="fa-solid fa-arrow-down-wide-short"
+  
+  [showCheckMark]="true"
+  (selectionChange)="onSelectionUpdated($event)"
+  [buttons]="actionButtons"
+  (headerButtons)="onHeaderButtonsClicked($event)"
+  >
 </app-h-table>

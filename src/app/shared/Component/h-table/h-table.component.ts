@@ -3,6 +3,7 @@ import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TableAction } from '../../../model/table-action';
 import { PageEvent } from '../../../model/page-event';
+import { HeaderButton } from '../../../model/header-button';
 
 
 @Component({
@@ -15,7 +16,8 @@ export class HTableComponent<T = any> {
 
   /** Detect page direction (ltr/rtl) from <body dir="..."> */
   dir: string | null = 'ltr';
-
+  /**check mark ids */
+  selectedIds: string[] = [];
   /** text Search on change the value will set here */
   textSearch:string='';
 
@@ -117,6 +119,7 @@ export class HTableComponent<T = any> {
   /** Show / hide Check mark */
   @Input() showCheckMark = false;
 
+  @Input() buttons: HeaderButton[] = [];
   // =============================
   // Outputs
   // =============================
@@ -146,7 +149,9 @@ export class HTableComponent<T = any> {
   @Output() onMoveDown = new EventEmitter<string>();
 
   /** Fired when user change the check mark*/
-  @Output() onCheckMarkChange = new EventEmitter<string>();
+  @Output() selectionChange = new EventEmitter<string[]>();
+  
+ @Output() headerButtons = new EventEmitter<string>();
 
   constructor(@Inject(DOCUMENT) private document: Document) {}
 
@@ -235,5 +240,22 @@ export class HTableComponent<T = any> {
   
   moveDown(order:string){
     this.onMoveDown.emit(order);
+  }
+
+  
+  onSelectChange(id: string, event: any) {
+    if (event.target.checked) {
+      if (!this.selectedIds.includes(id)) {
+        this.selectedIds.push(id);
+      }
+    } else {
+      this.selectedIds = this.selectedIds.filter(x => x !== id);
+    }
+    // Send updated list to parent
+    this.selectionChange.emit(this.selectedIds);
+  }
+
+  isSelected(id: string) {
+    return this.selectedIds.includes(id);
   }
 }

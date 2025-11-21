@@ -180,6 +180,8 @@ export class FinancingURLs {
 }
 export class SystemInventoryURLs {
   private static readonly base = Base_URL + 'api/SystemInventory/';
+  
+  public static readonly GetTrnxReportByIds = this.base + 'GetTrnxReportByIds';
   static GetTrnxReport(from: Date,to:Date): string {
      return `${this.base}GetTrnxReport?from=${from}&to=${to}` 
   }
