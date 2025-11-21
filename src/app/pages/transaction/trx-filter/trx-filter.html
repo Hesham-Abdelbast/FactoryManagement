@@ -1,39 +1,59 @@
 <app-h-modal headerTitle="بحث المعاملات" (closeEvent)="close()">
-    <div class="p-4">
-        <form [formGroup]="searchForm">
-            <div class=" d-flex justify-content-between gap-2">
-               <div class="w-50">
-                  <label for="merchantName">اسم التاجر</label>
-                  <input type="text" class="form-control border-gray" placeholder=" اسم التاجر" formControlName="merchantName" id="merchantName">
-               </div>
-               <div class="w-50">
-                  <label for="materialTypeName">نوع الماده</label>
-                  <input type="text" class="form-control border-gray" placeholder=" نوع الماده" formControlName="materialTypeName" id="materialTypeName">
-               </div>
-            </div>
-             <div class=" d-flex justify-content-between gap-2 mt-3">
-               <div class="w-50">
-                  <label for="fromDate">التاريخ من</label>
-                  <input type="date" class="form-control border-gray" placeholder=" اسم التاجر" formControlName="fromDate" id="fromDate">
-               </div>
-               <div class="w-50">
-                  <label for="toDate">التاريخ الى</label>
-                  <input type="date" class="form-control border-gray" placeholder=" نوع الماده" formControlName="toDate" id="toDate">
-               </div>
-            </div>
 
-            <div class=" d-flex justify-content-around gap-2 mt-3">
-               <div class="w-50">
-                  <label for="warehouseName">اسم المستودع</label>
-                  <input type="text" class="form-control border-gray" placeholder=" اسم المستودع" formControlName="warehouseName" id="warehouseName">
-               </div>
-              
-            </div>
+  <form [formGroup]="searchForm" class="p-4">
 
-            <div class=" d-flex justify-content-end gap-2 mt-4">
-               <button type="button" class="btn btn-secondary" (click)="close()">إلغاء</button>
-               <button type="button" class="btn btn-primary" (click)="onSearch()">بحث</button>
-            </div>
-        </form>
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label fw-bold" for="merchantName">اسم التاجر</label>
+        <input type="text" id="merchantName" class="form-control border-gray"
+               placeholder="ادخل اسم التاجر" formControlName="merchantName">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-bold" for="materialTypeName">نوع المادة</label>
+        <input type="text" id="materialTypeName" class="form-control border-gray"
+               placeholder="ادخل نوع المادة" formControlName="materialTypeName">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-bold" for="fromDate">التاريخ من</label>
+        <input type="date" id="fromDate" class="form-control border-gray"
+               formControlName="fromDate">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-bold" for="toDate">التاريخ الى</label>
+        <input type="date" id="toDate" class="form-control border-gray"
+               formControlName="toDate">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-bold" for="warehouseName">اسم المستودع</label>
+        <input type="text" id="warehouseName" class="form-control border-gray"
+               placeholder="ادخل اسم المستودع" formControlName="warehouseName">
+      </div>
+
+      <div class="col-md-6 d-flex align-items-end gap-4 mt-2">
+        <div class="form-check">
+          <input type="checkbox" id="isPaid" class="form-check-input" formControlName="isPaid">
+          <label for="isPaid" class="form-check-label">مدفوع</label>
+        </div>
+
+        <div class="form-check">
+          <input type="checkbox" id="isUnPaid" class="form-check-input" formControlName="isUnPaid">
+          <label for="isUnPaid" class="form-check-label">غير مدفوع</label>
+        </div>
+      </div>
+
     </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button type="button" class="btn btn-secondary" (click)="onReset()">إعادة تعيين</button>
+      <button type="button" class="btn btn-warning" (click)="close()">إغلاق</button>
+      <button type="button" class="btn btn-primary" (click)="onSearch()">بحث</button>
+    </div>
+
+  </form>
+
 </app-h-modal>

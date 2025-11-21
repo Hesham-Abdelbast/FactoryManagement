@@ -21,6 +21,8 @@
 
       [showPagination]="true"
       [total]="pagination.totalCount"
+      [pageIndex]="pagination.pageIndex"
+      [pageSize]="pagination.pageSize"
       (pageChangeEvent)="onPageChange($event)"
       page="صفحة"
       ItemPerPage="عدد العناصر">

@@ -21,6 +21,7 @@ import { WarehouseServices } from '../../core/Warehouse/warehouse-services';
 import { ViewTransactionComponent } from './view-transaction-component/view-transaction-component';
 import { TxnSearchDto } from '../../model/Transaction/txn-search-dto';
 import { TrxFilter } from './trx-filter/trx-filter';
+import { CommonService } from '../../core/common-service';
 
 @Component({
   selector: 'app-transaction',
@@ -39,6 +40,7 @@ export class Transaction implements OnInit {
     'الإجمالي',
     'التاجر',
     'المبلغ المدفوع',
+    'التاريخ'
   ];
 
   columnKeys = [
@@ -49,6 +51,7 @@ export class Transaction implements OnInit {
     'totalAmount',
     'merchantName',
     'amountPaid',
+    'formateDate'
   ];
 
   /** Data sources */
@@ -91,6 +94,7 @@ export class Transaction implements OnInit {
     private materialService: MaterialTypeServices,
     private merchantService: MerchantServices,
     private warehouseService: WarehouseServices,
+    private commonServices:CommonService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -125,6 +129,7 @@ export class Transaction implements OnInit {
             ...t,
             typeName: t.type === 'Income' ? 'وارد' : 'صادر',
             totalAmount: !t.totalAmount?t.quantity * t.pricePerUnit:t.totalAmount,
+            formateDate:this.commonServices.formatDateOnly(t.createDate)
           }));
 
           this.pagination.totalCount = res.totalCount
@@ -246,10 +251,19 @@ export class Transaction implements OnInit {
       if (filterData) {
         filterData.pageIndex = this.pagination.pageIndex;
         filterData.pageSize = this.pagination.pageSize;
+        filterData.totalCount = this.pagination.totalCount;
         this.transactionServices.search(filterData).subscribe({
           next: (res: ApiResponse<TransactionDto[]>) => {
             if (res.success && res.data) {
-              this.transctionList = res.data;
+              this.transctionList = res.data.map((t) => ({
+            ...t,
+            typeName: t.type === 'Income' ? 'وارد' : 'صادر',
+            totalAmount: !t.totalAmount?t.quantity * t.pricePerUnit:t.totalAmount,
+            formateDate:this.commonServices.formatDateOnly(t.createDate)
+          }));
+            }
+            else{
+              this.toast.error(res.returnMsg);
             }
           },
           error: (err: any) => {

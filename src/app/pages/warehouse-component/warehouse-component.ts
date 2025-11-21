@@ -43,7 +43,7 @@ export class WarehouseComponent {
 
   /** Data sources */
   warehouseList: WarehouseDto[] = [];
-  pagination: PaginationEntity = { pageIndex: 1, pageSize: 10, totalCount: 10 };
+  pagination: PaginationEntity = { pageIndex: 1, pageSize: 5, totalCount: 0 };
   /** Table actions */
   actions: TableAction[] = [
     {

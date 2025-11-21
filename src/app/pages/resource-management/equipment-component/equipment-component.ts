@@ -28,7 +28,7 @@ export class EquipmentComponent {
   eqpsData: EquipmentDto[] = [];
   paginationeqps: PaginationEntity = {
     pageIndex: 1,
-    pageSize: 10,
+    pageSize: 5,
     totalCount: 0
   }
   /** أعمدة الجدول */

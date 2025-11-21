@@ -22,7 +22,7 @@ export class EmployeesComponent implements OnInit {
   EmpsData: EmployeeDto[] = [];
   paginationEmp: PaginationEntity = {
     pageIndex: 1,
-    pageSize: 10,
+    pageSize: 5,
     totalCount: 0
   }
   /** أعمدة الجدول */

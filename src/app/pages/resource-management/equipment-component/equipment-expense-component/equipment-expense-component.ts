@@ -25,7 +25,7 @@ export class EquipmentExpenseComponent implements OnInit {
 
   pagination: PaginationEntity = {
     pageIndex: 1,
-    pageSize: 10,
+    pageSize: 5,
     totalCount: 0
   }
 
