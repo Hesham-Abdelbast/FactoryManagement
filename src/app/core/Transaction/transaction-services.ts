@@ -42,9 +42,9 @@ export class TransactionServices {
   /**
      * Fetch Transaction by ID
      */
-  GetAllByMerchantId(id: string): Observable<ApiResponse<AllTransByMerchantDto>> {
+  GetAllByMerchantId(id: string,param:PaginationEntity): Observable<ApiResponse<AllTransByMerchantDto>> {
     return this.baseService
-      .GetRequest<ApiResponse<AllTransByMerchantDto>>(TransactionURLs.GetAllByMerchantId(id))
+      .PostRequest<ApiResponse<AllTransByMerchantDto>>(TransactionURLs.GetAllByMerchantId(id),param)
       .pipe(
         catchError(error =>
           this.handleError<AllTransByMerchantDto>(

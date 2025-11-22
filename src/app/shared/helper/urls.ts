@@ -188,4 +188,8 @@ export class SystemInventoryURLs {
   static GetEmployeeFullFinancialReport(empId:string,from: Date,to:Date): string {
      return `${this.base}GetEmployeeFullFinancialReport?empId=${empId}&from=${from}&to=${to}` 
   }
+
+  static GetMerchantInventory(merchantId:string,from: Date,to:Date): string {
+     return `${this.base}GetMerchantInventory?merchantId=${merchantId}&from=${from}&to=${to}` 
+  }
 }

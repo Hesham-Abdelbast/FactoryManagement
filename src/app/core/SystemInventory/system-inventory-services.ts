@@ -12,41 +12,54 @@ export class SystemInventoryServices {
   /**
  * 🔍 Search Transactions with filters
  */
-  GetTrnxReport(from: Date,to:Date): Observable<ApiResponse<any>> {
+  GetTrnxReport(from: Date, to: Date): Observable<ApiResponse<any>> {
     return this.baseService
-      .GetRequest<ApiResponse<any>>(SystemInventoryURLs.GetTrnxReport(from,to))
+      .GetRequest<ApiResponse<any>>(SystemInventoryURLs.GetTrnxReport(from, to))
       .pipe(
         catchError(error =>
           this.handleError<any>('searching transactions', error, [])
         )
       );
   }
-/**
- * 📦 Get Transactions Report by IDs
- */
-GetTrnxReportByIds(transactionIds: string[]): Observable<ApiResponse<any>> {
-  return this.baseService
-    .PostRequest<ApiResponse<any>>(SystemInventoryURLs.GetTrnxReportByIds, transactionIds)
-    .pipe(
-      catchError(error =>
-        this.handleError<any>('getting transaction report by IDs', error, [])
-      )
-    );
-}
-
-
   /**
- * 🔍 Search Transactions with filters
- */
-  GetEmployeeFullFinancialReport(empId:string,from: Date,to:Date): Observable<ApiResponse<any>> {
+   * 📦 Get Transactions Report by IDs
+   */
+  GetTrnxReportByIds(transactionIds: string[]): Observable<ApiResponse<any>> {
     return this.baseService
-      .GetRequest<ApiResponse<any>>(SystemInventoryURLs.GetEmployeeFullFinancialReport(empId,from,to))
+      .PostRequest<ApiResponse<any>>(SystemInventoryURLs.GetTrnxReportByIds, transactionIds)
       .pipe(
         catchError(error =>
-          this.handleError<any>('searching Employess', error, [])
+          this.handleError<any>('getting transaction report by IDs', error, [])
         )
       );
   }
+  /**
+ * 🔍 Search Employee Inventory with filters
+ */
+  GetEmployeeFullFinancialReport(empId: string, from: Date, to: Date): Observable<ApiResponse<any>> {
+    return this.baseService
+      .GetRequest<ApiResponse<any>>(SystemInventoryURLs.GetEmployeeFullFinancialReport(empId, from, to))
+      .pipe(
+        catchError(error =>
+          this.handleError<any>('searching Employee', error, [])
+        )
+      );
+  }
+
+   /**
+ * 🔍 Search Merchant Inventory with filters
+ */
+  GetMerchantInventory(merchantId: string, from: Date, to: Date): Observable<ApiResponse<any>> {
+    return this.baseService
+      .GetRequest<ApiResponse<any>>(SystemInventoryURLs.GetMerchantInventory(merchantId, from, to))
+      .pipe(
+        catchError(error =>
+          this.handleError<any>('searching Merchant', error, [])
+        )
+      );
+  }
+  
+
   // 🔒 Centralized reusable error handler
   private handleError<T>(
     context: string,

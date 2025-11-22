@@ -1,0 +1,37 @@
+<div class="container" dir="rtl">
+
+  <h3 class="mb-3">📌 جرد التجار</h3>
+
+  <form [formGroup]="form" (ngSubmit)="getInventory()" class="card p-3 shadow-sm">
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">من تاريخ</label>
+        <input formControlName="fromDate" type="date" class="form-control">
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label">إلى تاريخ</label>
+        <input formControlName="toDate" type="date" class="form-control">
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label">التاجر</label>
+        <app-h-auto-complete
+          [data]="merchants"
+          placeholder="اختر التاجر"
+          (valueSelected)="onSelected($event)">
+        </app-h-auto-complete>
+      </div>
+    </div>
+
+    <button class="btn btn-primary mt-3" [disabled]="form.invalid">
+      جرد
+    </button>
+  </form>
+
+  <div *ngIf="result" class="mt-4 p-3 bg-light border rounded">
+    <app-inventory-result-merchant [merchantData]="result"/>
+  </div>
+
+</div>

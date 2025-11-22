@@ -141,7 +141,7 @@ export class MerchantComponent {
   show(id: string) {
     this.dialog.open(MeTtranscation, {
       width: '80vw',
-      height: '90vh',
+      height: 'auto',
       maxHeight: '90vh',
       maxWidth: '90vw',
       data: { merchantID: id }

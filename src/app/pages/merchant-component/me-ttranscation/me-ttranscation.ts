@@ -78,7 +78,7 @@ export class MeTtranscation implements OnInit {
   public loadTransactions(): void {
     const merchantID = this.data.merchantID;
     console.log(merchantID, 'معرف التاجر');
-    this.transactionService.GetAllByMerchantId(merchantID).subscribe({
+    this.transactionService.GetAllByMerchantId(merchantID,this.pagination).subscribe({
       next: (res: ApiResponse<AllTransByMerchantDto>) => {
         console.log(res, 'استجابة المعاملات');
         if (res.success && res.data) {
