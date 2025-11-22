@@ -1,0 +1,49 @@
+<div class="table-responsive shadow bg-white rounded p-3">
+    <table class="table table-bordered table-striped table-hover text-center align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>النوع</th>
+                <th>الصنف</th>
+                <th>الكمية</th>
+                <th>سعر الوحدة</th>
+                <th>الإجمالي</th>
+                <th>التاجر</th>
+                <th>المخزن</th>
+                <th>المدفوع</th>
+                <th>المتبقي</th>
+                <th>التاريخ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let t of pagedData; let i = index">
+                <td>{{ (currentPage - 1) * pageSize + (i + 1) }}</td>
+                <td>{{ t.typeNameAr }}</td>
+                <td>{{ t.materialTypeName }}</td>
+                <td>{{ t.quantity }}</td>
+                <td>{{ t.pricePerUnit | number }}</td>
+                <td>{{ t.totalAmount | number }}</td>
+                <td>{{ t.merchantName }}</td>
+                <td>{{ t.warehouseName }}</td>
+                <td>{{ t.amountPaid | number }}</td>
+                <td [class.text-danger]="t.remainingAmount > 0">{{ t.remainingAmount | number }}</td>
+                <td>{{ t.createDate | date: 'yyyy/MM/dd' }}</td>
+            </tr>
+
+            <tr *ngIf="!data || data.length === 0" class="text-center">
+                <td colspan="13" class="py-4 text-muted">لا توجد بيانات للعرض</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center align-items-center mt-3 gap-2">
+        <button class="btn btn-secondary btn-sm" (click)="changePage(currentPage - 1)"
+            [disabled]="currentPage === 1">السابق</button>
+
+        <span class="px-2">صفحة {{ currentPage }} من {{ totalPages }}</span>
+
+        <button class="btn btn-primary btn-sm" (click)="changePage(currentPage + 1)"
+            [disabled]="currentPage === totalPages">التالي</button>
+    </div>
+</div>

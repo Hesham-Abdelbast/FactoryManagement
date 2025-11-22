@@ -1,13 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
+import { CommonService } from '../../../../core/common-service';
+import { TransactionTableComponent } from "../../../../shared/Component/transaction-table-component/transaction-table-component";
 
 @Component({
   selector: 'app-inventory-result-merchant',
-  imports: [CommonModule],
+  imports: [CommonModule, TransactionTableComponent],
   templateUrl: './inventory-result-merchant.html',
   styleUrl: './inventory-result-merchant.scss',
 })
 export class InventoryResultMerchant {
+
+  commonServices = inject(CommonService);
   @Input() merchantData: any;
  // Arabic translations
   translations = {
@@ -27,7 +31,8 @@ export class InventoryResultMerchant {
     noTransactions: 'لا توجد معاملات',
     noExpenses: 'لا توجد مصروفات مسجلة',
     completed: 'مكتمل',
-    processed: 'تم المعالجة'
+    processed: 'تم المعالجة',
+    trxLen:'عدد المعاملات'
   };
 
   ngOnInit() {
@@ -36,13 +41,6 @@ export class InventoryResultMerchant {
 
   calculateNetBalance() {
     this.merchantData.netBalance = this.merchantData.totalSales - this.merchantData.totalExpenses;
-  }
-
-  formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('ar-SA', {
-      style: 'currency',
-      currency: 'SAR'
-    }).format(amount);
   }
 
   formatDate(dateString: string): string {

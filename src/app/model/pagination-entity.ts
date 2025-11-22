@@ -3,4 +3,6 @@ export interface PaginationEntity {
     pageIndex: number;
     totalCount: number;
     search?:string
+    from?:Date;
+    to?:Date;
 }

@@ -18,4 +18,12 @@ export class CommonService {
     if (!date) return '';
     return date.split('T')[0]; // yyyy-MM-dd
   }
+
+  formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('ar-LY', {
+      style: 'currency',
+      currency: 'LYD',
+      minimumFractionDigits: 2
+    }).format(amount);
+  }
 }

@@ -22,7 +22,7 @@ import { CommonService } from '../../../core/common-service';
   styleUrl: './me-ttranscation.scss',
 })
 export class MeTtranscation implements OnInit {
-  pagination: PaginationEntity = { pageIndex: 1, pageSize: 10, totalCount: 0 }
+  pagination: PaginationEntity = { pageIndex: 1, pageSize: 5, totalCount: 0 }
   orginalTransctionList: TransactionDto[] = [];
   searchTransctionList: TransactionDto[] = [];
   materialTypeLst: MaterialTypeVM[] = [];
@@ -78,7 +78,7 @@ export class MeTtranscation implements OnInit {
   public loadTransactions(): void {
     const merchantID = this.data.merchantID;
     console.log(merchantID, 'معرف التاجر');
-    this.transactionService.GetAllByMerchantId(merchantID,this.pagination).subscribe({
+    this.transactionService.GetAllByMerchantId(merchantID, this.pagination).subscribe({
       next: (res: ApiResponse<AllTransByMerchantDto>) => {
         console.log(res, 'استجابة المعاملات');
         if (res.success && res.data) {
@@ -111,20 +111,9 @@ export class MeTtranscation implements OnInit {
       .subscribe((filterData: any) => {
         if (!filterData) return;
 
-        console.log(filterData, 'بيانات التصفية');
-
-        const fromDate = filterData.from ? new Date(filterData.from + 'T00:00:00') : null;
-        const toDate = filterData.to ? new Date(filterData.to + 'T23:59:59') : null;
-
-        this.searchTransctionList = this.orginalTransctionList.filter(t => {
-          const transactionDate = new Date(t.createDate);
-
-          if (fromDate && transactionDate < fromDate) return false;
-          if (toDate && transactionDate > toDate) return false;
-
-          return true;
-        });
-        this.cdr.markForCheck();
+        this.pagination.from = filterData.from
+        this.pagination.to = filterData.to
+        this.loadTransactions();
       });
   }
   close(): void {

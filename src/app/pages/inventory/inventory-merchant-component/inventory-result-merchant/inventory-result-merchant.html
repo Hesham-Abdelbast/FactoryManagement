@@ -9,24 +9,27 @@
         <div class="merchant-header">
             <div>
                 <h2 class="merchant-name">{{ merchantData.merchantName }}</h2>
-                <p class="merchant-id">رقم التعريف: {{ merchantData.merchantId }}</p>
             </div>
         </div>
         
         <div class="financial-summary">
+            <div class="financial-card expenses">
+                <div class="financial-label">{{ translations.trxLen }}</div>
+                <div class="financial-value">{{ merchantData.transactions.length}}</div>
+            </div>
             <div class="financial-card sales">
                 <div class="financial-label">{{ translations.totalSales }}</div>
-                <div class="financial-value">{{ formatCurrency(merchantData.totalSales) }}</div>
+                <div class="financial-value">{{ commonServices.formatCurrency(merchantData.totalSales) }}</div>
             </div>
             <div class="financial-card expenses">
                 <div class="financial-label">{{ translations.totalExpenses }}</div>
-                <div class="financial-value">{{ formatCurrency(merchantData.totalExpenses) }}</div>
+                <div class="financial-value">{{ commonServices.formatCurrency(merchantData.totalExpenses) }}</div>
             </div>
             <div class="financial-card net">
                 <div class="financial-label">{{ translations.netBalance }}</div>
                 <div class="financial-value" [class.net-positive]="merchantData.netBalance >= 0" 
                      [class.net-negative]="merchantData.netBalance < 0">
-                    {{ formatCurrency(merchantData.netBalance) }}
+                    {{ commonServices.formatCurrency(merchantData.netBalance) }}
                 </div>
             </div>
         </div>
@@ -34,24 +37,9 @@
     
     <h2 class="section-title">{{ translations.recentTransactions }}</h2>
     <div class="transactions-section">
-        <table id="transactions-table" *ngIf="merchantData.transactions.length > 0; else noTransactions">
-            <thead>
-                <tr>
-                    <th>{{ translations.date }}</th>
-                    <th>{{ translations.description }}</th>
-                    <th>{{ translations.amount }}</th>
-                    <th>{{ translations.status }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let transaction of merchantData.transactions">
-                    <td>{{ formatDate(transaction.date) }}</td>
-                    <td>{{ transaction.description }}</td>
-                    <td [class]="getAmountClass(transaction.amount)">{{ formatCurrency(transaction.amount) }}</td>
-                    <td>{{ getStatus(transaction.type) }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div *ngIf="merchantData.transactions.length > 0; else noTransactions">
+           <app-transaction-table [data]="merchantData.transactions"/>
+        </div>
         
         <ng-template #noTransactions>
             <div class="empty-state">
@@ -77,7 +65,7 @@
                     <td>{{ formatDate(expense.date) }}</td>
                     <td>{{ expense.category }}</td>
                     <td>{{ expense.description }}</td>
-                    <td class="amount-negative">{{ formatCurrency(expense.amount) }}</td>
+                    <td class="amount-negative">{{ commonServices.formatCurrency(expense.amount) }}</td>
                 </tr>
             </tbody>
         </table>
