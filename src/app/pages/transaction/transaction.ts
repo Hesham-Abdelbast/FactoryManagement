@@ -151,6 +151,7 @@ export class Transaction implements OnInit {
       },
     });
   }
+
   /** Table Actions */
   onTableAction(event: { action: string; row: TransactionDto }): void {
     if (event.action === 'edit') this.editTransaction(event.row);
@@ -188,7 +189,7 @@ export class Transaction implements OnInit {
   InvoiceTransaction(id: string) {
     this.dialog.open(InvoiceComponent, {
       panelClass: 'invoice-dialog',
-      width: '90vw',
+      width: 'auto',
       height: '100vh',
       maxWidth: '90vw',
       maxHeight: '100vh',

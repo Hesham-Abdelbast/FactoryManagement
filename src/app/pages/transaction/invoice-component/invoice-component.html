@@ -1,168 +1,179 @@
-<ng-container *ngIf="!isLoading; else loadingTpl">
-  <div class="p-2 overflow-auto" dir="rtl" *ngIf="invoiceDto as inv; else noDataTpl">
-    <header>
-      <div class="logo">{{ inv.companyName }}</div>
-      <div class="invoice-title">
-        <h1>فاتورة</h1>
-      </div>
-    </header>
+<div class="page" id="invoice">
+  <!-- WATERMARK IMAGE -->
+  <img [src]="'images/logo.png'" alt="Watermark" class="watermark">
 
-    <div class="invoice-details">
-      <div>
-        <h3 class="section-title">تفاصيل المعاملة</h3>
-        <div class="detail-row">
-          <div class="detail-label">معرف المعاملة:</div>
-          <div>{{ inv.transactionIdentifier }}</div>
-        </div>
-        <div class="detail-row">
-          <div class="detail-label">النوع:</div>
-          <div>
-            <span [class]="'transaction-type ' + getTransactionTypeClass()">
-              {{ getTransactionTypeText() }}
-            </span>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="ar">
+      <h1 class="brand-title">شركة الكواكب</h1>
+      <p class="brand-sub">لتجميع الخردة وصهر وتشكيل المعادن</p>
+    </div>
+
+    <div class="logo-box">
+      <img [src]="'images/logo.png'" alt="Logo">
+    </div>
+
+    <div class="en">
+      <h1 class="brand-title" style="font-size : 20pt">Al Kawakeb Company</h1>
+      <p class="brand-sub">For scrap metal collection, smelting, and metal forming</p>
+    </div>
+  </div>
+
+  <!-- INVOICE TITLE -->
+  <div class="invoice-title">
+    <h2>فاتورة {{invoiceDto?.type == 'Income'?'وارد' : 'صادر'}}</h2>
+    <div class="invoice-number">
+      رقم الفاتورة :  {{invoiceDto?.transactionIdentifier}}
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="content-grid">
+      <!-- TRANSACTION INFO -->
+      <div class="info-section">
+        <h3 class="section-title">معلومات المعاملة</h3>
+        <div class="info-grid">
+          <div class="info-row">
+            <span class="info-label">تاريخ الفاتورة : </span>
+            <span class="info-value">{{commonServices.formatDateOnly(invoiceDto?.createDate??'')}}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">تاريخ الطباعة : </span>
+            <span class="info-value">{{commonServices.formatDateOnly(currentDate)}}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">نوع المعاملة : </span>
+            <span class="info-value">{{invoiceDto?.type == 'Income'?'وارد' : 'صادر'}}</span>
           </div>
         </div>
-        <div class="detail-row">
-          <div class="detail-label">التاريخ:</div>
-          <div>{{ formatDate(inv.createDate) }}</div>
-        </div>
-        <div class="detail-row">
-          <div class="detail-label">نوع المادة:</div>
-          <div>{{ inv.materialTypeName || '-' }}</div>
-        </div>
       </div>
 
-      <div>
-        <h3 class="section-title">الأطراف</h3>
-        <div class="detail-row">
-          <div class="detail-label">التاجر:</div>
-          <div>{{ inv.merchantName || '-' }}</div>
-        </div>
-        <div class="detail-row">
-          <div class="detail-label">المخزن:</div>
-          <div>{{ inv.warehouseName || '-' }}</div>
-        </div>
-        @if(inv.showPhoneNumber) {
-        <div class="detail-row">
-          <div class="detail-label">الاتصال:</div>
-          <div>{{ inv.companyPhone || '-' }}</div>
-        </div>
-        }
-        <div class="detail-row">
-          <div class="detail-label">العنوان:</div>
-          <div>{{ inv.companyAddress || '-' }}</div>
+      <!-- PARTIES INFO -->
+      <div class="info-section">
+        <h3 class="section-title">معلومات الأطراف</h3>
+        <div class="info-grid">
+          <div class="info-row">
+            <span class="info-label">اسم التاجر : </span>
+            <span class="info-value">{{invoiceDto?.merchantName}}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">المخزن : </span>
+            <span class="info-value">{{invoiceDto?.warehouseName}}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">اسم السائق : </span>
+            <span class="info-value">{{invoiceDto?.carDriverName}}</span>
+          </div>
+          
         </div>
       </div>
     </div>
 
-    <!-- Truck Details Section -->
-    <div class="truck-section">
-      <h3 class="section-title">تفاصيل الشاحنة</h3>
-
-      <!-- First Row: 3 items -->
-      <div class="truck-details-row">
+    <!-- WEIGHT DETAILS -->
+    <div class="info-section">
+      <h3 class="section-title">تفاصيل الوزن</h3>
+      <div class="details-grid">
         <div class="detail-item">
-          <div class="detail-label">اسم السائق:</div>
-          <div class="detail-value">{{ inv.carDriverName || '-' }}</div>
+          <span class="detail-label">الوزن الكلي  : </span>
+          <span class="detail-value">{{invoiceDto?.carAndMatrerialWeight | number}} كجم</span>
         </div>
-
         <div class="detail-item">
-          <div class="detail-label">الوزن الكلى:</div>
-          <div class="detail-value">{{ inv.carAndMatrerialWeight | number }}</div>
+          <span class="detail-label">الوزن الفارغ  : </span>
+          <span class="detail-value">{{invoiceDto?.carWeight | number}} كجم</span>
         </div>
-
         <div class="detail-item">
-          <div class="detail-label">الوزن الفارغ:</div>
-          <div class="detail-value">{{ inv.carWeight | number }}</div>
+          <span class="detail-label">الوزن الإجمالي : </span>
+          <span class="detail-value">{{grossWeight | number}} كجم</span>
         </div>
-      </div>
-
-      <!-- Second Row: 2 items -->
-      <div class="truck-details-row">
         <div class="detail-item">
-          <div class="detail-label">نسبة الشوائب:</div>
-          <div class="detail-value">{{ formatPercentage(inv.percentageOfImpurities) }}</div>
+          <span class="detail-label">نسبة الشوائب : </span>
+          <span class="detail-value">{{invoiceDto?.percentageOfImpurities | number}}%</span>
         </div>
-
         <div class="detail-item">
-          <div class="detail-label">وزن الشوائب:</div>
-          <div class="detail-value">{{ impuritiesWeight | number }}</div>
+          <span class="detail-label">وزن الشوائب : </span>
+          <span class="detail-value">{{impuritiesWeight | number}} كجم</span>
         </div>
-      </div>
-
-      <!-- Third Row: 1 item -->
-      <div class="truck-details-row">
-        <div class="detail-item full-width">
-          <div class="detail-label">الوزن الصافي:</div>
-          <div class="detail-value">{{ netAfterImpurities | number }}</div>
+        <div class="detail-item">
+          <span class="detail-label">الوزن الصافي  : </span>
+          <span class="detail-value">{{netAfterImpurities | number}} كجم</span>
         </div>
       </div>
     </div>
-    <!-- <div style="padding: 0 30px;">
-      <h3 class="section-title">بنود المعاملة</h3>
-      <table class="items-table">
+
+    <!-- ITEMS TABLE -->
+    <div class="table-section">
+      <h3 class="section-title">تفاصيل المعاملة</h3>
+      <table class="invoice-table">
         <thead>
           <tr>
-            <th>الوصف</th>
-            <th>الكمية</th>
-            <th>سعر الوحدة</th>
-            <th class="text-center">المبلغ</th>
+            <th>نوع المعاملة</th>
+            <th>نوع المادة</th>
+            <th>اسم التاجر</th>
+            <th>المخزن</th>
+            <th>الكمية (كجم)</th>
+            <th>السعر للكيلو</th>
+            <th>المبلغ الإجمالي</th>
+            <th>المبلغ المدفوع</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>{{ inv.materialTypeName || '-' }}</td>
-            <td>{{ inv.quantity| number }}</td>
-            <td>{{ inv.pricePerUnit | number}}</td>
-            <td class="text-center">{{ totalAmount| number }}</td>
+            <td>{{invoiceDto?.type == 'Income'?'وارد' : 'صادر'}}</td>
+            <td>{{invoiceDto?.materialTypeName}}</td>
+            <td>{{invoiceDto?.merchantName}}</td>
+            <td>{{invoiceDto?.warehouseName}}</td>
+            <td>{{invoiceDto?.quantity | number}}</td>
+            <td>{{invoiceDto?.pricePerUnit | number}} {{ 'د.ل'}}</td>
+            <td>{{totalAmount | number}} {{'د.ل'}}</td>
+            <td>{{invoiceDto?.amountPaid | number}} {{ 'د.ل'}}</td>
           </tr>
         </tbody>
       </table>
-    </div> -->
+    </div>
 
-    <div class="">
-      <h3 class="section-title">ملخص المبالغ</h3>
-
-      <div class="d-flex align-items-center justify-content-around">
-        <div class="amount-row">
-          <div class="label ms-5">المجموع الفرعي</div>
-          <div class="value">{{ totalAmount | number }} دل</div>
+    <!-- PAYMENT SUMMARY -->
+    <div class="payment-summary">
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-label">المبلغ الإجمالي : </span>
+          <span class="summary-value">{{totalAmount | number}} {{ 'د.ل'}}</span>
         </div>
-
-        <div class="amount-row">
-          <div class="label ms-5">المبلغ المدفوع:</div>
-          <div class="value">{{ inv.amountPaid | number }} دل</div>
+        <div class="summary-item">
+          <span class="summary-label">المبلغ المدفوع : </span>
+          <span class="summary-value">{{invoiceDto?.amountPaid | number}} {{ 'د.ل'}}</span>
         </div>
-
-        <div class="amount-row total-row">
-          <div class="label ms-5">الرصيد المستحق </div>
-          <div class="value">{{ balanceDue | number }} دل</div>
+        <div class="summary-item highlight">
+          <span class="summary-label">المبلغ المتبقي : </span>
+          <span class="summary-value">{{balanceDue | number}} {{ 'د.ل'}}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">حالة الدفع : </span>
+          <span class="summary-value" [class.paid]="invoiceDto?.isFullyPaid" [class.unpaid]="!invoiceDto?.isFullyPaid">
+            {{invoiceDto?.isFullyPaid ? 'مدفوع بالكامل'  :  'غير مدفوع بالكامل'}}
+          </span>
         </div>
       </div>
     </div>
 
-
-    <div class="action-buttons">
-      <button class="btn btn-primary" (click)="printInvoice()">طباعة الفاتورة</button>
-      <button class="btn btn-primary" (click)="close()">الرجوع</button>
-    </div>
-
-    <div class="footer">
-      <p>شكرًا لتعاملك معنا!</p>
-      <p>{{ inv.companyName }} • {{ inv.companyAddress }} • {{ inv.companyPhone }}</p>
+    <!-- NOTES -->
+    <div class="notes-section" *ngIf="invoiceDto?.notes">
+      <h3 class="section-title">ملاحظات</h3>
+      <div class="notes-content">{{invoiceDto?.notes}}</div>
     </div>
   </div>
-</ng-container>
+<!-- FOOTER -->
+<div class="footer">
+  عنوان الشركة — القوارشة بالقرب من جزيرة الأنابيب
+  <span class="sep">•</span>
+  <span dir="ltr">0920001858</span>
+  <span class="sep">•</span>
+  <span dir="ltr">0917746065</span>
+</div>
+  
+</div>
 
-<ng-template #loadingTpl>
-  <div class="loading">
-    <div class="spinner"></div>
-    <div>جارٍ تحميل بيانات الفاتورة...</div>
-  </div>
-</ng-template>
-
-<ng-template #noDataTpl>
-  <div class="loading">
-    لا توجد بيانات لعرضها
-  </div>
-</ng-template>
+<div class="action-buttons">
+  <button class="btn btn-primary" (click)="printInvoice()">طباعة الفاتورة</button>
+  <button class="btn btn-secondary" (click)="close()">الرجوع</button>
+</div>
