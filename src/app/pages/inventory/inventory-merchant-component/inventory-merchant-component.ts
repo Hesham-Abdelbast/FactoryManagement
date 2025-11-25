@@ -60,6 +60,7 @@ export class InventoryMerchantComponent implements OnInit {
 
     this.systemInventoryServices.GetMerchantInventory(payload.merchantId, payload.fromDate, payload.toDate)
       .subscribe((res: ApiResponse<any>) => {
+        console.log(res,'Merchant res data')
         if (res.success && res.data) {
           this.result = res.data;
         }
