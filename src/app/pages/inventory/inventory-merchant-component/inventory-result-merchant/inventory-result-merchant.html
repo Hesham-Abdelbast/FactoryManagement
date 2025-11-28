@@ -25,6 +25,10 @@
                 <div class="financial-label">{{ translations.totalExpenses }}</div>
                 <div class="financial-value">{{ commonServices.formatCurrency(merchantData.totalExpenses) }}</div>
             </div>
+             <div class="financial-card expenses">
+                <div class="financial-label">{{ translations.totalPaid }}</div>
+                <div class="financial-value">{{ commonServices.formatCurrency(merchantData.totalPaid) }}</div>
+            </div>
             <div class="financial-card net">
                 <div class="financial-label">{{ translations.netBalance }}</div>
                 <div class="financial-value" [class.net-positive]="merchantData.netBalance >= 0" 
@@ -54,18 +58,18 @@
         <table id="expenses-table" *ngIf="merchantData.merchantExpenses.length > 0; else noExpenses">
             <thead>
                 <tr>
-                    <th>{{ translations.date }}</th>
-                    <th>{{ translations.category }}</th>
-                    <th>{{ translations.description }}</th>
+                    <th>#</th>
                     <th>{{ translations.amount }}</th>
+                    <th>{{ translations.date }}</th>
+                    <th>{{ translations.description }}</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let expense of merchantData.merchantExpenses">
-                    <td>{{ formatDate(expense.date) }}</td>
-                    <td>{{ expense.category }}</td>
-                    <td>{{ expense.description }}</td>
-                    <td class="amount-negative">{{ commonServices.formatCurrency(expense.amount) }}</td>
+               <tr *ngFor="let expense of merchantData.merchantExpenses; let i = index">
+                    <td>{{ i + 1 }}</td> <!-- count column -->
+                    <td>{{ expense.amount }}</td>
+                    <td>{{ commonServices.formatDateOnly(expense.expenseDate) }}</td>
+                    <td>{{ expense.notes }}</td>
                 </tr>
             </tbody>
         </table>

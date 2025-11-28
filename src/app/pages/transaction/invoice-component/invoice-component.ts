@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize, take } from 'rxjs/operators';
 
@@ -7,6 +7,7 @@ import { ApiResponse } from '../../../model/api-response';
 import { InvoiceDto } from '../../../model/Transaction/invoice-dto';
 import { ToastService } from '../../../core/shared/toast.service';
 import { CommonModule } from '@angular/common';
+import { CommonService } from '../../../core/common-service';
 
 @Component({
   selector: 'app-invoice-component',
@@ -15,17 +16,22 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
 })
-export class InvoiceComponent implements OnInit{
+export class InvoiceComponent implements OnInit {
   invoiceDto?: InvoiceDto;
   isLoading = false;
-
+  printDate: string;
+  currentDate=''
   constructor(
     private transactionServices: TransactionServices,
     private dialogRef: MatDialogRef<InvoiceComponent>,
     private toastService: ToastService,
     private cdr: ChangeDetectorRef,
+    public commonServices: CommonService,
     @Inject(MAT_DIALOG_DATA) public data: { Id: string }
-  ) {}
+  ) {
+    this.printDate = this.commonServices.formatDateOnly(new Date().toISOString());
+    this.currentDate = new Date().toString();
+  }
 
   ngOnInit(): void {
     this.getInvoiceData();
@@ -78,7 +84,7 @@ export class InvoiceComponent implements OnInit{
           hour: '2-digit',
           minute: '2-digit',
         });
-   }
+  }
 
   // Computed UI helpers
   getTransactionTypeText(): string {
@@ -125,6 +131,7 @@ export class InvoiceComponent implements OnInit{
   printInvoice(): void {
     window.print();
   }
+  
   close(){
     this.dialogRef.close();
   }

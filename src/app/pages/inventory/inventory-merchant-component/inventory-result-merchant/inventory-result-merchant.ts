@@ -19,6 +19,7 @@ export class InventoryResultMerchant {
     subtitle: 'عرض تفاصيل التاجر، الملخص المالي، وسجل المعاملات',
     totalSales: 'إجمالي المبيعات',
     totalExpenses: 'إجمالي المصروفات',
+    totalPaid: 'إجمالي المدفوع',
     netBalance: 'صافي الرصيد',
     recentTransactions: 'المعاملات الحديثة',
     expenseDetails: 'تفاصيل المصروفات',
@@ -26,7 +27,6 @@ export class InventoryResultMerchant {
     description: 'الوصف',
     amount: 'المبلغ',
     status: 'الحالة',
-    category: 'الفئة',
     refreshData: 'تحديث البيانات',
     noTransactions: 'لا توجد معاملات',
     noExpenses: 'لا توجد مصروفات مسجلة',
@@ -40,7 +40,7 @@ export class InventoryResultMerchant {
   }
 
   calculateNetBalance() {
-    this.merchantData.netBalance = this.merchantData.totalSales - this.merchantData.totalExpenses;
+    this.merchantData.netBalance = this.merchantData.totalSales - this.merchantData.totalExpenses - this.merchantData.totalPaid;
   }
 
   formatDate(dateString: string): string {
