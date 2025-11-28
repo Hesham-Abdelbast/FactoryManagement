@@ -27,6 +27,7 @@ export class TrxFilter implements OnInit {
       toDate: [null],
       isPaid: [null],
       isUnPaid: [null],
+      ironFilter: [''],
     });
   }
 

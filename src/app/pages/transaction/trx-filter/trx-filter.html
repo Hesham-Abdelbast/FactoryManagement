@@ -6,32 +6,38 @@
 
       <div class="col-md-6">
         <label class="form-label fw-bold" for="merchantName">اسم التاجر</label>
-        <input type="text" id="merchantName" class="form-control border-gray"
-               placeholder="ادخل اسم التاجر" formControlName="merchantName">
+        <input type="text" id="merchantName" class="form-control border-gray" placeholder="ادخل اسم التاجر"
+          formControlName="merchantName">
       </div>
 
       <div class="col-md-6">
         <label class="form-label fw-bold" for="materialTypeName">نوع المادة</label>
-        <input type="text" id="materialTypeName" class="form-control border-gray"
-               placeholder="ادخل نوع المادة" formControlName="materialTypeName">
+        <input type="text" id="materialTypeName" class="form-control border-gray" placeholder="ادخل نوع المادة"
+          formControlName="materialTypeName">
       </div>
 
       <div class="col-md-6">
         <label class="form-label fw-bold" for="fromDate">التاريخ من</label>
-        <input type="date" id="fromDate" class="form-control border-gray"
-               formControlName="fromDate">
+        <input type="date" id="fromDate" class="form-control border-gray" formControlName="fromDate">
       </div>
 
       <div class="col-md-6">
         <label class="form-label fw-bold" for="toDate">التاريخ الى</label>
-        <input type="date" id="toDate" class="form-control border-gray"
-               formControlName="toDate">
+        <input type="date" id="toDate" class="form-control border-gray" formControlName="toDate">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-bold" for="ironFilter">نوع المادة</label>
+        <select id="ironFilter" class="form-select" formControlName="ironFilter">
+          <option value="all">الكل</option>
+          <option value="iron">حديد فقط</option>
+          <option value="noIron">بدون حديد</option>
+        </select>
       </div>
 
       <div class="col-md-6">
         <label class="form-label fw-bold" for="warehouseName">اسم المستودع</label>
-        <input type="text" id="warehouseName" class="form-control border-gray"
-               placeholder="ادخل اسم المستودع" formControlName="warehouseName">
+        <input type="text" id="warehouseName" class="form-control border-gray" placeholder="ادخل اسم المستودع"
+          formControlName="warehouseName">
       </div>
 
       <div class="col-md-6 d-flex align-items-end gap-4 mt-2">

@@ -253,13 +253,17 @@ export class Transaction implements OnInit {
       data: {
         pageIngo: this.pagination
       }
-    }).afterClosed().subscribe((filterData: TxnSearchDto) => {
+    }).afterClosed().subscribe((filterData: any) => {
       if (filterData) {
         this.pagination.fromDate = filterData.fromDate;
         this.pagination.toDate = filterData.toDate;
 
         this.pagination.isPaid = filterData.isPaid;
         this.pagination.isUnPaid = filterData.isUnPaid;
+
+        this.pagination.needAll = filterData.ironFilter == 'all';
+
+        this.pagination.isIron = filterData.ironFilter == 'iron'
 
         this.pagination.merchantName = filterData.merchantName;
         this.pagination.warehouseeName = filterData.warehouseeName;
@@ -311,5 +315,4 @@ export class Transaction implements OnInit {
       }
     })
   }
-
 }

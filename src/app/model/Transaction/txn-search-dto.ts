@@ -8,6 +8,8 @@ export interface TxnSearchDto extends PaginationEntity {
   warehouseeName?: string;
   isUnPaid?: boolean;
   isPaid?: boolean;
+  needAll?: boolean;
+  isIron?: boolean;
   pageSize:number;
   pageIndex:number;
   totalCount:number;
