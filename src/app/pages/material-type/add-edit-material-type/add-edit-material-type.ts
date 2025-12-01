@@ -27,7 +27,6 @@ export class AddEditMaterialType {
     private dialogRef: MatDialogRef<AddEditMaterialType>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
-
   }
 
   ngOnInit(): void {
@@ -38,12 +37,14 @@ export class AddEditMaterialType {
       this.materialTypeForm = this.fb.group({
         name: [this.data.Item.name, [Validators.required, Validators.maxLength(50)]],
         description: [this.data.Item.description, [Validators.maxLength(200)]],
+        type:[this.data.Item.type=='Iron'?'1':'2',Validators.required]
       });
     }
     else {
       this.materialTypeForm = this.fb.group({
         name: ['', [Validators.required, Validators.maxLength(50)]],
         description: ['', [Validators.maxLength(200)]],
+        type: [null, Validators.required]
       });
     }
   }

@@ -27,6 +27,18 @@
       </div>
 
       <div class="mb-3 text-end">
+        <label class="form-label">نوع المعدن</label>
+       <select formControlName="type" class="form-control text-end">
+          <option value="" disabled selected>-- اختر النوع --</option>
+          <option value="1"> حديد</option>
+          <option value="2"> معادن</option>
+       </select>
+        <div class="invalid-feedback text-end" *ngIf="materialTypeForm.get('type')?.errors?.['required']">
+          الاسم مطلوب.
+        </div>
+      </div>
+
+      <div class="mb-3 text-end">
         <label class="form-label">الوصف</label>
         <textarea
           formControlName="description"

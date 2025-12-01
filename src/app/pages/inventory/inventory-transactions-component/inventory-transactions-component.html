@@ -5,16 +5,37 @@
   <form [formGroup]="form" (ngSubmit)="getInventory()" class="card p-3 shadow-sm">
 
     <div class="row">
-      <div class="col-md-6 mb-3">
+      <div class="col-md-3 mb-3">
         <label class="form-label">من تاريخ</label>
         <input formControlName="fromDate" type="date" class="form-control">
       </div>
 
-      <div class="col-md-6 mb-3">
+      <div class="col-md-3 mb-3">
         <label class="form-label">إلى تاريخ</label>
         <input formControlName="toDate" type="date" class="form-control">
       </div>
+
+      <div class="col-md-3 mb-3">
+        <label class="form-label">نوع المعدن</label>
+        <select formControlName="metalType" class="form-control text-end">
+          <option value="null" disabled selected>-- اختر النوع --</option>
+          <option value="Iron"> حديد</option>
+          <option value="metals"> معادن</option>
+       </select>
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <label class="form-label">المخزن</label>
+        <select formControlName="warehouseId" class="form-control text-end">
+          <option value="null" disabled selected>-- اختر المخزن --</option>
+          @for(item of warehouseLst;track $index){
+            <option [value]="item.id">{{item.name}}</option>
+          }
+       </select>
+      </div>
+
     </div>
+
 
     <button class="btn btn-primary mt-3" [disabled]="form.invalid">
         جرد

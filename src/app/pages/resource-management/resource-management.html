@@ -1,23 +1,65 @@
 <ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item">
-    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#workers">العمال</button>
+   <li class="nav-item">
+    <button class="nav-link" 
+            [class.active]="activeTab === 'metals'" 
+            (click)="setTab('metals')">المعادن</button>
   </li>
+
   <li class="nav-item">
-    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tools">الادوات</button>
+    <button class="nav-link" 
+            [class.active]="activeTab === 'store'" 
+            (click)="setTab('store')">المخازن</button>
   </li>
+
   <li class="nav-item">
-    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#financing">التمويل</button>
+    <button class="nav-link" 
+            [class.active]="activeTab === 'workers'" 
+            (click)="setTab('workers')">العمال</button>
+  </li>
+
+  <li class="nav-item">
+    <button class="nav-link" 
+            [class.active]="activeTab === 'tools'" 
+            (click)="setTab('tools')">الادوات</button>
+  </li>
+
+  <li class="nav-item">
+    <button class="nav-link" 
+            [class.active]="activeTab === 'drivers'" 
+            (click)="setTab('drivers')">السائقين </button>
+  </li>
+
+  <li class="nav-item">
+    <button class="nav-link" 
+            [class.active]="activeTab === 'financing'"
+            (click)="setTab('financing')">التمويل</button>
   </li>
 </ul>
 
 <div class="tab-content mt-3">
-  <div class="tab-pane fade show active" id="workers">
-    <app-employees-component></app-employees-component>
+
+  <div class="tab-pane fade" [class.show]="activeTab === 'metals'" [class.active]="activeTab === 'metals'">
+    <app-material-type *ngIf="activeTab === 'metals'"></app-material-type>
   </div>
-  <div class="tab-pane fade" id="tools">
-    <app-equipment-component></app-equipment-component>
+
+  <div class="tab-pane fade" [class.show]="activeTab === 'store'" [class.active]="activeTab === 'store'">
+    <app-warehouse-component *ngIf="activeTab === 'store'"></app-warehouse-component>
   </div>
-  <div class="tab-pane fade" id="financing">
-    <app-financing-component></app-financing-component>
+
+  <div class="tab-pane fade" [class.show]="activeTab === 'workers'" [class.active]="activeTab === 'workers'">
+    <app-employees-component *ngIf="activeTab === 'workers'"></app-employees-component>
   </div>
+
+  <div class="tab-pane fade" [class.show]="activeTab === 'tools'" [class.active]="activeTab === 'tools'">
+    <app-equipment-component *ngIf="activeTab === 'tools'"></app-equipment-component>
+  </div>
+
+   <div class="tab-pane fade" [class.show]="activeTab === 'drivers'" [class.active]="activeTab === 'drivers'">
+    <app-drivers-component *ngIf="activeTab === 'drivers'"></app-drivers-component>
+  </div>
+
+  <div class="tab-pane fade" [class.show]="activeTab === 'financing'" [class.active]="activeTab === 'financing'">
+    <app-financing-component *ngIf="activeTab === 'financing'"></app-financing-component>
+  </div>
+
 </div>

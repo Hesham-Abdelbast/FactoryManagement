@@ -232,7 +232,6 @@ header {
 .summary-value { font-weight: 600; font-size: 16px; }
 
 /* Arabic Font Support */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
 .container[dir="rtl"] { font-family: 'Segoe UI', 'Noto Naskh Arabic', Tahoma, Geneva, Verdana, sans-serif; }
 .container[dir="rtl"] .logo h1,
 .container[dir="rtl"] .employee-name,

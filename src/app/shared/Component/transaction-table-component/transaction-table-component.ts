@@ -11,7 +11,7 @@ import { TransactionDto } from '../../../model/Transaction/transaction-dto';
 })
 export class TransactionTableComponent {
 
-  @Input() pageSize: number = 5;
+  @Input() pageSize: number = 15;
   currentPage: number = 1;
 
   get pagedData() {

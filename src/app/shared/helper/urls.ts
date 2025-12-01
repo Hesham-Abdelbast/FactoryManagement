@@ -178,13 +178,12 @@ export class FinancingURLs {
   static Delete(id: string): string { return `${this.base}Delete/${id}` }
   static Exists(id: string): string { return `${this.base}Exists/${id}` }
 }
+
 export class SystemInventoryURLs {
   private static readonly base = Base_URL + 'api/SystemInventory/';
   
   public static readonly GetTrnxReportByIds = this.base + 'GetTrnxReportByIds';
-  static GetTrnxReport(from: Date,to:Date): string {
-     return `${this.base}GetTrnxReport?from=${from}&to=${to}` 
-  }
+  public static readonly GetTrnxReport = this.base + 'GetTrnxReport';
   static GetEmployeeFullFinancialReport(empId:string,from: Date,to:Date): string {
      return `${this.base}GetEmployeeFullFinancialReport?empId=${empId}&from=${from}&to=${to}` 
   }
@@ -192,4 +191,27 @@ export class SystemInventoryURLs {
   static GetMerchantInventory(merchantId:string,from: Date,to:Date): string {
      return `${this.base}GetMerchantInventory?merchantId=${merchantId}&from=${from}&to=${to}` 
   }
+}
+
+export class DriverManagementURLs {
+  private static readonly base = Base_URL + 'api/DriverManagement/';
+
+  // Driver CRUD
+  static readonly GetAll = this.base + 'GetAll';
+  static Get(id: string): string { return `${this.base}Get/${id}` }
+  static readonly Create = this.base + 'Create';
+  static readonly Update = this.base + 'Update';
+  static Delete(id: string): string { return `${this.base}Delete/${id}` }
+
+  // Travel
+  static readonly AddTravel = this.base + 'AddTravel';
+  static readonly UpdateTravel = this.base + 'UpdateTravel';
+  static DeleteTravel(id: string): string { return `${this.base}DeleteTravel/${id}` }
+  static readonly GetAllTravels = this.base + 'GetAllTravels';
+
+  // Driver Expenses
+  static readonly AddExpense = this.base + 'AddExpense';
+  static readonly UpdateExpense = this.base + 'UpdateExpense';
+  static DeleteExpense(id: string): string { return `${this.base}DeleteExpense/${id}` }
+  static readonly GetAllExpenses = this.base + 'GetAllExpenses';
 }

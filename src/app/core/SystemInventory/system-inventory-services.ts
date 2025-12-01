@@ -3,6 +3,7 @@ import { BaseServicesService } from '../shared/base-services.service';
 import { catchError, Observable, of } from 'rxjs';
 import { ApiResponse } from '../../model/api-response';
 import { SystemInventoryURLs } from '../../shared/helper/urls';
+import { TrnxReportRequestDto } from '../../model/SystemInventory/trnx-report-request-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,9 @@ export class SystemInventoryServices {
   /**
  * 🔍 Search Transactions with filters
  */
-  GetTrnxReport(from: Date, to: Date): Observable<ApiResponse<any>> {
+  GetTrnxReport(model:TrnxReportRequestDto): Observable<ApiResponse<any>> {
     return this.baseService
-      .GetRequest<ApiResponse<any>>(SystemInventoryURLs.GetTrnxReport(from, to))
+      .PostRequest<ApiResponse<any>>(SystemInventoryURLs.GetTrnxReport,model)
       .pipe(
         catchError(error =>
           this.handleError<any>('searching transactions', error, [])
