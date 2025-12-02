@@ -34,11 +34,11 @@ export class AddEditFinancing {
 
       this.isEditMode = true;
       this.financing = this.data.Item;
-
+        
       this.financingForm = this.fb.group({
         providerName: [this.financing?.providerName, [Validators.required, Validators.maxLength(100)]],
         amount: [this.financing?.amount, [Validators.required, Validators.min(1)]],
-        createDate: [this.financing?.createDate, Validators.required],
+        createDate: [this.financing?.createDate?.split('T')[0], Validators.required],
         notes: [this.financing?.notes || ''],
       });
 

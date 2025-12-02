@@ -1,0 +1,57 @@
+<app-h-modal [headerTitle]="isEdit ? 'تعديل مصروف' : 'إضافة مصروف'" (closeEvent)="close()">
+  <form [formGroup]="expenseForm" class="p-3" dir="rtl">
+
+    <!-- Amount -->
+    <div class="mb-3 text-end">
+      <label class="form-label">المبلغ <span class="text-danger">*</span></label>
+      <input 
+        type="number" 
+        formControlName="amount" 
+        class="form-control text-end"
+        placeholder="أدخل المبلغ"
+        [ngClass]="{'is-invalid': expenseForm.get('amount')?.invalid && expenseForm.get('amount')?.touched}"
+      />
+
+      <div class="invalid-feedback text-end" *ngIf="expenseForm.get('amount')?.errors?.['required']">
+        المبلغ مطلوب.
+      </div>
+
+      <div class="invalid-feedback text-end" *ngIf="expenseForm.get('amount')?.errors?.['min']">
+        المبلغ يجب أن يكون أكبر من صفر.
+      </div>
+    </div>
+
+    <!-- Date -->
+    <div class="mb-3 text-end">
+      <label class="form-label">تاريخ العملية <span class="text-danger">*</span></label>
+      <input 
+        type="date" 
+        formControlName="expenseDate" 
+        class="form-control text-end"
+        [ngClass]="{'is-invalid': expenseForm.get('expenseDate')?.invalid && expenseForm.get('expenseDate')?.touched}"
+      />
+
+      <div class="invalid-feedback text-end" *ngIf="expenseForm.get('expenseDate')?.errors?.['required']">
+        يجب إدخال تاريخ العملية.
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="mb-3 text-end">
+      <label class="form-label">ملاحظات</label>
+      <textarea 
+        formControlName="notes" 
+        class="form-control text-end" 
+        placeholder="ملاحظات إضافية (اختياري)">
+      </textarea>
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-primary ms-2" type="button" (click)="submit()">
+        {{ isEdit ? 'تحديث' : 'حفظ' }}
+      </button>
+      <button class="btn btn-secondary" type="button" (click)="close()">إلغاء</button>
+    </div>
+  </form>
+</app-h-modal>

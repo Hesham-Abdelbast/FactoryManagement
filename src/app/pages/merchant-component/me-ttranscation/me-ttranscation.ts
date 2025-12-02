@@ -31,9 +31,10 @@ export class MeTtranscation implements OnInit {
   moneyToBePaid = 0;
   totalWight = 0;
   totalImp = 0;
+  totalExpense = 0;
+  totalFinance = 0;
   titleName = 'معاملات ';
   balance: number = 0;
-  total = 0;
   /** Table Columns */
   columns = [
     'نوع المعاملة',
@@ -87,12 +88,15 @@ export class MeTtranscation implements OnInit {
             ...item,
             formattedDate: this.commonServices.formatDateOnly(item.createDate)
           }));
+          this.totalExpense = res.data.totalExpense
+          this.balance = res.data.balance
+          this.totalFinance = res.data.totalFinance
           this.totalMoneyTaken = res.data.totalMoneypay
           this.moneyToBePaid = res.data.totalMoneyProcessed
           this.totalWight = res.data.totalWight;
           this.totalImp = res.data.totalImpurities;
-          this.balance = this.moneyToBePaid - this.totalMoneyTaken;
           this.titleName = `معاملات ${this.orginalTransctionList[0]?.merchantName || ''}`;
+          this.pagination.totalCount = res.totalCount;
           this.cdr.markForCheck();
 
         } else {

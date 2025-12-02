@@ -21,6 +21,7 @@ export class AuthURLs {
 }
 
 export class MaterialTypeURLs{
+  static readonly GetAllWithPagination = Base_URL + 'api/MaterialType/GetAllWithPagination';
   static readonly GetAll = Base_URL + 'api/MaterialType/GetAll';
   static GetByID(id:string):string {return `${Base_URL}api/MaterialType/GetById/${id}`};
   static Delete(id:string):string {return `${Base_URL}api/MaterialType/Delete/${id}`};
@@ -34,6 +35,37 @@ export class MerchantURLs{
   static Delete(id:string):string {return `${Base_URL}api/Merchants/Delete/${id}`};
   static readonly Add = Base_URL + 'api/Merchants/Add';
   static readonly Update = Base_URL + 'api/Merchants/Update';
+}
+
+export class MerchantFinanceURLs {
+  private static readonly base = Base_URL + 'api/MerchantFinance/';
+
+  // GET all without pagination
+  static readonly GetAll = this.base + 'GetAll';
+
+  // GET all with pagination
+  static readonly GetAllWithPagination = this.base + 'GetAllWithPagination';
+
+  // GET all by merchant with pagination
+  static GetAllByMerchantIdWithPagination(id: string): string {
+    return `${this.base}GetAllByMerchantIdWithPagination/${id}`;
+  }
+
+  // GET by Id
+  static GetById(id: string): string {
+    return `${this.base}${id}`;
+  }
+
+  // ADD new finance record
+  static readonly Add = this.base + 'Add';
+
+  // UPDATE finance
+  static readonly Update = this.base + 'Update';
+
+  // DELETE finance
+  static Delete(id: string): string {
+    return `${this.base}Delete/${id}`;
+  }
 }
 
 export class MerchantExpenseURLs {
@@ -207,11 +239,13 @@ export class DriverManagementURLs {
   static readonly AddTravel = this.base + 'AddTravel';
   static readonly UpdateTravel = this.base + 'UpdateTravel';
   static DeleteTravel(id: string): string { return `${this.base}DeleteTravel/${id}` }
+  static GetAllTravelsByDriverId(id: string): string { return `${this.base}GetAllTravelsByDriverId/${id}` }
   static readonly GetAllTravels = this.base + 'GetAllTravels';
 
   // Driver Expenses
   static readonly AddExpense = this.base + 'AddExpense';
   static readonly UpdateExpense = this.base + 'UpdateExpense';
   static DeleteExpense(id: string): string { return `${this.base}DeleteExpense/${id}` }
+  static GetAllExpensesByDriverId(id: string): string { return `${this.base}GetAllExpensesByDriverId/${id}` }
   static readonly GetAllExpenses = this.base + 'GetAllExpenses';
 }

@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MeTtranscation } from './me-ttranscation/me-ttranscation';
 import { PaginationEntity } from '../../model/pagination-entity';
 import { MerchantExponseComponent } from './merchant-exponse-component/merchant-exponse-component';
+import { MerchantFinanceComponent } from './merchant-finance-component/merchant-finance-component';
 
 @Component({
   selector: 'app-merchant-component',
@@ -54,8 +55,8 @@ export class MerchantComponent {
     {
       icon: 'fa-solid fa-file-invoice-dollar',
       iconColor: '',
-      label: 'جرد',
-      type: 'Gerd',
+      label: 'تمويل',
+      type: 'finance',
       style: 'btn btn-outline-primary btn-sm'
     },
     {
@@ -87,8 +88,8 @@ export class MerchantComponent {
       case 'show':
         this.show(event.row.id);
         break;
-      case 'Gerd':
-        this.Gerd(event.row.id);
+      case 'finance':
+        this.finance(event.row.id,event.row.name);
         break;
       case 'Sdad':
         this.Sdad(event.row.id,event.row.name);
@@ -102,8 +103,14 @@ export class MerchantComponent {
     }
   }
 
-  Gerd(id: string){
-
+  finance(id: string,name:string){
+    this.dialog.open(MerchantFinanceComponent, {
+      width: '80vw',
+      height: 'auto',
+      maxHeight: '90vh',
+      maxWidth: '90vw',
+      data: { merchantID: id ,Title : name}
+    });
   }
 
   Sdad(id: string,name:string){

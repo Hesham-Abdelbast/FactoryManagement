@@ -9,6 +9,8 @@ import { PageEvent } from '../../../model/page-event';
 import { DriverDto } from '../../../model/Drivers/driver-dto';
 import { DriverManagmentServices } from '../../../core/Drivers/driver-managment-services';
 import { AddEditDriverComponent } from './add-edit-driver-component/add-edit-driver-component';
+import { TravelComponent } from './travel-component/travel-component';
+import { DriverExpenseComponent } from './driver-expense-component/driver-expense-component';
 
 // Dialogs for driver CRUD
 
@@ -62,6 +64,12 @@ export class DriversComponent implements OnInit {
       label: 'سلفة',
       type: 'CashAdvance',
       style: 'btn btn-outline-primary btn-sm'
+    },
+    {
+      icon: 'fa-solid fa-signs-post',
+      label: 'اضافة طريق',
+      type: 'travel',
+      style: 'btn btn-outline-primary btn-sm'
     }
   ];
 
@@ -77,6 +85,9 @@ export class DriversComponent implements OnInit {
       case 'CashAdvance':
         this.openCashAdvance(event.row.id, event.row.name);
         break;
+      case 'travel':
+        this.travel(event.row.id, event.row.name);
+        break;
     }
   }
 
@@ -88,7 +99,25 @@ export class DriversComponent implements OnInit {
   }
 
   openCashAdvance(id: string, name: string) {
-    
+     this.dialog.open(DriverExpenseComponent, {
+      width: '70vw',
+      maxWidth:'90vw',
+      data: { 
+        driverId:id,
+        name:name
+       }
+    });
+  }
+
+  travel(id: string, name: string) {
+    this.dialog.open(TravelComponent, {
+      width: '70vw',
+      maxWidth:'90vw',
+      data: {  
+        driverId:id,
+        name:name
+      }
+    });
   }
 
   editDriver(driver: DriverDto) {

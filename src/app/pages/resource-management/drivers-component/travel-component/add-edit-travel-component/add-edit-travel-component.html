@@ -1,0 +1,74 @@
+<app-h-modal [headerTitle]="isEdit ? 'تعديل مسار' : 'إضافة مسار'" (closeEvent)="close()">
+
+    <form [formGroup]="form" class="p-3" dir="rtl">
+
+        <!-- Start Location -->
+        <div class="mb-3 text-end">
+            <label class="form-label">منطقة الانطلاق <span class="text-danger">*</span></label>
+            <input type="text" formControlName="startLocation" class="form-control text-end" placeholder=""
+                [ngClass]="{'is-invalid': form.get('startLocation')?.invalid && form.get('startLocation')?.touched}" />
+
+            <div class="invalid-feedback text-end" *ngIf="form.get('startLocation')?.errors?.['required']">
+                هذا الحقل مطلوب.
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="plateNumber" class="form-label">رقم اللوحة</label>
+
+            <input id="plateNumber" type="text" class="form-control" formControlName="plateNumber"
+                placeholder="أدخل رقم اللوحة" dir="rtl" />
+
+            <div class="text-danger mt-1" *ngIf="form.get('plateNumber')?.invalid && form.get('plateNumber')?.touched"
+                dir="rtl">
+                <span *ngIf="form.get('plateNumber')?.hasError('required')">
+                    رقم اللوحة مطلوب
+                </span>
+            </div>
+        </div>
+
+        <!-- Cost -->
+        <div class="mb-3 text-end">
+            <label class="form-label">التكلفة <span class="text-danger">*</span></label>
+            <input type="number" formControlName="amount" class="form-control text-end" placeholder="0.00"
+                [ngClass]="{'is-invalid': form.get('amount')?.invalid && form.get('amount')?.touched}" />
+
+            <div class="invalid-feedback text-end" *ngIf="form.get('amount')?.errors?.['required']">
+                التكلفة مطلوبة.
+            </div>
+
+            <div class="invalid-feedback text-end" *ngIf="form.get('amount')?.errors?.['min']">
+                التكلفة يجب أن تكون أكبر من صفر.
+            </div>
+        </div>
+
+        <!-- Dates -->
+        <div class="row">
+            <div class="col-6 mb-3 text-end">
+                <label class="form-label">تاريخ الانطلاق <span class="text-danger">*</span></label>
+                <input type="date" formControlName="startDate" class="form-control text-end"
+                    [ngClass]="{'is-invalid': form.get('startDate')?.invalid && form.get('startDate')?.touched}">
+            </div>
+
+            <div class="col-6 mb-3 text-end">
+                <label class="form-label">تاريخ الوصول</label>
+                <input type="date" formControlName="endDate" class="form-control text-end">
+            </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="mb-3 text-end">
+            <label class="form-label">ملاحظات</label>
+            <textarea formControlName="notes" class="form-control text-end" placeholder="ملاحظات إضافية"></textarea>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-end mt-3">
+            <button type="button" class="btn btn-primary ms-2" (click)="submit()">
+                {{ isEdit ? 'تحديث' : 'حفظ' }}
+            </button>
+            <button class="btn btn-secondary" type="button" (click)="close()">إلغاء</button>
+        </div>
+
+    </form>
+</app-h-modal>

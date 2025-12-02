@@ -75,6 +75,7 @@ export class MaterialType implements OnInit {
   onPageChange(pageEvent: PageEvent) {
     this.pagination.pageIndex = pageEvent.pageIndex;
     this.pagination.pageSize = pageEvent.pageSize;
+    this.loadMaterialTypes();
   }
 
   /** إضافة نوع جديد */
@@ -131,7 +132,7 @@ export class MaterialType implements OnInit {
 
   /** تحميل جميع الأنواع */
   public loadMaterialTypes() {
-    this.materialTypeServices.getAll().subscribe((res: ApiResponse<MaterialTypeVM[]>) => {
+    this.materialTypeServices.getAllWithPagination(this.pagination).subscribe((res: ApiResponse<MaterialTypeVM[]>) => {
       if (res.success && res.data) {
         this.materialList = res.data;
         this.total = res.data.length;

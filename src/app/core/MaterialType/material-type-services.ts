@@ -4,6 +4,7 @@ import { BaseServicesService } from '../shared/base-services.service';
 import { MaterialTypeVM } from '../../model/MaterialType/material-type-vm';
 import { ApiResponse } from '../../model/api-response';
 import { MaterialTypeURLs } from '../../shared/helper/urls';
+import { PaginationEntity } from '../../model/pagination-entity';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,20 @@ import { MaterialTypeURLs } from '../../shared/helper/urls';
 export class MaterialTypeServices {
 
   constructor(private baseService: BaseServicesService) {}
+
+  /**
+   * Fetch all material types
+   */
+  getAllWithPagination(param:PaginationEntity): Observable<ApiResponse<MaterialTypeVM[]>> {
+    return this.baseService
+      .PostRequest<ApiResponse<MaterialTypeVM[]>>(MaterialTypeURLs.GetAllWithPagination,param)
+      .pipe(
+        catchError(error =>
+          this.handleError<MaterialTypeVM[]>('fetching all material types', error, [])
+        )
+      );
+  }
+
 
   /**
    * Fetch all material types

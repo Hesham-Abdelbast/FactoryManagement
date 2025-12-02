@@ -66,7 +66,10 @@ export class DriverManagmentServices {
     return this.baseService.PostRequest<ApiResponse<TravelDto[]>>(DriverManagementURLs.GetAllTravels, param)
       .pipe(catchError(err => this.handleError<TravelDto[]>('جلب الرحلات', err, [])));
   }
-
+  getAllTravelsByDriverId(id:string,param: PaginationEntity): Observable<ApiResponse<TravelDto[]>> {
+    return this.baseService.PostRequest<ApiResponse<TravelDto[]>>(DriverManagementURLs.GetAllTravelsByDriverId(id), param)
+      .pipe(catchError(err => this.handleError<TravelDto[]>('جلب الرحلات', err, [])));
+  }
   // ---------- Driver Expenses ----------
 
   addExpense(dto: CreateDriverExpenseDto): Observable<ApiResponse<string>> {
@@ -88,7 +91,10 @@ export class DriverManagmentServices {
     return this.baseService.PostRequest<ApiResponse<DriverExpenseDto[]>>(DriverManagementURLs.GetAllExpenses, param)
       .pipe(catchError(err => this.handleError<DriverExpenseDto[]>('جلب المصروفات', err, [])));
   }
-
+  getAllExpensesByDriverId(id:string,param: PaginationEntity): Observable<ApiResponse<DriverExpenseDto[]>> {
+    return this.baseService.PostRequest<ApiResponse<DriverExpenseDto[]>>(DriverManagementURLs.GetAllExpensesByDriverId(id), param)
+      .pipe(catchError(err => this.handleError<DriverExpenseDto[]>('جلب المصروفات', err, [])));
+  }
   // 🔥 Central error handler
   private handleError<T>(context: string, error: any, fallbackData: T | null): Observable<ApiResponse<T>> {
     console.error(`❌ خطأ أثناء ${context}:`, error);

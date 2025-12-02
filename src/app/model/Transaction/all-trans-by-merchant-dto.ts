@@ -6,4 +6,7 @@ export interface AllTransByMerchantDto {
   totalMoneypay: number;
   totalWight: number;
   totalImpurities: number;
+  totalExpense: number;
+  totalFinance: number;
+  balance: number;
 }

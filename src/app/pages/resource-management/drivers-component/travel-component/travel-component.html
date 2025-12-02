@@ -1,0 +1,30 @@
+<app-h-modal [headerTitle]="title" (closeEvent)="close()">
+
+  <div class="p-3">
+    <app-h-table 
+    entityName=""
+    headerText="الرحلات"
+    [data]="travels"
+    [displayColumns]="columns"
+    [keyColumns]="columnKeys"
+    [actions]="actions"
+    [enableActions]="true"
+    (actionClick)="onTableAction($event)"
+    actionName="الإجراءات"
+
+    [enableAdd]="true"
+    addText="إضافة رحلة"
+    addIcon="fa-solid fa-square-plus"
+    (onAddEvent)="addTravel()"
+
+    [showPagination]="true"
+    [total]="pagination.totalCount"
+    [pageIndex]="pagination.pageIndex"
+    [pageSize]="pagination.pageSize"
+    (pageChangeEvent)="onPageChange($event)"
+    page="صفحة"
+  ItemPerPage="عدد العناصر في الصفحة">
+  </app-h-table>
+  </div>
+
+</app-h-modal>

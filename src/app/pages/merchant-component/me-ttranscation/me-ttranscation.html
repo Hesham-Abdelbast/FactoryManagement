@@ -3,7 +3,7 @@
     <div class="row mt-4">
 
       <!-- Money you must pay the merchant -->
-      <div class="col-12 col-md-4 mb-3">
+      <div class="col-12 col-md-3 mb-3">
         <div class="card shadow-sm text-center p-3">
           <h6 class="fw-bold text-secondary">اجمالي القيمة المستحقة</h6>
           <h4 class="text-danger fw-bold">{{ moneyToBePaid | number }}</h4>
@@ -11,48 +11,81 @@
       </div>
 
       <!-- Money merchant must pay you -->
-      <div class="col-12 col-md-4 mb-3">
+      <div class="col-12 col-md-3 mb-3">
         <div class="card shadow-sm text-center p-3">
           <h6 class="fw-bold text-secondary">القيمة المستلمة</h6>
           <h4 class="text-success fw-bold">{{ totalMoneyTaken | number }}</h4>
         </div>
       </div>
 
-      <!-- Final Balance -->
-      <div class="col-12 col-md-4 mb-3 ">
-        <div class="card shadow-sm text-center p-3" [ngClass]="balance >= 0 ? 'border-success' : 'border-danger'">
 
-          <h6 class="fw-bold text-secondary">الباقي</h6>
-
-          <h4 [ngClass]="balance >= 0 ? 'text-success' : 'text-danger'" class="fw-bold">
-            {{ balance | number }}
-          </h4>
-        </div>
-      </div>
-
-      <div class="col-12 col-md-4 mb-3">
-        <div class="card shadow-sm text-center p-3" [ngClass]="balance >= 0 ? 'border-success' : 'border-danger'">
+      <div class="col-12 col-md-3 mb-3">
+        <div class="card shadow-sm text-center p-3 border-success ">
 
           <h6 class="fw-bold text-secondary"> اجمالي المعدن</h6>
 
-          <h4 [ngClass]="balance >= 0 ? 'text-success' : 'text-danger'" class="fw-bold">
+          <h4 class="fw-bold text-success">
             {{ totalWight | number }}
           </h4>
         </div>
       </div>
 
-      <div class="col-12 col-md-4 mb-3">
-        <div class="card shadow-sm text-center p-3" [ngClass]="balance >= 0 ? 'border-success' : 'border-danger'">
+      <div class="col-12 col-md-3 mb-3">
+        <div class="card shadow-sm text-center p-3 border-success ">
 
           <h6 class="fw-bold text-secondary"> اجمالي الشوائب</h6>
 
-          <h4 [ngClass]="balance >= 0 ? 'text-success' : 'text-danger'" class="fw-bold">
+          <h4 class="fw-bold text-success">
             {{ totalImp | number }}
           </h4>
         </div>
       </div>
 
-      <div class="col-12 col-md-4 mb-3">
+      <div class="col-12 col-md-3 mb-3">
+        <div class="card shadow-sm text-center p-3 border-success">
+
+          <h6 class="fw-bold text-secondary">عدد المعاملات</h6>
+
+          <h4 class="fw-bold text-success">
+            {{pagination.totalCount}}
+          </h4>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-3 mb-3">
+        <div class="card shadow-sm text-center p-3 border-success">
+
+          <h6 class="fw-bold text-secondary">مجموع النفقات والسلف</h6>
+
+          <h4 class="fw-bold text-success">
+            {{totalExpense}}
+          </h4>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-3 mb-3">
+        <div class="card shadow-sm text-center p-3 border-success">
+
+          <h6 class="fw-bold text-secondary">مجموع التمويلات</h6>
+
+          <h4 class="fw-bold text-success">
+            {{totalFinance}}
+          </h4>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-3 mb-3">
+        <div class="card shadow-sm text-center p-3 border-success">
+
+          <h6 class="fw-bold text-secondary">الرصيد</h6>
+
+          <h4 class="fw-bold text-success">
+            {{balance}}
+          </h4>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-3 mb-3">
         <div class="card shadow-sm text-center p-3" [ngClass]="balance >= 0 ? 'border-success' : 'border-danger'">
 
           <h6 class="fw-bold text-secondary">تاريخ اخر عمليه جرد</h6>
@@ -73,7 +106,6 @@
       P_Key="id" 
       
       [showPagination]="true" 
-      [total]="total"
       (pageChangeEvent)="onPageChange($event)" 
       page="صفحة" 
       ItemPerPage="عدد العناصر في الصفحة"

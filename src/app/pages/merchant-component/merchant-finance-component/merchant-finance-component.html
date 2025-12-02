@@ -1,0 +1,28 @@
+<app-h-modal [headerTitle]="titleName" (closeEvent)="close()">
+  <div class="p-2">
+
+    <app-h-table
+      entityName=""
+      headerText="التمويلات"
+      [data]="finance"
+      [displayColumns]="columns"
+      [keyColumns]="columnKeys"
+      [enableActions]="true"
+      [actions]="actions"
+      actionName="الإجراءات"
+      (actionClick)="onTableAction($event)"
+      [showPagination]="true"
+      [total]="pagination.totalCount"
+      [pageIndex]="pagination.pageIndex"
+      [pageSize]="pagination.pageSize"
+      (pageChangeEvent)="onPageChange($event)"
+      page="صفحة"
+      ItemPerPage="عدد العناصر في الصفحة"
+      [enableAdd]="true"
+      addIcon="fa-solid fa-square-plus"
+      addText="إضافة عملية"
+      (onAddEvent)="addFinance()"
+    ></app-h-table>
+
+  </div>
+</app-h-modal>

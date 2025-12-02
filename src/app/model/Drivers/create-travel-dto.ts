@@ -1,10 +1,11 @@
 export interface CreateTravelDto {
-    id?: string; // Guid
+  id?: string; // Guid
   startDate: string | Date;
   endDate?: string | Date | null;
-  startLocation: string;
+  startLocation?: string;
   destination?: string | null;
   plateNumber?: string | null;
   amount: number;
   notes?: string | null;
+  driverId:string
 }
