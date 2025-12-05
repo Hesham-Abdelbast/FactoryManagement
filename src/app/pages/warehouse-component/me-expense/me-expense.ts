@@ -29,7 +29,7 @@ export class MeExpense implements OnInit {
 
   titleName = 'المصروفات';
   expenses: WarehouseExpenseDto[] = [];
-  pagination: PaginationEntity = { pageIndex: 1, pageSize: 10, totalCount: 0 }
+  pagination: PaginationEntity = { pageIndex: 1, pageSize: 5, totalCount: 0 }
   /** Table Columns */
   columns = [
     'السبب',
@@ -75,6 +75,7 @@ export class MeExpense implements OnInit {
             ...item,
             formattedDate: this.commonServices.formatDateOnly(item.createDate.toString())
           })) ?? [];
+          this.pagination.totalCount = res.totalCount;
           this.cdr.markForCheck();
         } else {
           this.toast.error(res.returnMsg);
@@ -138,5 +139,4 @@ export class MeExpense implements OnInit {
   close(): void {
     this.dialogRef.close();
   }
-
 }

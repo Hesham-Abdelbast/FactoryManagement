@@ -25,6 +25,8 @@ import { CommonService } from '../../core/common-service';
 import { HeaderButton } from '../../model/header-button';
 import { SystemInventoryServices } from '../../core/SystemInventory/system-inventory-services';
 import { ResultInventory } from '../inventory/inventory-transactions-component/result-inventory/result-inventory';
+import { InvoiceLstDto } from '../../model/Transaction/invoice-lst-dto';
+import { InvoiceLstPrint } from './invoice-lst-print/invoice-lst-print';
 
 @Component({
   selector: 'app-transaction',
@@ -273,12 +275,14 @@ export class Transaction implements OnInit {
       }
     });
   }
+
   onSelectionUpdated(ids: string[]) {
     this.selectedFromChild = ids;
   }
 
   actionButtons: HeaderButton[] = [
     { text: 'جرد', icon: 'fa-solid fa-file-invoice-dollar', type: 'primary', eventName: 'gard' },
+    { text: 'طباعه', icon: 'fa-solid fa-print', type: 'primary', eventName: 'print' },
   ];
 
   onHeaderButtonsClicked(action: string) {
@@ -286,6 +290,9 @@ export class Transaction implements OnInit {
 
     if (action === 'gard') {
       this.gard();
+    }
+    else if (action === 'print') {
+      this.print();
     }
   }
 
@@ -313,6 +320,28 @@ export class Transaction implements OnInit {
       }
       else{
         this.toast.error(res.returnMsg)
+      }
+    })
+  }
+
+  print(){
+    console.log("Selected values from child:", this.selectedFromChild);
+    if (!this.selectedFromChild || this.selectedFromChild.length == 0) {
+      this.toast.warning('اختر اولا المعاملات التي تريد طباعتها..!');
+      return;
+    }
+
+    this.transactionServices.getInvoiceByIds(this.selectedFromChild).subscribe( (res:ApiResponse<InvoiceLstDto>) =>{
+      if(res.success && res.data){
+          this.dialog.open(InvoiceLstPrint, {
+          panelClass: 'invoice-dialog',
+          width: 'auto',
+          height: '100vh',
+          maxWidth: '90vw',
+          maxHeight: '100vh',
+          autoFocus: false,
+          data: { Data: res.data },
+        });
       }
     })
   }

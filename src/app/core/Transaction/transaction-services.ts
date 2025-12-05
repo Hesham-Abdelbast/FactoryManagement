@@ -9,6 +9,7 @@ import { CreateTransactionDto } from '../../model/Transaction/create-transaction
 import { InvoiceDto } from '../../model/Transaction/invoice-dto';
 import { AllTransByMerchantDto } from '../../model/Transaction/all-trans-by-merchant-dto';
 import { TxnSearchDto } from '../../model/Transaction/txn-search-dto';
+import { InvoiceLstDto } from '../../model/Transaction/invoice-lst-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -81,6 +82,20 @@ export class TransactionServices {
         catchError(error =>
           this.handleError<InvoiceDto>(
             `fetching Transaction by ID ${id}`,
+            error,
+            null
+          )
+        )
+      );
+  }
+
+  getInvoiceByIds(ids: string[]): Observable<ApiResponse<InvoiceLstDto>> {
+    return this.baseService
+      .PostRequest<ApiResponse<InvoiceLstDto>>(TransactionURLs.getInvoiceByIds,ids)
+      .pipe(
+        catchError(error =>
+          this.handleError<InvoiceLstDto>(
+            `fetching Transaction `,
             error,
             null
           )

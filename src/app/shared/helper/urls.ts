@@ -107,6 +107,7 @@ export class MerchantExpenseURLs {
 export class TransactionURLs{
   static readonly Search = Base_URL + 'api/Transactions/Search';
   static readonly GetAll = Base_URL + 'api/Transactions/GetAll';
+  static readonly getInvoiceByIds = Base_URL + 'api/Transactions/getInvoiceByIds';
   static GetByID(id:string):string {return `${Base_URL}api/Transactions/GetById/${id}`};
   static GetInvoiceById(id:string):string {return `${Base_URL}api/Transactions/GetInvoiceById/${id}`};
   static GetAllByMerchantId(id:string):string {return `${Base_URL}api/Transactions/GetAllByMerchantId/${id}`};

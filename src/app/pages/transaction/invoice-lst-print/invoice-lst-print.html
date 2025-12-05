@@ -1,0 +1,87 @@
+<div class="print-container" *ngIf="invoice">
+
+    <!-- Header Buttons -->
+    <div class="actions no-print">
+        <button class="btn btn-secondary" (click)="close()">إغلاق</button>
+        <button class="btn btn-primary" (click)="print()">طباعة</button>
+    </div>
+
+    <!-- Invoice Box -->
+    <div class="invoice-box">
+
+        <div class="header-title">شركة الكواكب</div>
+
+            <div class="d-flex justify-content-between">
+                <div>
+                    <span class="fw-bold fw-lighter">من : </span>
+                    <span>{{ invoice.transactions[0]?.merchantName || 'غير محدد' }} </span>
+                </div>
+                <div>
+                    <span class="fw-bold fw-lighter">رقم الفاتورة : </span>
+                    <span> {{ invoice.transactions[0]?.transactionIdentifier }} </span>
+                </div>
+
+                <div>
+                    <span class="fw-bold fw-lighter">تاريخ الفاتورة : </span>
+                    <span>{{ getDate() }} </span>
+                </div>
+            </div>
+        <!-- Detailed table -->
+        <h3 class="details-title">تفاصيل العمليات</h3>
+
+        <table class="table table-bordered table-striped table-hover text-center align-middle details-table">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>النوع</th>
+                    <th>الصنف</th>
+                    <th>الكمية</th>
+                    <th>سعر الوحدة</th>
+                    <th>الإجمالي</th>
+                    <th>التاجر</th>
+                    <th>المخزن</th>
+                    <th>المدفوع</th>
+                    <th>المتبقي</th>
+                    <th>التاريخ</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let t of invoice.transactions; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ t.typeNameAr }}</td>
+                    <td>{{ t.materialTypeName }}</td>
+                    <td>{{ t.quantity }}</td>
+                    <td>{{ t.pricePerUnit | number }}</td>
+                    <td>{{ t.totalAmount | number }}</td>
+                    <td>{{ t.merchantName }}</td>
+                    <td>{{ t.warehouseName }}</td>
+                    <td>{{ t.amountPaid | number }}</td>
+                    <td [class.text-danger]="t.remainingAmount > 0">{{ t.remainingAmount | number }}</td>
+                    <td>{{ t.createDate | date:'yyyy/MM/dd' }}</td>
+                </tr>
+
+                <tr *ngIf="invoice.transactions.length === 0">
+                    <td colspan="11" class="py-4 text-muted">لا توجد بيانات للعرض</td>
+                </tr>
+            </tbody>
+        </table>
+
+       <div class="d-flex justify-content-between">
+
+        <div class="borderGray d-flex justify-content-between w-25">
+            <span >اجمالي الكميات</span>
+            <span>{{invoice.totalQuantity}}</span>
+        </div>
+        <div class="borderGray d-flex justify-content-between">
+            <span>اجمالي المدفوع</span>
+            <span>{{invoice.totalAmountPaid}}</span>
+        </div>
+        <div class="borderGray d-flex justify-content-between">
+            <span>اجمالي المبلغ</span>
+            <span>{{invoice.totalAmount}}</span>
+        </div>
+       </div>
+
+    </div>
+</div>

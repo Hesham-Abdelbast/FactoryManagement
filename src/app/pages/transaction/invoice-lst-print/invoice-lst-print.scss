@@ -1,0 +1,130 @@
+.print-container {
+  direction: rtl;
+  text-align: right;
+  padding: 15px;
+}
+
+.no-print {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: #777;
+  color: #fff;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+.invoice-box {
+  background: #fff;
+  padding: 25px;
+  border: 1px solid #ddd;
+  max-width: 900px;
+  margin: auto;
+}
+
+.header-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.invoice-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.simple-table,
+.details-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.simple-table th,
+.simple-table td,
+.details-table th,
+.details-table td {
+  border: 1px solid #444;
+  padding: 6px;
+  text-align: center;
+}
+
+.simple-table th {
+  background: #ececec;
+}
+
+.table-dark {
+  background: #222 !important;
+  color: #fff;
+}
+
+.details-title {
+  margin-top: 25px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* PRINT MODE */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .invoice-box {
+    border: none;
+    padding: 0;
+  }
+}
+.improved-box {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border: 1px solid #ddd;
+  padding: 15px 20px;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.info-block {
+  flex: 1;
+}
+
+.label {
+  font-weight: bold;
+  font-size: 15px;
+  opacity: 0.75;
+}
+
+.value {
+  font-size: 17px;
+  margin-bottom: 10px;
+}
+.txtheader{
+    font-weight: bold;
+    font-size: large;
+}
+.borderGray{
+    border: 2px solid gray;
+    border-radius: 2px;
+    padding: 10px;
+    width: 25%;
+}
