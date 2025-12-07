@@ -11,10 +11,11 @@ import { WarehouseExpenseDto } from '../../../model/Warehouse/warehouse-expense-
 import { AddEditExpenseComponent } from './add-edit-expense-component/add-edit-expense-component';
 import { PaginationEntity } from '../../../model/pagination-entity';
 import { CommonService } from '../../../core/common-service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-me-expense',
-  imports: [HTableComponent, HModalComponent],
+  imports: [HTableComponent, HModalComponent,CommonModule],
   templateUrl: './me-expense.html',
   styleUrl: './me-expense.scss',
 })
@@ -26,7 +27,7 @@ export class MeExpense implements OnInit {
   private expenseService = inject(WarehouseExpenseServices);
   private cdr = inject(ChangeDetectorRef);
   private commonServices = inject(CommonService);
-
+  totalAmount:number = 0
   titleName = 'المصروفات';
   expenses: WarehouseExpenseDto[] = [];
   pagination: PaginationEntity = { pageIndex: 1, pageSize: 5, totalCount: 0 }
@@ -70,11 +71,13 @@ export class MeExpense implements OnInit {
   loadExpenses() {
     this.expenseService.getAllWithPagination(this.pagination).subscribe({
       next: (res: ApiResponse<WarehouseExpenseDto[]>) => {
-        if (res.success) {
+        if (res.success && res.data) {
           this.expenses = res.data?.map(item => ({
             ...item,
             formattedDate: this.commonServices.formatDateOnly(item.createDate.toString())
           })) ?? [];
+          this.totalAmount = res.data.reduce((sum, x) => sum + x.amount, 0);
+
           this.pagination.totalCount = res.totalCount;
           this.cdr.markForCheck();
         } else {

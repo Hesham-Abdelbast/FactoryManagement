@@ -1,3 +1,5 @@
+import { MaterialCategory } from "../Enums/material-category";
+
 export interface TravelDto {
     id?: string;
   startDate: string | Date;
@@ -8,4 +10,5 @@ export interface TravelDto {
   amount: number;
   notes?: string | null;
   createDate:string
+  category:MaterialCategory
 }

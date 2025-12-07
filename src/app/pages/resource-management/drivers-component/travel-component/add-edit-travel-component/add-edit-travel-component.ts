@@ -5,9 +5,10 @@ import { HModalComponent } from '../../../../../shared/Component/h-modal/h-modal
 import { DriverManagmentServices } from '../../../../../core/Drivers/driver-managment-services';
 import { ToastService } from '../../../../../core/shared/toast.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TravelDto } from '../../../../../model/Drivers/travel-dto';
 import { CreateTravelDto } from '../../../../../model/Drivers/create-travel-dto';
 import { CommonService } from '../../../../../core/common-service';
+import { ProcessType } from '../../../../../model/Enums/process-type';
+import { MaterialCategory } from '../../../../../model/Enums/material-category';
 
 @Component({
   selector: 'app-add-edit-travel-component',
@@ -20,6 +21,16 @@ export class AddEditTravelComponent {
 
   form!: FormGroup;
   isEdit = false;
+  processTypeItems = [
+    { value: ProcessType.Internal, label: 'داخلي' },
+    { value: ProcessType.External, label: 'خارجي' }
+  ];
+
+materialCategoryItems = [
+  { value: MaterialCategory.Iron, label: 'حديد' },
+  { value: MaterialCategory.metals, label: 'معادن' },
+  { value: MaterialCategory.others, label: 'أخرى' }
+];
 
   constructor(
     private fb: FormBuilder,
@@ -43,7 +54,8 @@ export class AddEditTravelComponent {
       plateNumber: [this.data?.item?.plateNumber ?? ''],
       amount: [this.data?.item?.amount ?? null, Validators.required],
       notes: [this.data?.item?.notes ?? ''],
-      createDate: [new Date()]
+      createDate: [new Date()],
+      category:['',Validators.required]
     });
   }
 

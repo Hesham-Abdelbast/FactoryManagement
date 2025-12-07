@@ -17,7 +17,9 @@
   (onAddEvent)="addMaterialType()"
 
   [showPagination]="true"
-  [total]="total"
+  [total]="pagination.totalCount"
+  [pageIndex]="pagination.pageIndex"
+  [pageSize]="pagination.pageSize"
   (pageChangeEvent)="onPageChange($event)"
   page="صفحة"
   ItemPerPage="عدد العناصر في الصفحة">

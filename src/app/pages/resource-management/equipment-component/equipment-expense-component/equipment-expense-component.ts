@@ -10,6 +10,7 @@ import { HModalComponent } from "../../../../shared/Component/h-modal/h-modal.co
 import { EquipmentExpenseDto } from '../../../../model/Equipments/equipment-expense-dto';
 import { EquipmentManagementService } from '../../../../core/Equipments/equipment-management-service';
 import { AddEditEquipmentExpenseComponent } from './add-edit-equipment-expense-component/add-edit-equipment-expense-component';
+import { CommonService } from '../../../../core/common-service';
 
 @Component({
   selector: 'app-equipment-expense',
@@ -32,8 +33,8 @@ export class EquipmentExpenseComponent implements OnInit {
   equipmentId: string = '';
 
   /** Table Columns */
-  columns = ['نوع المصروف', 'المبلغ', 'ملاحظات'];
-  columnKeys = ['typeLabel', 'amount', 'note'];
+  columns = ['نوع المصروف', 'المبلغ', 'التاريخ'];
+  columnKeys = ['typeLabel', 'amount', 'formattedDate'];
 
   /** Table Actions */
   actions: TableAction[] = [
@@ -47,7 +48,8 @@ export class EquipmentExpenseComponent implements OnInit {
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<EquipmentExpenseComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private commonServices: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -64,7 +66,8 @@ export class EquipmentExpenseComponent implements OnInit {
         if (res.success && res.data) {
           this.data = res.data.map(item => ({
             ...item,
-            typeLabel: EquipmentExpenseTypeArabic[item.type]
+            typeLabel: EquipmentExpenseTypeArabic[item.type],
+            formattedDate: this.commonServices.formatDateOnly(item.createDate.toString())
           }));
 
           this.pagination.totalCount = res.totalCount;

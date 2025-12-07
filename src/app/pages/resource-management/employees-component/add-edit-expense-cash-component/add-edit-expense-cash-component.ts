@@ -44,14 +44,14 @@ export class AddEditExpenseCashComponent {
         employeeId: [this.data.item.employeeId, Validators.required],
         amount: [this.data.item.amount, [Validators.required, Validators.min(1)]],
         note: [this.data.item.note || ''],
-        createDate:[new Date().toISOString()]
+        createDate:[this.data.item.createDate]
       });
     } else {
       this.form = this.fb.group({
         employeeId: [this.data.employeeId, Validators.required],
         amount: [0, [Validators.required, Validators.min(1)]],
         note: [''],
-        createDate:[new Date().toISOString()]
+        createDate:[new Date().toString()]
       });
     }
   }

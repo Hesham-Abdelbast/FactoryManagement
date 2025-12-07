@@ -1,3 +1,5 @@
+import { MaterialCategory } from "../Enums/material-category";
+
 export interface CreateTravelDto {
   id?: string; // Guid
   startDate: string | Date;
@@ -7,5 +9,6 @@ export interface CreateTravelDto {
   plateNumber?: string | null;
   amount: number;
   notes?: string | null;
-  driverId:string
+  driverId:string,
+  category:MaterialCategory
 }

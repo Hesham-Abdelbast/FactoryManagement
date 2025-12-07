@@ -1,6 +1,39 @@
 <app-h-modal [headerTitle]="isEdit ? 'تعديل مسار' : 'إضافة مسار'" (closeEvent)="close()">
 
     <form [formGroup]="form" class="p-3" dir="rtl">
+        <!-- <div class="form-group mb-3" dir="rtl">
+            <label for="processType" class="form-label">نوع العملية</label>
+
+            <select id="processType" class="form-control" formControlName="processType">
+                <option value="" selected disabled>اختر نوع العملية</option>
+                <option *ngFor="let item of processTypeItems" [value]="item.value">
+                    {{ item.label }}
+                </option>
+            </select>
+
+            <div class="text-danger mt-1" *ngIf="form.get('processType')?.invalid && form.get('processType')?.touched">
+                <span *ngIf="form.get('processType')?.hasError('required')">
+                    نوع العملية مطلوب
+                </span>
+            </div>
+        </div> -->
+        <div class="form-group mb-3" dir="rtl">
+            <label for="category" class="form-label">تصنيف المادة</label>
+
+            <select id="category" class="form-control" formControlName="category">
+                <option value="" selected disabled>اختر التصنيف</option>
+                <option *ngFor="let mc of materialCategoryItems" [value]="mc.value">
+                    {{ [mc.label] }}
+                </option>
+            </select>
+
+            <div class="text-danger mt-1"
+                *ngIf="form.get('category')?.invalid && form.get('category')?.touched">
+                <span *ngIf="form.get('category')?.hasError('required')">
+                    التصنيف مطلوب
+                </span>
+            </div>
+        </div>
 
         <!-- Start Location -->
         <div class="mb-3 text-end">

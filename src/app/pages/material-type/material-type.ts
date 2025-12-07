@@ -9,6 +9,7 @@ import { AddEditMaterialType } from './add-edit-material-type/add-edit-material-
 import { ToastService } from '../../core/shared/toast.service';
 import { MaterialTypeServices } from '../../core/MaterialType/material-type-services';
 import { PaginationEntity } from '../../model/pagination-entity';
+import { MaterialCategory } from '../../model/Enums/material-category';
 
 @Component({
   selector: 'app-material-type',
@@ -20,15 +21,11 @@ import { PaginationEntity } from '../../model/pagination-entity';
 export class MaterialType implements OnInit {
   pagination:PaginationEntity={pageIndex:1,pageSize:10,totalCount:0}
   /** أعمدة الجدول */
-  columns = ['الاسم', 'الوصف'];
-  columnKeys = ['name', 'description'];
+  columns = ['الاسم', 'النوع'];
+  columnKeys = ['name', 'categoryType'];
 
   /** قائمة الأنواع */
   materialList: any;
-
-  /** عدد السجلات */
-  total = 0;
-
   constructor(
     private materialTypeServices: MaterialTypeServices,
     private dialog: MatDialog,
@@ -134,8 +131,11 @@ export class MaterialType implements OnInit {
   public loadMaterialTypes() {
     this.materialTypeServices.getAllWithPagination(this.pagination).subscribe((res: ApiResponse<MaterialTypeVM[]>) => {
       if (res.success && res.data) {
-        this.materialList = res.data;
-        this.total = res.data.length;
+        this.materialList = res.data.map(item =>({
+          ...item,
+          categoryType: item.type == 'Iron'?'حديد':'معادن'
+        }));
+        this.pagination.totalCount = res.totalCount;
         console.log(res.data)
       } else {
         this.toastService.error('فشل تحميل الأنواع.');

@@ -15,6 +15,20 @@
                  placeholder="أدخل المبلغ" />
         </div>
 
+        <!-- Date -->
+        <div class="mb-3 text-end">
+          <label class="form-label">تاريخ العملية <span class="text-danger">*</span></label>
+          <input 
+            type="date" 
+            formControlName="createDate" 
+            class="form-control text-end"
+            [ngClass]="{'is-invalid': form.get('createDate')?.invalid && form.get('createDate')?.touched}"
+          />
+
+          <div class="invalid-feedback text-end" *ngIf="form.get('createDate')?.errors?.['required']">
+            يجب إدخال تاريخ العملية.
+          </div>
+        </div>
         <!-- الملاحظات -->
         <div class="mb-3 text-end">
           <label class="form-label">ملاحظات</label>

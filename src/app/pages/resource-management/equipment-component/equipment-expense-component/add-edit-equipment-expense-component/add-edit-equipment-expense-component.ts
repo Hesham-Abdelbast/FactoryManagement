@@ -7,6 +7,7 @@ import { EquipmentExpenseDto } from '../../../../../model/Equipments/equipment-e
 import { EquipmentExpenseType } from '../../../../../model/Enums/equipment-expense-type';
 import { CommonModule } from '@angular/common';
 import { HModalComponent } from "../../../../../shared/Component/h-modal/h-modal.component";
+import { CommonService } from '../../../../../core/common-service';
 
 @Component({
   selector: 'app-add-edit-equipment-expense',
@@ -25,6 +26,7 @@ export class AddEditEquipmentExpenseComponent implements OnInit {
     private dialogRef: MatDialogRef<AddEditEquipmentExpenseComponent>,
     private toast: ToastService,
     private service: EquipmentManagementService,
+    private commonServices: CommonService,
     @Inject(MAT_DIALOG_DATA) public data: { isEdit: boolean, item?: EquipmentExpenseDto, equipmentId: string }
   ) { }
 
@@ -34,6 +36,15 @@ export class AddEditEquipmentExpenseComponent implements OnInit {
 
     if (this.isEditMode && this.data.item) {
       this.form.patchValue(this.data.item);
+
+      this.form = this.fb.group({
+        id:[this.data.item.id],
+        equipmentId: [this.data.equipmentId, Validators.required],
+        type: [this.data.item.type, Validators.required],
+        amount: [this.data.item.amount, [Validators.required, Validators.min(1)]],
+        note: [this.data.item.note],
+        createDate: [this.commonServices.formatForInputDate(this.data.item.createDate.toString())]
+      });
     }
   }
 
@@ -42,7 +53,8 @@ export class AddEditEquipmentExpenseComponent implements OnInit {
       equipmentId: [this.data.equipmentId, Validators.required],
       type: ['', Validators.required],
       amount: [0, [Validators.required, Validators.min(1)]],
-      note: ['']
+      note: [''],
+      createDate:[]
     });
   }
 
@@ -57,6 +69,7 @@ export class AddEditEquipmentExpenseComponent implements OnInit {
       ? { ...this.data.item, ...this.form.value }
       : this.form.value;
 
+      console.log(model,'add orrr edit')
     if (this.isEditMode) {
       this.service.UpdateEquipmentExpense(model).subscribe({
         next: (res) => {

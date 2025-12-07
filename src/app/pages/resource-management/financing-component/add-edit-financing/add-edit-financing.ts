@@ -8,6 +8,8 @@ import { FinancingService } from '../../../../core/Financing/financing-service';
 import { ApiResponse } from '../../../../model/api-response';
 import { FinancingDto } from '../../../../model/financing-dto';
 import { FinancingCreateDto } from '../../../../model/financing-create-dto';
+import { ProcessType } from '../../../../model/Enums/process-type';
+import { MaterialCategory } from '../../../../model/Enums/material-category';
 
 @Component({
   selector: 'app-add-edit-financing',
@@ -20,6 +22,16 @@ export class AddEditFinancing {
   financingForm!: FormGroup;
   isEditMode = false;
   financing?: FinancingDto;
+ processTypeItems = [
+    { value: ProcessType.Internal, label: 'داخلي' },
+    { value: ProcessType.External, label: 'خارجي' }
+  ];
+
+materialCategoryItems = [
+  { value: MaterialCategory.Iron, label: 'حديد' },
+  { value: MaterialCategory.metals, label: 'معادن' },
+  { value: MaterialCategory.others, label: 'أخرى' }
+];
 
   constructor(
     private fb: FormBuilder,
@@ -48,6 +60,8 @@ export class AddEditFinancing {
         amount: [0, [Validators.required, Validators.min(1)]],
         createDate: [new Date().toISOString().split('T')[0], Validators.required],
         notes: [''],
+        type:['',Validators.required],
+        category:['',Validators.required],
       });
     }
   }
@@ -68,7 +82,9 @@ export class AddEditFinancing {
       const createDto: FinancingCreateDto = {
         providerName: this.financingForm.value.providerName,
         amount: this.financingForm.value.amount,
-        notes: this.financingForm.value.notes
+        notes: this.financingForm.value.notes,
+        type: this.financingForm.value.type,
+        category: this.financingForm.value.category,
       };
       this.create(createDto);
     }

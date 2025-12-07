@@ -1,5 +1,15 @@
 <app-h-modal [headerTitle]="titleName" (closeEvent)="close()">
   <div class="p-2">
+    <div class="row mt-4">
+
+      <!-- Money you must pay the merchant -->
+      <div class="col-12 col-md-3 mb-3">
+        <div class="card shadow-sm text-center p-3">
+          <h6 class="fw-bold text-secondary">اجمالي السلف </h6>
+          <h4 class="text-danger fw-bold">{{ totalAmount | number }}</h4>
+        </div>
+      </div>
+    </div>
     <app-h-table
       entityName=""
       headerText="قائمة المصروفات"
@@ -10,15 +20,19 @@
       actionName="الإجراءات"
       [actions]="actions"
       (actionClick)="onTableAction($event)"
+
       [showPagination]="true"
       [total]="pagination.totalCount"
+      [pageIndex]="pagination.pageIndex"
+      [pageSize]="pagination.pageSize"
       (pageChangeEvent)="onPageChange($event)"
+      page="صفحة"
+      ItemPerPage="عدد العناصر في الصفحة"
+
       [enableAdd]="true"
       addIcon="fa-solid fa-square-plus"
       addText="إضافة مصروف جديد"
       (onAddEvent)="addExpense()"
-      page="صفحة"
-      ItemPerPage="عدد العناصر في الصفحة"
     >
     </app-h-table>
   </div>

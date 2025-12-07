@@ -7,4 +7,5 @@ export interface EquipmentExpenseDto {
   type: EquipmentExpenseType;
   amount: number;
   note?: string;
+  createDate:Date
 }

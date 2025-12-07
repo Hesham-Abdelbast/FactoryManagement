@@ -1,5 +1,5 @@
 export interface WarehouseExpenseDto {
-    id: string;
+  id: string;
   warehouseId: string;
   warehouseName?: string;
   notes?: string;
