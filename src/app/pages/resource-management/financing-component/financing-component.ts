@@ -78,6 +78,7 @@ export class FinancingComponent {
     const dialogRef = this.dialog.open(AddEditFinancing, {
       width: '900px',
       height: 'auto',
+      maxHeight: '90vh',
       data: { isEdit: true, Item: financing }
     });
     dialogRef.afterClosed().subscribe(res => {
@@ -104,7 +105,8 @@ export class FinancingComponent {
   addEqps() {
     const dialogRef = this.dialog.open(AddEditFinancing, {
       width: '900px',
-      height: 'auto'
+      height: 'auto',
+      maxHeight: '90vh',
     });
 
     dialogRef.afterClosed().subscribe(res => {

@@ -44,6 +44,7 @@ materialCategoryItems = [
   ngOnInit(): void {
     this.isEdit = !!this.data?.item;
 
+    console.log(this.data,'ddddddddddddd')
     this.form = this.fb.group({
       id: [this.data?.item?.id ?? null],
       driverId: [this.data?.driverId ?? null],
@@ -54,8 +55,9 @@ materialCategoryItems = [
       plateNumber: [this.data?.item?.plateNumber ?? ''],
       amount: [this.data?.item?.amount ?? null, Validators.required],
       notes: [this.data?.item?.notes ?? ''],
-      createDate: [new Date()],
-      category:['',Validators.required]
+      createDate: [this.data?.item?.createDate ?? new Date()],
+      category:[this.data?.item?.category ?? '',Validators.required],
+      type:[this.data?.item?.type ?? '',Validators.required]
     });
   }
 

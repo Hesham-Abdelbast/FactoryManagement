@@ -1,4 +1,5 @@
 import { MaterialCategory } from "../Enums/material-category";
+import { ProcessType } from "../Enums/process-type";
 
 export interface TravelDto {
     id?: string;
@@ -11,4 +12,5 @@ export interface TravelDto {
   notes?: string | null;
   createDate:string
   category:MaterialCategory
+  type:ProcessType
 }

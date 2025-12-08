@@ -102,6 +102,8 @@ export class DriversComponent implements OnInit {
      this.dialog.open(DriverExpenseComponent, {
       width: '70vw',
       maxWidth:'90vw',
+      height:'auto',
+      maxHeight:'90vh',
       data: { 
         driverId:id,
         name:name
@@ -113,6 +115,8 @@ export class DriversComponent implements OnInit {
     this.dialog.open(TravelComponent, {
       width: '70vw',
       maxWidth:'90vw',
+      height:'auto',
+      maxHeight:'90vh',
       data: {  
         driverId:id,
         name:name
@@ -123,6 +127,8 @@ export class DriversComponent implements OnInit {
   editDriver(driver: DriverDto) {
     const dialogRef = this.dialog.open(AddEditDriverComponent, {
       width: '800px',
+      height:'auto',
+      maxHeight:'90vh',
       data: { isEdit: true, Item: driver }
     });
 
@@ -148,7 +154,9 @@ export class DriversComponent implements OnInit {
 
   addDriver() {
     const dialogRef = this.dialog.open(AddEditDriverComponent, {
-      width: '800px'
+      width: '800px',
+      height:'auto',
+      maxHeight:'90vh',
     });
 
     dialogRef.afterClosed().subscribe(res => {

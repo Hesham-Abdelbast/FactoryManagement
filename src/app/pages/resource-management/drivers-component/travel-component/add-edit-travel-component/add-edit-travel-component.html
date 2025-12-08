@@ -1,89 +1,93 @@
 <app-h-modal [headerTitle]="isEdit ? 'تعديل مسار' : 'إضافة مسار'" (closeEvent)="close()">
 
     <form [formGroup]="form" class="p-3" dir="rtl">
-        <!-- <div class="form-group mb-3" dir="rtl">
-            <label for="processType" class="form-label">نوع العملية</label>
 
-            <select id="processType" class="form-control" formControlName="processType">
-                <option value="" selected disabled>اختر نوع العملية</option>
-                <option *ngFor="let item of processTypeItems" [value]="item.value">
-                    {{ item.label }}
-                </option>
-            </select>
+        <!-- Row: Type + Category -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">نوع العملية <span class="text-danger">*</span></label>
 
-            <div class="text-danger mt-1" *ngIf="form.get('processType')?.invalid && form.get('processType')?.touched">
-                <span *ngIf="form.get('processType')?.hasError('required')">
+                <select class="form-control" formControlName="type">
+                    <option value="" disabled>اختر نوع العملية</option>
+                    <option *ngFor="let item of processTypeItems" [value]="item.value">
+                        {{ item.label }}
+                    </option>
+                </select>
+
+                <div class="text-danger mt-1" *ngIf="form.get('type')?.touched && form.get('type')?.hasError('required')">
                     نوع العملية مطلوب
-                </span>
+                </div>
             </div>
-        </div> -->
-        <div class="form-group mb-3" dir="rtl">
-            <label for="category" class="form-label">تصنيف المادة</label>
 
-            <select id="category" class="form-control" formControlName="category">
-                <option value="" selected disabled>اختر التصنيف</option>
-                <option *ngFor="let mc of materialCategoryItems" [value]="mc.value">
-                    {{ [mc.label] }}
-                </option>
-            </select>
+            <div class="col-md-6">
+                <label class="form-label">تصنيف المادة <span class="text-danger">*</span></label>
 
-            <div class="text-danger mt-1"
-                *ngIf="form.get('category')?.invalid && form.get('category')?.touched">
-                <span *ngIf="form.get('category')?.hasError('required')">
+                <select class="form-control" formControlName="category">
+                    <option value="" disabled>اختر التصنيف</option>
+                    <option *ngFor="let mc of materialCategoryItems" [value]="mc.value">
+                        {{ mc.label }}
+                    </option>
+                </select>
+
+                <div class="text-danger mt-1" *ngIf="form.get('category')?.touched && form.get('category')?.hasError('required')">
                     التصنيف مطلوب
-                </span>
+                </div>
             </div>
         </div>
 
-        <!-- Start Location -->
-        <div class="mb-3 text-end">
-            <label class="form-label">منطقة الانطلاق <span class="text-danger">*</span></label>
-            <input type="text" formControlName="startLocation" class="form-control text-end" placeholder=""
-                [ngClass]="{'is-invalid': form.get('startLocation')?.invalid && form.get('startLocation')?.touched}" />
+        <!-- Row: Start Location + Destination -->
+        <div class="row mb-3">
+            <div class="col-md-6 text-end">
+                <label class="form-label">منطقة الانطلاق <span class="text-danger">*</span></label>
+                <input type="text" formControlName="startLocation" class="form-control text-end"
+                       [ngClass]="{'is-invalid': form.get('startLocation')?.touched && form.get('startLocation')?.invalid}" />
 
-            <div class="invalid-feedback text-end" *ngIf="form.get('startLocation')?.errors?.['required']">
-                هذا الحقل مطلوب.
+                <div class="invalid-feedback text-end" *ngIf="form.get('startLocation')?.hasError('required')">
+                    هذا الحقل مطلوب.
+                </div>
+            </div>
+
+            <div class="col-md-6 text-end">
+                <label class="form-label">الوجهة</label>
+                <input type="text" formControlName="destination" class="form-control text-end" />
             </div>
         </div>
 
-        <div class="form-group mb-3">
-            <label for="plateNumber" class="form-label">رقم اللوحة</label>
+        <!-- Row: Plate Number + Amount -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">رقم اللوحة</label>
+                <input id="plateNumber" type="text" class="form-control" formControlName="plateNumber" placeholder="أدخل رقم اللوحة">
 
-            <input id="plateNumber" type="text" class="form-control" formControlName="plateNumber"
-                placeholder="أدخل رقم اللوحة" dir="rtl" />
-
-            <div class="text-danger mt-1" *ngIf="form.get('plateNumber')?.invalid && form.get('plateNumber')?.touched"
-                dir="rtl">
-                <span *ngIf="form.get('plateNumber')?.hasError('required')">
+                <div class="text-danger mt-1" *ngIf="form.get('plateNumber')?.touched && form.get('plateNumber')?.hasError('required')">
                     رقم اللوحة مطلوب
-                </span>
+                </div>
+            </div>
+
+            <div class="col-md-6 text-end">
+                <label class="form-label">التكلفة <span class="text-danger">*</span></label>
+                <input type="number" formControlName="amount" class="form-control text-end" placeholder="0.00"
+                       [ngClass]="{'is-invalid': form.get('amount')?.touched && form.get('amount')?.invalid}" />
+
+                <div class="invalid-feedback text-end" *ngIf="form.get('amount')?.hasError('required')">
+                    التكلفة مطلوبة.
+                </div>
+
+                <div class="invalid-feedback text-end" *ngIf="form.get('amount')?.hasError('min')">
+                    التكلفة يجب أن تكون أكبر من صفر.
+                </div>
             </div>
         </div>
 
-        <!-- Cost -->
-        <div class="mb-3 text-end">
-            <label class="form-label">التكلفة <span class="text-danger">*</span></label>
-            <input type="number" formControlName="amount" class="form-control text-end" placeholder="0.00"
-                [ngClass]="{'is-invalid': form.get('amount')?.invalid && form.get('amount')?.touched}" />
-
-            <div class="invalid-feedback text-end" *ngIf="form.get('amount')?.errors?.['required']">
-                التكلفة مطلوبة.
-            </div>
-
-            <div class="invalid-feedback text-end" *ngIf="form.get('amount')?.errors?.['min']">
-                التكلفة يجب أن تكون أكبر من صفر.
-            </div>
-        </div>
-
-        <!-- Dates -->
-        <div class="row">
-            <div class="col-6 mb-3 text-end">
+        <!-- Row: Start Date + End Date -->
+        <div class="row mb-3">
+            <div class="col-md-6 text-end">
                 <label class="form-label">تاريخ الانطلاق <span class="text-danger">*</span></label>
                 <input type="date" formControlName="startDate" class="form-control text-end"
-                    [ngClass]="{'is-invalid': form.get('startDate')?.invalid && form.get('startDate')?.touched}">
+                       [ngClass]="{'is-invalid': form.get('startDate')?.touched && form.get('startDate')?.invalid}">
             </div>
 
-            <div class="col-6 mb-3 text-end">
+            <div class="col-md-6 text-end">
                 <label class="form-label">تاريخ الوصول</label>
                 <input type="date" formControlName="endDate" class="form-control text-end">
             </div>

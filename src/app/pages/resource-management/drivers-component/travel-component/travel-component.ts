@@ -78,14 +78,18 @@ export class TravelComponent implements OnInit {
 
   addTravel() {
     this.dialog.open(AddEditTravelComponent, {
-      width: '450px',
+      width: '60vw',
+      height:'auto',
+      maxHeight:'90vh',
       data: { driverId: this.data?.driverId }
     }).afterClosed().subscribe(r => r && this.loadData());
   }
 
   editTravel(row: TravelDto) {
     this.dialog.open(AddEditTravelComponent, {
-      width: '450px',
+      width: '60vw',
+      height:'auto',
+      maxHeight:'90vh',
       data: { item: row, driverId: this.data?.driverId }
     }).afterClosed().subscribe(r => r && this.loadData());
   }

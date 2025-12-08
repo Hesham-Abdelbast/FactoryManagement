@@ -1,6 +1,4 @@
-<app-h-modal 
-  (closeEvent)="close()" 
-  [headerTitle]="isEditMode ? 'تعديل سائق' : 'إضافة سائق'">
+<app-h-modal (closeEvent)="close()" [headerTitle]="isEditMode ? 'تعديل سائق' : 'إضافة سائق'">
 
   <div class="container mt-4" dir="rtl">
     <div class="card shadow p-4">
@@ -10,11 +8,7 @@
         <!-- الاسم -->
         <div class="mb-3 text-end">
           <label class="form-label">الاسم <span class="text-danger">*</span></label>
-          <input 
-            type="text" 
-            formControlName="name" 
-            class="form-control text-end"
-            placeholder="أدخل اسم السائق"
+          <input type="text" formControlName="name" class="form-control text-end" placeholder="أدخل اسم السائق"
             [ngClass]="{'is-invalid': driverForm.get('name')?.invalid && driverForm.get('name')?.touched}" />
 
           <div class="invalid-feedback text-end" *ngIf="driverForm.get('name')?.errors?.['required']">
@@ -26,41 +20,18 @@
           </div>
         </div>
 
-
         <!-- رقم الهاتف -->
         <div class="mb-3 text-end">
           <label class="form-label">رقم الهاتف</label>
-          <input 
-            type="text" 
-            formControlName="phoneNumber" 
-            class="form-control text-end"
+          <input type="text" formControlName="phoneNumber" class="form-control text-end"
             placeholder="أدخل رقم الهاتف" />
         </div>
-
 
         <!-- رقم الرخصة -->
         <div class="mb-3 text-end">
           <label class="form-label">رقم الرخصة</label>
-          <input 
-            type="text" 
-            formControlName="licenseNumber" 
-            class="form-control text-end"
+          <input type="text" formControlName="licenseNumber" class="form-control text-end"
             placeholder="أدخل رقم الرخصة" />
-        </div>
-
-
-        <!-- تاريخ انتهاء الرخصة -->
-        <div class="mb-3 text-end">
-          <label class="form-label">تاريخ انتهاء الرخصة <span class="text-danger">*</span></label>
-          <input 
-            type="date" 
-            formControlName="licenseExpiry" 
-            class="form-control text-end"
-            [ngClass]="{'is-invalid': driverForm.get('licenseExpiry')?.invalid && driverForm.get('licenseExpiry')?.touched}" />
-
-          <div class="invalid-feedback text-end" *ngIf="driverForm.get('licenseExpiry')?.errors?.['required']">
-            هذا الحقل مطلوب.
-          </div>
         </div>
 
         <!-- Actions -->
@@ -70,7 +41,7 @@
           </button>
           <button class="btn btn-secondary" type="button" (click)="close()">إلغاء</button>
         </div>
-        
+
       </form>
     </div>
   </div>

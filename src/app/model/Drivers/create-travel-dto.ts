@@ -1,4 +1,5 @@
 import { MaterialCategory } from "../Enums/material-category";
+import { ProcessType } from "../Enums/process-type";
 
 export interface CreateTravelDto {
   id?: string; // Guid
@@ -11,4 +12,5 @@ export interface CreateTravelDto {
   notes?: string | null;
   driverId:string,
   category:MaterialCategory
+  type:ProcessType
 }
