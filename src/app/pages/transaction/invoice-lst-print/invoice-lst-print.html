@@ -81,6 +81,10 @@
             <span>اجمالي المبلغ</span>
             <span>{{invoice.totalAmount}}</span>
         </div>
+        <div class="borderGray d-flex justify-content-between">
+            <span>الباقي</span>
+            <span>{{invoice.totalAmount - invoice.totalAmountPaid}}</span>
+        </div>
        </div>
 
     </div>

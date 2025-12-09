@@ -26,25 +26,25 @@ export class AddEditTravelComponent {
     { value: ProcessType.External, label: 'خارجي' }
   ];
 
-materialCategoryItems = [
-  { value: MaterialCategory.Iron, label: 'حديد' },
-  { value: MaterialCategory.metals, label: 'معادن' },
-  { value: MaterialCategory.others, label: 'أخرى' }
-];
+  materialCategoryItems = [
+    { value: MaterialCategory.Iron, label: 'حديد' },
+    { value: MaterialCategory.metals, label: 'معادن' },
+    { value: MaterialCategory.others, label: 'أخرى' }
+  ];
 
   constructor(
     private fb: FormBuilder,
     private travelService: DriverManagmentServices,
     private toast: ToastService,
-    private commonServices:CommonService,
+    private commonServices: CommonService,
     private dialogRef: MatDialogRef<AddEditTravelComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.isEdit = !!this.data?.item;
 
-    console.log(this.data,'ddddddddddddd')
+    console.log(this.data, 'ddddddddddddd')
     this.form = this.fb.group({
       id: [this.data?.item?.id ?? null],
       driverId: [this.data?.driverId ?? null],
@@ -56,8 +56,8 @@ materialCategoryItems = [
       amount: [this.data?.item?.amount ?? null, Validators.required],
       notes: [this.data?.item?.notes ?? ''],
       createDate: [this.data?.item?.createDate ?? new Date()],
-      category:[this.data?.item?.category ?? '',Validators.required],
-      type:[this.data?.item?.type ?? '',Validators.required]
+      category: [this.data?.item?.category ?? '', Validators.required],
+      type: [this.data?.item?.type ?? '', Validators.required]
     });
   }
 
@@ -74,7 +74,7 @@ materialCategoryItems = [
 
   create(model: CreateTravelDto) {
     this.travelService.addTravel(model).subscribe(res => {
-      console.log(res,'aaaaaaaaaaa')
+      console.log(res, 'aaaaaaaaaaa')
       if (res.success) {
         this.toast.success(" تم إضافة الرحلة بنجاح");
         this.dialogRef.close(true);

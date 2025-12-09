@@ -1,0 +1,121 @@
+<app-h-modal [headerTitle]="'كشف راتب شهري'" (closeEvent)="close()">
+    <div class="container mt-4" dir="rtl">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="row">
+
+                <!-- Year -->
+                <div class="col-6 mb-3">
+                    <label class="form-label">السنة</label>
+
+                    <select class="form-control" formControlName="year" (change)="result = null">
+                        <option value="">اختر السنة</option>
+                        <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+                    </select>
+
+                    <!-- Validation -->
+                    <div class="text-danger mt-1" *ngIf="form.get('year')?.touched && form.get('year')?.invalid">
+                        <small *ngIf="form.get('year')?.hasError('required')">
+                            الرجاء اختيار السنة
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Month -->
+                <div class="col-6 mb-3">
+                    <label class="form-label">الشهر</label>
+
+                    <select class="form-control" formControlName="month" (change)="result = null">
+                        <option value="">اختر الشهر</option>
+                        <option *ngFor="let m of months" [value]="m">
+                            {{ m }} - {{ monthNames[m] }}
+                        </option>
+                    </select>
+
+                    <!-- Validation -->
+                    <div class="text-danger mt-1" *ngIf="form.get('month')?.touched && form.get('month')?.invalid">
+                        <small *ngIf="form.get('month')?.hasError('required')">
+                            الرجاء اختيار الشهر
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-around">
+                <button class="btn btn-primary w-25" type="submit">اظهار</button>
+            </div>
+        </form>
+
+        <!-- Result -->
+        <div *ngIf="result" class="card mt-4 p-3">
+            <div *ngIf="result" class="card mt-4 p-4" dir="rtl">
+
+                <h5 class="mb-3 fw-bold text-primary text-center">
+                    كشف الراتب الشهري
+                </h5>
+
+                <!-- Basic Info -->
+                <div class="row mb-3">
+                    <div class="col-6 d-flex">
+                        <label class="text-muted">السنة : </label>
+                        <div class="fw-semibold">{{ result.year }}</div>
+                    </div>
+
+                    <div class="col-6 d-flex">
+                        <label class="text-muted">الشهر : </label>
+                        <div class="fw-semibold">{{ result.month }}</div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Financial Details -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="border rounded p-3 bg-light">
+                            <label class="text-muted">الراتب الأساسي</label>
+                            <h5 class="fw-bold text-success">{{ result.baseSalary | number }}</h5>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="border rounded p-3 bg-light">
+                            <label class="text-muted">إجمالي المصروفات الشخصية</label>
+                            <h5 class="fw-bold text-danger">{{ result.personalExpensesTotal | number }}</h5>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="border rounded p-3 bg-light">
+                            <label class="text-muted">إجمالي السُلَف النقدية</label>
+                            <h5 class="fw-bold text-danger">{{ result.cashAdvancesTotal | number }}</h5>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="border rounded p-3 bg-light">
+                            <label class="text-muted">المتبقي</label>
+                            <h5 class="fw-bold" [ngClass]="result.remaining >= 0 ? 'text-success' : 'text-danger'">
+                                {{ result.remaining | number }}
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Sadad month Salary Button -->
+                @if(result.remaining > 0){
+                <div class="d-flex justify-content-around">
+                    <button class="btn btn-success" (click)="payMonthlySalary()">
+                        دفع راتب الشهر
+                    </button>
+                </div>
+                }
+
+            </div>
+
+        </div>
+    </div>
+
+</app-h-modal>

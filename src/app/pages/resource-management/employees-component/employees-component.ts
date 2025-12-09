@@ -11,6 +11,7 @@ import { HTableComponent } from "../../../shared/Component/h-table/h-table.compo
 import { AddEditEmployee } from './add-edit-employee/add-edit-employee';
 import { EmployeePersonalExpenseComponent } from './employee-personal-expense-component/employee-personal-expense-component';
 import { EmployeeCashAdvanceComponent } from './employee-cash-advance-component/employee-cash-advance-component';
+import { MonthlyPayrollComponent } from './monthly-payroll-component/monthly-payroll-component';
 
 @Component({
   selector: 'app-employees-component',
@@ -50,8 +51,16 @@ export class EmployeesComponent implements OnInit {
     {
       icon: 'fa fa-edit',
       iconColor: '',
-      label: 'السلف',
+      label: 'السُلف والراتب',
       type: 'CashAdvance',
+      style: 'btn btn-outline-primary btn-sm'
+    }
+    ,
+    {
+      icon: 'fa fa-edit',
+      iconColor: '',
+      label: 'كشف الرواتب',
+      type: 'Repayment',
       style: 'btn btn-outline-primary btn-sm'
     },
     {
@@ -85,6 +94,9 @@ export class EmployeesComponent implements OnInit {
       case 'PersonalExpense':
         this.PersonalExpense(event.row.id,event.row.name);
         break;
+      case 'Repayment':
+        this.Repayment(event.row);
+        break;
     }
   }
 
@@ -104,7 +116,15 @@ export class EmployeesComponent implements OnInit {
     data: { Id: id,Name:name }         
   });
 }
-
+Repayment(row: EmployeeDto) {
+  this.dialog.open(MonthlyPayrollComponent, {
+    width: '1000px',          
+    height: 'auto',
+    maxHeight: '90vh',
+    maxWidth: '90vw',
+    data: { Employee : row}         
+  });
+}
   CashAdvance(employeeId: string,name:string) {
   this.dialog.open(EmployeeCashAdvanceComponent, {
     width: '900px',

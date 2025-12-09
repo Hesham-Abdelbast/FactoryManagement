@@ -1,4 +1,4 @@
 export enum ProcessType {
-  Internal = 1,
-  External = 2
+  Internal = 'Internal',
+  External = 'External'
 }

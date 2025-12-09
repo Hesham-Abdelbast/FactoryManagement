@@ -1,10 +1,14 @@
 export interface EmployeeMonthlyPayrollDto {
-     id: string;
+  id: string;
   employeeId: string;
   year: number;
   month: number;
+
   baseSalary: number;
   personalExpensesTotal: number;
   cashAdvancesTotal: number;
   remaining: number;
+
+  createDate?: string;
+  updateDate?: string;
 }

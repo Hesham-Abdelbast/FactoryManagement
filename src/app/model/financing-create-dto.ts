@@ -2,9 +2,10 @@ import { MaterialCategory } from "./Enums/material-category";
 import { ProcessType } from "./Enums/process-type";
 
 export interface FinancingCreateDto {
-    amount: number;
+  amount: number;
   providerName: string;
   notes?: string;
-  category:MaterialCategory,
-    type:ProcessType
+  category: MaterialCategory,
+  type: ProcessType,
+  createDate: string
 }

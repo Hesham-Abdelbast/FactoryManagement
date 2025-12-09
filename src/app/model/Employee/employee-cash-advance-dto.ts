@@ -1,7 +1,10 @@
+import { TypeOfCash } from "../Enums/type-of-cash";
+
 export interface EmployeeCashAdvanceDto {
-    id: string;
+    id?: string;
     employeeId: string;
     amount: number;
     note?: string;
-    createDate:string
+    createDate:string,
+    typeOfCash:TypeOfCash
 }

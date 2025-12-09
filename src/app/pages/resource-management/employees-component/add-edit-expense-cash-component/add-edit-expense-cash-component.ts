@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HModalComponent } from '../../../../shared/Component/h-modal/h-modal.component';
 import { ToastService } from '../../../../core/shared/toast.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApiResponse } from '../../../../model/api-response';
 import { EmployeeManagementService } from '../../../../core/Employees/employee-management-service';
+import { TypeOfCash } from '../../../../model/Enums/type-of-cash';
+import { CommonService } from '../../../../core/common-service';
 
 @Component({
   selector: 'app-add-edit-expense-cash',
@@ -20,22 +22,25 @@ export class AddEditExpenseCashComponent {
   isEditMode = false;
   entityType: 'cash' | 'expense' = 'cash';
   headerLabel = '';
-
+ processTypeItems = [
+    { value: TypeOfCash.CashAdvance, label: 'سلفة ماليه' },
+    { value: TypeOfCash.Salary, label: 'مرتب شهري' }
+  ];
   constructor(
     private fb: FormBuilder,
     private service: EmployeeManagementService,
     private toast: ToastService,
     private dialogRef: MatDialogRef<AddEditExpenseCashComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) {}
+    private commonServices: CommonService,
+    private cdr:ChangeDetectorRef
+  ) {
 
-  ngOnInit(): void {
-
-    this.entityType = this.data?.type || 'cash';
+     this.entityType = this.data?.type || 'cash';
     this.isEditMode = this.data?.isEdit || false;
 
     this.headerLabel = this.entityType === 'cash'
-      ? (this.isEditMode ? 'تعديل سلفة' : 'إضافة سلفة')
+      ? (this.isEditMode ? 'تعديل السُلف والراتب' : 'إضافة السُلف والراتب')
       : (this.isEditMode ? 'تعديل مصروف' : 'إضافة مصروف');
 
     if (this.isEditMode) {
@@ -44,16 +49,27 @@ export class AddEditExpenseCashComponent {
         employeeId: [this.data.item.employeeId, Validators.required],
         amount: [this.data.item.amount, [Validators.required, Validators.min(1)]],
         note: [this.data.item.note || ''],
-        createDate:[this.data.item.createDate]
+        createDate:[this.data.item.createDate],
+        
       });
+      if(this.entityType==='cash'){
+        this.form.addControl('typeOfCash',this.fb.control(this.data.item.typeOfCash,Validators.required));
+      }
     } else {
       this.form = this.fb.group({
         employeeId: [this.data.employeeId, Validators.required],
-        amount: [0, [Validators.required, Validators.min(1)]],
+        amount: [, [Validators.required, Validators.min(1)]],
         note: [''],
-        createDate:[new Date().toString()]
+        createDate:[new Date().toString()],
       });
+      if(this.entityType==='cash'){
+        this.form.addControl('typeOfCash',this.fb.control('',Validators.required));
+      }
     }
+  }
+
+  ngOnInit(): void {
+    this.cdr.detectChanges();
   }
 
   onSubmit(): void {
@@ -81,7 +97,7 @@ export class AddEditExpenseCashComponent {
         this.toast.success('تمت العملية بنجاح.');
         this.dialogRef.close(true);
       } else {
-        this.toast.error('حدث خطأ أثناء الإضافة.');
+        this.toast.error(res.returnMsg);
       }
     });
   }

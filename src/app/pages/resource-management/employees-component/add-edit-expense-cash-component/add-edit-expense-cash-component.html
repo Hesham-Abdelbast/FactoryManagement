@@ -9,21 +9,33 @@
           <label class="form-label">
             المبلغ <span class="text-danger">*</span>
           </label>
-          <input type="number"
-                 formControlName="amount"
-                 class="form-control text-end"
-                 placeholder="أدخل المبلغ" />
+          <input type="number" formControlName="amount" class="form-control text-end" placeholder="أدخل المبلغ" />
         </div>
+        <!-- type -->
+        @if(this.entityType === 'cash'){
+        <div class="form-group mb-3" dir="rtl">
+          <label for="type" class="form-label">نوع العملية</label>
+
+          <select id="typeOfCash" class="form-control" formControlName="typeOfCash">
+            <option value="" selected disabled>اختر نوع العملية</option>
+            <option *ngFor="let item of processTypeItems" [value]="item.value">
+              {{ item.label }}
+            </option>
+          </select>
+
+          <div class="text-danger mt-1" *ngIf="form.get('typeOfCash')?.invalid && form.get('typeOfCash')?.touched">
+            <span *ngIf="form.get('typeOfCash')?.hasError('required')">
+              نوع العملية مطلوب
+            </span>
+          </div>
+        </div>
+        }
 
         <!-- Date -->
         <div class="mb-3 text-end">
           <label class="form-label">تاريخ العملية <span class="text-danger">*</span></label>
-          <input 
-            type="date" 
-            formControlName="createDate" 
-            class="form-control text-end"
-            [ngClass]="{'is-invalid': form.get('createDate')?.invalid && form.get('createDate')?.touched}"
-          />
+          <input type="date" formControlName="createDate" class="form-control text-end"
+            [ngClass]="{'is-invalid': form.get('createDate')?.invalid && form.get('createDate')?.touched}" />
 
           <div class="invalid-feedback text-end" *ngIf="form.get('createDate')?.errors?.['required']">
             يجب إدخال تاريخ العملية.

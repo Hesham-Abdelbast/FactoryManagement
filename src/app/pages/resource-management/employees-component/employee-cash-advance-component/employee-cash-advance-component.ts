@@ -18,7 +18,7 @@ import { HModalComponent } from "../../../../shared/Component/h-modal/h-modal.co
   styleUrl: './employee-cash-advance-component.scss',
 })
 export class EmployeeCashAdvanceComponent implements OnInit {
-  title: string = 'سلف الموظف '
+  title: string = 'السُلف والراتب الموظف '
   data: EmployeeCashAdvanceDto[] = [];
   pagination: PaginationEntity = {
     pageIndex: 1,
@@ -27,8 +27,8 @@ export class EmployeeCashAdvanceComponent implements OnInit {
   }
   empId: string = ''
 
-  columns = ['المبلغ', 'ملاحظات', 'تاريخ السلفة'];
-  columnKeys = ['amount', 'note', 'createDate'];
+  columns = ['المبلغ', 'النوع', 'تاريخ '];
+  columnKeys = ['amount', 'type', 'createDate'];
 
   actions: TableAction[] = [
     { icon: 'fa fa-edit', label: 'تعديل', type: 'edit', style: 'btn btn-outline-success btn-sm' },
@@ -57,7 +57,8 @@ export class EmployeeCashAdvanceComponent implements OnInit {
       if (res.success && res.data) {
         this.data = res.data.map(item => ({
           ...item,
-          createDate: item.createDate?.split('T')[0]
+          createDate: item.createDate?.split('T')[0],
+          type: item.typeOfCash === 'CashAdvance' ? 'سلفة مالية' : 'مرتب شهري'
         }));
         console.log(res)
         this.pagination.totalCount = res.totalCount;
@@ -70,7 +71,7 @@ export class EmployeeCashAdvanceComponent implements OnInit {
 
   onTableAction(event: { action: string; row: EmployeeCashAdvanceDto }) {
     if (event.action === 'edit') this.openDialog(true, event.row);
-    else if (event.action === 'delete') this.delete(event.row.id);
+    else if (event.action === 'delete' && event.row.id) this.delete(event.row.id);
   }
 
   openDialog(isEdit: boolean, item?: EmployeeCashAdvanceDto) {

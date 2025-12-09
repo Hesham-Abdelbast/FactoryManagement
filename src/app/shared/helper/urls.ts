@@ -161,6 +161,8 @@ export class EmployeeManagementURLs {
   static readonly GetAll = this.base + 'GetAll';
   static Get(id: string): string { return `${this.base}Get/${id}` }
   static readonly Create = this.base + 'Create';
+  static readonly CreateMonthlyPayroll = this.base + 'CreateMonthlyPayroll';
+  static readonly GetEmployeeFullFinancialReport = this.base + 'GetEmployeeFullFinancialReport';
   static readonly Update = this.base + 'Update';
   static Delete(id: string): string { return `${this.base}Delete/${id}` }
 

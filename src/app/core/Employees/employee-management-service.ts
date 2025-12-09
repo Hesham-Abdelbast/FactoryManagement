@@ -10,6 +10,9 @@ import { EmployeePersonalExpenseDto } from '../../model/Employee/employee-person
 import { EmployeeMonthlyPayrollDto } from '../../model/Employee/employee-monthly-payroll-dto';
 import { EmployeeFinancialReportDto } from '../../model/Employee/employee-financial-report-dto';
 import { PaginationEntity } from '../../model/pagination-entity';
+import { CreatePayrollDto } from '../../model/Employee/create-payroll-dto';
+import { FullFinancialResponseDto } from '../../model/Employee/full-financial-response-dto';
+import { FullFinancialRequestDto } from '../../model/Employee/full-financial-request-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -90,6 +93,17 @@ export class EmployeeManagementService {
   UpdatePersonalExpense(dto: EmployeePersonalExpenseDto): Observable<ApiResponse<boolean>> {
     return this.baseService.PutRequest<ApiResponse<boolean>>(EmployeeManagementURLs.UpdatePersonalExpense, dto)
       .pipe(catchError(err => this.handleError<boolean>('تحديث بيانات الموظف', err, null)));
+  }
+
+  // ---------------- Monthly Payroll ----------------
+  CreateMonthlyPayroll(dto: CreatePayrollDto): Observable<ApiResponse<EmployeeMonthlyPayrollDto>> {
+    return this.baseService.PostRequest<ApiResponse<EmployeeMonthlyPayrollDto>>(EmployeeManagementURLs.CreateMonthlyPayroll, dto)
+      .pipe(catchError(err => this.handleError<EmployeeMonthlyPayrollDto>('إنشاء كشف رواتب شهري', err, null)));
+  }
+
+  GetEmployeeFullFinancialReport(dto: FullFinancialRequestDto): Observable<ApiResponse<FullFinancialResponseDto>> {
+    return this.baseService.PostRequest<ApiResponse<FullFinancialResponseDto>>(EmployeeManagementURLs.GetEmployeeFullFinancialReport, dto)
+      .pipe(catchError(err => this.handleError<FullFinancialResponseDto>('إنشاء كشف رواتب شهري', err, null)));
   }
 
   // 🔒 Centralized reusable error handler

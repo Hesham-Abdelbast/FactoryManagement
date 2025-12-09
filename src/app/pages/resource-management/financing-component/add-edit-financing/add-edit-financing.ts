@@ -10,6 +10,7 @@ import { FinancingDto } from '../../../../model/financing-dto';
 import { FinancingCreateDto } from '../../../../model/financing-create-dto';
 import { ProcessType } from '../../../../model/Enums/process-type';
 import { MaterialCategory } from '../../../../model/Enums/material-category';
+import { CommonService } from '../../../../core/common-service';
 
 @Component({
   selector: 'app-add-edit-financing',
@@ -38,6 +39,7 @@ materialCategoryItems = [
     private toast: ToastService,
     private financingService: FinancingService,
     private dialogRef: MatDialogRef<AddEditFinancing>,
+    private commonServices: CommonService,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {}
 
@@ -50,8 +52,10 @@ materialCategoryItems = [
       this.financingForm = this.fb.group({
         providerName: [this.financing?.providerName, [Validators.required, Validators.maxLength(100)]],
         amount: [this.financing?.amount, [Validators.required, Validators.min(1)]],
-        createDate: [this.financing?.createDate?.split('T')[0], Validators.required],
+        createDate: [this.commonServices.formatForInputDate(this.financing?.createDate), Validators.required],
         notes: [this.financing?.notes || ''],
+        type:[this.financing?.type,Validators.required],
+        category:[this.financing?.category,Validators.required],
       });
 
     } else {
@@ -85,6 +89,7 @@ materialCategoryItems = [
         notes: this.financingForm.value.notes,
         type: this.financingForm.value.type,
         category: this.financingForm.value.category,
+        createDate: this.financingForm.value.createDate,
       };
       this.create(createDto);
     }
