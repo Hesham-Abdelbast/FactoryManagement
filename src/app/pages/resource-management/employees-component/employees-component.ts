@@ -103,7 +103,7 @@ export class EmployeesComponent implements OnInit {
   /** تغيير الصفحة */
   onPageChange(pageEvent: PageEvent) {
     this.paginationEmp.pageIndex = pageEvent.pageIndex;
-    this.paginationEmp.pageSize = pageEvent.pageIndex;
+    this.paginationEmp.pageSize = pageEvent.pageSize;
     this.GetAllEmps();
   }
 

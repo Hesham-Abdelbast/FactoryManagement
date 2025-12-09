@@ -69,7 +69,7 @@ export class FinancingComponent {
   /** تغيير الصفحة */
   onPageChange(pageEvent: PageEvent) {
     this.paginationeqps.pageIndex = pageEvent.pageIndex;
-    this.paginationeqps.pageSize = pageEvent.pageIndex;
+    this.paginationeqps.pageSize = pageEvent.pageSize;
     this.GetAllFinancing();
   }
 
