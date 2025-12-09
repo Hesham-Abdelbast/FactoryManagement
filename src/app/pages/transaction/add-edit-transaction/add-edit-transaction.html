@@ -142,7 +142,7 @@
         <div class="col-md-6 text-end">
           <label class="form-label fw-bold">السعر للوحدة <span class="text-danger">*</span></label>
           <input type="number" formControlName="pricePerUnit" class="form-control text-end"
-            [ngClass]="{'is-invalid': invalid('pricePerUnit')}" (input)="updateTotalAmount()">
+            [ngClass]="{'is-invalid': invalid('pricePerUnit')}">
           <div class="invalid-feedback text-end">السعر غير صالح.</div>
         </div>
 
@@ -150,7 +150,7 @@
         <div class="col-md-6 text-end">
           <label class="form-label fw-bold">الإجمالي</label>
           <input type="number" class="form-control text-end" formControlName="totalAmount"
-            (input)="UpdatePricePerUnit()">
+            >
         </div>
 
         <!-- المبلغ المدفوع -->

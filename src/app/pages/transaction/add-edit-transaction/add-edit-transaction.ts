@@ -74,7 +74,6 @@ export class AddEditTransaction implements OnInit {
       });
 
       this.recalculateQuantity();
-      this.updateTotalAmount();
     }
 
     this.merchantKeyValue = this.data.merchantLst.map((e: any) => ({ key: e.id, value: e.name } as DicKeyValue));
@@ -116,16 +115,6 @@ export class AddEditTransaction implements OnInit {
       this.dialogRef.close(true);
     } else {
       this.toast.error(res.returnMsg || 'فشل العملية');
-    }
-  }
-
-  UpdatePricePerUnit() {
-    const quantity = this.numeric(this.transactionForm.get('quantity')?.value);
-    const totalAmount = this.numeric(this.transactionForm.get('totalAmount')?.value) ?? 0;
-    if (quantity > 0) {
-      this.transactionForm.get('pricePerUnit')?.setValue(Number((totalAmount / quantity).toFixed(2)), { emitEvent: false });
-    } else {
-      this.transactionForm.get('pricePerUnit')?.setValue(0, { emitEvent: false });
     }
   }
 
@@ -175,26 +164,7 @@ export class AddEditTransaction implements OnInit {
     const finalQuantity = Math.max(quantity - impurityWeight, 0);
     this.setValue('quantity', finalQuantity);
 
-    this.updateTotalAmount();
   }
-
-  updateTotalAmount() {
-    const quantity = this.getValue('quantity');
-    const price = this.getValue('pricePerUnit');
-
-    const totalControl = this.transactionForm.get('totalAmount');
-
-    // Only prevent auto-calculation if the user manually typed in the field
-    const userEdited = totalControl?.dirty;
-
-    if (!userEdited) {
-      const total = quantity * price;
-      this.setValue('totalAmount', total);
-    }
-
-    this.updateRemaining();
-  }
-
 
   updateRemaining() {
     const paid = this.getValue('amountPaid');

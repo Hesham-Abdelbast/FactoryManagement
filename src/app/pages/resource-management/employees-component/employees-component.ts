@@ -179,7 +179,7 @@ Repayment(row: EmployeeDto) {
     this.EmpServices.getAllEmployeesWithPagination(this.paginationEmp).subscribe((res: ApiResponse<EmployeeDto[]>) => {
       if (res.success && res.data) {
         this.EmpsData = res.data
-        this.paginationEmp.totalCount = res.data.length;
+        this.paginationEmp.totalCount = res.totalCount ?? 0;
       }
       else {
         this.toast.error(res.returnMsg);
