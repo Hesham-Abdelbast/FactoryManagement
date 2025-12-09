@@ -119,6 +119,7 @@ export class FinancingComponent {
     this.financingServices.getAllWithPagination(this.paginationeqps).subscribe((res: ApiResponse<FinancingDto[]>) => {
       if (res.success && res.data) {
         this.eqpsData = res.data
+        this.paginationeqps.totalCount = res.totalCount ?? 0;
       }
       else {
         this.toast.error(res.returnMsg);
