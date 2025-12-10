@@ -8,6 +8,7 @@ import { StoreComponent } from './pages/store-component/store-component';
 import { WarehouseComponent } from './pages/warehouse-component/warehouse-component';
 import { ResourceManagement } from './pages/resource-management/resource-management';
 import { Inventory } from './pages/inventory/inventory';
+import { ExternalTransaction } from './pages/ExternalTransaction/external-transaction/external-transaction';
 
 export const routes: Routes = [
 
@@ -20,5 +21,6 @@ export const routes: Routes = [
   { path: 'warehouses', component: WarehouseComponent },
   { path: 'resources', component: ResourceManagement },
   { path: 'inventory', component: Inventory },
+  { path: 'externalTrnx', component: ExternalTransaction },
 
 ];

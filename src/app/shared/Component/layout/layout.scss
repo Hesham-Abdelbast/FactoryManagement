@@ -16,8 +16,6 @@
     transition: all 0.5s ease;
 }
 
-
-
 .sidebar.open {
     width: 250px;
 }
@@ -76,13 +74,22 @@
     position: relative;
     margin: 8px 0;
     list-style: none;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 12px;
+    transition: all 0.4s ease;
+
 }
 
 .sidebar li i {
+    color: #fff;
     height: 50px;
+    width: 50px;
     line-height: 50px;
+    padding: 0 16px;
     font-size: 18px;
     border-radius: 12px;
+    transition: all 0.4s ease;
 }
 
 .sidebar li a {

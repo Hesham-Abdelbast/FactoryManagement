@@ -3,64 +3,82 @@
     <div class="logo_name">شركة الكواكب</div>
     <i [ngClass]=" isOpened? 'bx bx-menu-alt-right':'bx bx-menu'" (click)="isOpened= !isOpened" id="btn"></i>
   </div>
+
   <ul class="nav-list">
 
-    <li>
-      <a routerLink="store">
-        <i class='bx bx-grid-alt'></i>
-        <span class="links_name">لوحه التحكم</span>
-      </a>
-      <span class="tooltip">لوحه التحكم</span>
-    </li>
-    <li>
-      <a routerLink="inventory">
-        <i class='bx bx-grid-alt'></i>
-        <span class="links_name">الجرد</span>
-      </a>
-      <span class="tooltip">الجرد</span>
-    </li>
-    <li>
-      <a routerLink="transactions">
-        <i class='bx bx-grid-alt'></i>
-        <span class="links_name">المعاملات</span>
-      </a>
-      <span class="tooltip">المعاملات</span>
-    </li>
+  <li>
+    <a routerLink="store">
+      <i class='bx bx-line-chart'></i>
+      <span class="links_name">لوحة التحكم</span>
+    </a>
+    <span class="tooltip">لوحة التحكم</span>
+  </li>
 
-    <li>
-      <a routerLink="merchants">
-        <i class='bx bx-grid-alt'></i>
-        <span class="links_name">التجار</span>
-      </a>
-      <span class="tooltip">التجار</span>
-    </li>
-    
-    <li>
-      <a routerLink="resources">
-        <i class='bx bx-grid-alt'></i>
-        <span class="links_name">إدارة الموارد</span>
-      </a>
-      <span class="tooltip">إدارة الموارد</span>
-    </li>
+  <li>
+    <a routerLink="inventory">
+      <i class='bx bx-box'></i>
+      <span class="links_name">الجرد</span>
+    </a>
+    <span class="tooltip">الجرد</span>
+  </li>
 
-    <li>
-      <a routerLink="contact">
-        <i class='bx bx-grid-alt'></i>
-        <span class="links_name">عنا</span>
-      </a>
-      <span class="tooltip">عنا</span>
-    </li>
-    <!-- <li class="profile">
-      <div class="profile-details">
-        <div class="name_job">
-          <div class="name">{{this.user?.name}}</div>
-          <div class="job">{{ this.user?.role }}</div>
-        </div>
+  <li>
+    <a routerLink="transactions">
+      <i class='bx bx-transfer-alt'></i>
+      <span class="links_name">المعاملات</span>
+    </a>
+    <span class="tooltip">المعاملات</span>
+  </li>
+
+  <li>
+    <a routerLink="externalTrnx">
+      <i class='bx bx-shuffle'></i>
+      <span class="links_name">المعاملات الخارجية</span>
+    </a>
+    <span class="tooltip">المعاملات الخارجية</span>
+  </li>
+
+  <li>
+    <a routerLink="merchants">
+      <i class='bx bx-user'></i>
+      <span class="links_name">التجار</span>
+    </a>
+    <span class="tooltip">التجار</span>
+  </li>
+
+  <li>
+    <a routerLink="resources">
+      <i class='bx bx-server'></i>
+      <span class="links_name">إدارة الموارد</span>
+    </a>
+    <span class="tooltip">إدارة الموارد</span>
+  </li>
+
+  <li>
+    <a routerLink="contact">
+      <i class='bx bx-info-circle'></i>
+      <span class="links_name">عنا</span>
+    </a>
+    <span class="tooltip">عنا</span>
+  </li>
+
+  <!-- Profile section (optional) -->
+  <!--
+  <li class="profile">
+    <div class="profile-details">
+      <div class="name_job">
+        <div class="name">{{ user?.name }}</div>
+        <div class="job">{{ user?.role }}</div>
       </div>
-      <i class='bx bx-log-out' style="cursor: pointer;" id="log_out" (click)="logout()"></i>
-    </li> -->
+    </div>
+    <i class='bx bx-log-out' id="log_out" (click)="logout()"></i>
+  </li>
+  -->
 
-  </ul>
+</ul>
+
+
+
 </div>
 
 <div class="home-section">
