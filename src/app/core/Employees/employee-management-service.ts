@@ -106,6 +106,12 @@ export class EmployeeManagementService {
       .pipe(catchError(err => this.handleError<FullFinancialResponseDto>('إنشاء كشف رواتب شهري', err, null)));
   }
 
+  //End Of Work
+  EndWorkEmployee(id:string): Observable<ApiResponse<boolean>> {
+    return this.baseService.GetRequest<ApiResponse<boolean>>(EmployeeManagementURLs.EndWork(id))
+      .pipe(catchError(err => this.handleError<boolean>('إنهاء عمل الموظف', err, null)));
+  }
+
   // 🔒 Centralized reusable error handler
   private handleError<T>(context: string, error: any, fallbackData: T | null): Observable<ApiResponse<T>> {
     console.error(`خطأ أثناء ${context}:`, error);

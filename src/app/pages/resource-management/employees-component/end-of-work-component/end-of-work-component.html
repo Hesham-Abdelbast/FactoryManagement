@@ -1,0 +1,174 @@
+<app-h-modal 
+  (closeEvent)="colse()" 
+  headerTitle="إنهاء عمل الموظف {{ financialData.employee.name }}">
+
+  <div class="end-of-work-container" *ngIf="financialData" dir="rtl">
+    
+    <div class="summary-section">
+        <h2>ملخص مالي</h2>
+
+        <div class="summary-cards">
+            <div class="summary-card">
+                <h4>أيام العمل</h4>
+                <p class="value">{{ financialData.totalNumberOfWorkDays }}</p>
+            </div>
+
+            <div class="summary-card">
+                <h4>إجمالي السلف النقدية</h4>
+                <p class="value negative">
+                    {{ commonService.formatCurrency(financialData.totalCashAdvances) }}
+                </p>
+            </div>
+
+            <div class="summary-card">
+                <h4>إجمالي المصروفات الشخصية</h4>
+                <p class="value negative">
+                    {{ commonService.formatCurrency(financialData.totalPersonalExpenses) }}
+                </p>
+            </div>
+
+            <div class="summary-card">
+                <h4>الإجمالي النهائي</h4>
+                <p class="value"
+                   [class.positive]="getGrandTotal() >= 0"
+                   [class.negative]="getGrandTotal() < 0">
+                    {{ commonService.formatCurrency(getGrandTotal()) }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cash Advances Table -->
+    <div class="table-section" *ngIf="financialData.cashAdvances && financialData.cashAdvances.length > 0">
+        <h3>السلف النقدية</h3>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>المبلغ</th>
+                    <th>النوع</th>
+                    <th>ملاحظات</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let advance of financialData.cashAdvances">
+                    <td>{{ formatDate(advance.createDate) }}</td>
+                    <td class="negative">
+                        {{ commonService.formatCurrency(advance.amount) }}
+                    </td>
+                    <td>{{ getTypeOfCashAr(advance.typeOfCash) }}</td>
+                    <td>{{ advance.note || 'لا يوجد ملاحظات' }}</td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="total-row">
+                        إجمالي السلف النقدية:
+                        <span class="negative">
+                            {{ commonService.formatCurrency(financialData.totalCashAdvances) }}
+                        </span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- Personal Expenses Table -->
+    <div class="table-section" *ngIf="financialData.personalExpenses && financialData.personalExpenses.length > 0">
+        <h3>المصروفات الشخصية</h3>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>المبلغ</th>
+                    <th>ملاحظات</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let expense of financialData.personalExpenses">
+                    <td>{{ formatDate(expense.createDate) }}</td>
+                    <td class="negative">
+                        {{ commonService.formatCurrency(expense.amount) }}
+                    </td>
+                    <td>{{ expense.note || 'لا يوجد ملاحظات' }}</td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="total-row">
+                        إجمالي المصروفات الشخصية:
+                        <span class="negative">
+                            {{ commonService.formatCurrency(financialData.totalPersonalExpenses) }}
+                        </span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- Monthly Payrolls Table -->
+    <div class="table-section" *ngIf="financialData.monthlyPayrolls && financialData.monthlyPayrolls.length > 0">
+        <h3>كشوف المرتبات الشهرية</h3>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>الفترة</th>
+                    <th>الراتب الأساسي</th>
+                    <th>المصروفات الشخصية</th>
+                    <th>السلف النقدية</th>
+                    <th>المتبقي</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let payroll of financialData.monthlyPayrolls">
+                    <td>{{ getMonthNameAr(payroll.month) }} {{ payroll.year }}</td>
+
+                    <td class="positive">
+                        {{ commonService.formatCurrency(payroll.baseSalary) }}
+                    </td>
+
+                    <td class="negative">
+                        {{ commonService.formatCurrency(payroll.personalExpensesTotal) }}
+                    </td>
+
+                    <td class="negative">
+                        {{ commonService.formatCurrency(payroll.cashAdvancesTotal) }}
+                    </td>
+
+                    <td [class.positive]="payroll.remaining >= 0"
+                        [class.negative]="payroll.remaining < 0">
+                        {{ commonService.formatCurrency(payroll.remaining) }}
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+    <!-- No Data -->
+    <div class="no-data"
+        *ngIf="!financialData.cashAdvances?.length &&
+               !financialData.personalExpenses?.length &&
+               !financialData.monthlyPayrolls?.length">
+        <p>لا توجد بيانات مالية متاحة لهذا الموظف.</p>
+    </div>
+
+    <div class="d-flex justify-content-around">
+        <button class="btn btn-secondary" (click)="colse()">إلغاء</button>
+        <button class="btn btn-danger" (click)="confirmEndOfWork()">تأكيد إنهاء العمل</button>
+    </div>
+  </div>
+
+  <div *ngIf="!financialData" class="loading">
+      <p>جاري تحميل البيانات المالية...</p>
+  </div>
+
+</app-h-modal>

@@ -7,6 +7,7 @@ import { EmployeeManagementService } from '../../../../core/Employees/employee-m
 import { ToastService } from '../../../../core/shared/toast.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApiResponse } from '../../../../model/api-response';
+import { CommonService } from '../../../../core/common-service';
 
 @Component({
   selector: 'app-add-edit-employee',
@@ -26,6 +27,7 @@ export class AddEditEmployee {
     private toast: ToastService,
     private dialogRef: MatDialogRef<AddEditEmployee>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -35,15 +37,17 @@ export class AddEditEmployee {
       this.employeeForm = this.fb.group({
         id: [this.employee?.id],
         name: [this.employee?.name, [Validators.required, Validators.maxLength(50)]],
-        startDate: [this.employee?.startDate, [Validators.required]],
-        baseSalary: [this.employee?.baseSalary, [Validators.required, Validators.min(0)]],
+        startDate: [this.commonService.formatForInputDate(this.employee?.startDate), [Validators.required]],
+        endWorkDate: [this.commonService.formatForInputDate(this.employee?.endWorkDate)],
+        baseSalary: [this.employee?.baseSalary, [Validators.required, Validators.min(1)]],
         notes: [this.employee?.notes],
       });
     } else {
       this.employeeForm = this.fb.group({
         name: ['', [Validators.required, Validators.maxLength(50)]],
         startDate: ['', [Validators.required]],
-        baseSalary: [0, [Validators.required, Validators.min(0)]],
+        endWorkDate: [''],
+        baseSalary: [, [Validators.required, Validators.min(1)]],
         notes: ['']
       });
     }
@@ -56,7 +60,7 @@ export class AddEditEmployee {
     }
 
     const employee: EmployeeDto = this.employeeForm.value;
-
+    
     if (this.isEditMode) {
       this.update(employee);
     } else {

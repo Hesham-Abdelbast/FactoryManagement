@@ -23,7 +23,7 @@ export class CommonService {
     return new Intl.NumberFormat('ar-LY', {
       style: 'currency',
       currency: 'LYD',
-      minimumFractionDigits: 2
+      minimumFractionDigits: 0
     }).format(amount);
   }
 }

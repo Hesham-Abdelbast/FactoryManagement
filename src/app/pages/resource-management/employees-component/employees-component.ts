@@ -12,6 +12,9 @@ import { AddEditEmployee } from './add-edit-employee/add-edit-employee';
 import { EmployeePersonalExpenseComponent } from './employee-personal-expense-component/employee-personal-expense-component';
 import { EmployeeCashAdvanceComponent } from './employee-cash-advance-component/employee-cash-advance-component';
 import { MonthlyPayrollComponent } from './monthly-payroll-component/monthly-payroll-component';
+import { EndOfWorkComponent } from './end-of-work-component/end-of-work-component';
+import { FullFinancialRequestDto } from '../../../model/Employee/full-financial-request-dto';
+import { FullFinancialResponseDto } from '../../../model/Employee/full-financial-response-dto';
 
 @Component({
   selector: 'app-employees-component',
@@ -37,8 +40,10 @@ export class EmployeesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     this.GetAllEmps();
   }
+
   /** إجراءات الجدول */
   actions: TableAction[] = [
     {
@@ -76,6 +81,13 @@ export class EmployeesComponent implements OnInit {
       label: 'حذف',
       type: 'delete',
       style: 'btn btn-outline-danger btn-sm'
+    },
+    {
+      icon: 'fa fa-trash',
+      iconColor: '',
+      label: 'انهاءالعمل',
+      type: 'endOfWork',
+      style: 'btn btn-outline-danger btn-sm'
     }
   ];
 
@@ -89,14 +101,18 @@ export class EmployeesComponent implements OnInit {
         this.deleteEmp(event.row.id);
         break;
       case 'CashAdvance':
-        this.CashAdvance(event.row.id,event.row.name);
+        this.CashAdvance(event.row.id, event.row.name);
         break;
       case 'PersonalExpense':
-        this.PersonalExpense(event.row.id,event.row.name);
+        this.PersonalExpense(event.row.id, event.row.name);
         break;
       case 'Repayment':
         this.Repayment(event.row);
         break;
+      case 'endOfWork':
+        this.EndOfWork(event.row);
+        break;
+
     }
   }
 
@@ -107,34 +123,79 @@ export class EmployeesComponent implements OnInit {
     this.GetAllEmps();
   }
 
-  PersonalExpense(id: string , name:string) {
-  this.dialog.open(EmployeePersonalExpenseComponent, {
-    width: '1000px',          
-    height: 'auto',
-    maxHeight: '90vh',
-    maxWidth: '90vw',
-    data: { Id: id,Name:name }         
-  });
-}
-Repayment(row: EmployeeDto) {
-  this.dialog.open(MonthlyPayrollComponent, {
-    width: '1000px',          
-    height: 'auto',
-    maxHeight: '90vh',
-    maxWidth: '90vw',
-    data: { Employee : row}         
-  });
-}
-  CashAdvance(employeeId: string,name:string) {
-  this.dialog.open(EmployeeCashAdvanceComponent, {
-    width: '900px',
-    height: 'auto',
-    maxHeight: '90vh',
-    maxWidth: '90vw',
-    data: { Id: employeeId ,Name:name}
-  });
-}
+  PersonalExpense(id: string, name: string) {
+    this.dialog.open(EmployeePersonalExpenseComponent, {
+      width: '1000px',
+      height: 'auto',
+      maxHeight: '90vh',
+      maxWidth: '90vw',
+      data: { Id: id, Name: name }
+    });
+  }
 
+  Repayment(row: EmployeeDto) {
+    this.dialog.open(MonthlyPayrollComponent, {
+      width: '1000px',
+      height: 'auto',
+      maxHeight: '90vh',
+      maxWidth: '90vw',
+      data: { Employee: row }
+    });
+  }
+
+  EndOfWork(row: EmployeeDto) {
+
+    if(!row){
+      this.toast.error('بيانات الموظف غير موجودة.');
+      return;
+    }
+
+    if(row.isActive){
+      this.toast.error('الموظف قد تم إنهاء عمله مسبقاً.');
+      return;
+    }
+
+    if (!row.endWorkDate || row.endWorkDate.trim() === '') {
+      this.toast.error('يرجى تحديد تاريخ انتهاء العمل للموظف قبل إنشاء تقرير نهاية الخدمة.');
+      return;
+    }
+
+    const dto: FullFinancialRequestDto = {
+      employeeId: row.id,
+      periodFrom: row.startDate,
+      periodTo: new Date().toISOString().split('T')[0],
+    }
+
+    this.EmpServices.GetEmployeeFullFinancialReport(dto).subscribe((res: ApiResponse<FullFinancialResponseDto>) => {
+      if (res.success && res.data) {
+        const ref = this.dialog.open(EndOfWorkComponent, {
+          width: '80vw',
+          height: 'auto',
+          maxHeight: '90vh',
+          maxWidth: '90vw',
+          data: { result: res.data}
+        });
+        ref.afterClosed().subscribe(ended => {
+          if(ended){
+            this.GetAllEmps();
+          }
+        });
+      } else {
+        this.toast.error(res.returnMsg);
+        return;
+      }
+    });
+  }
+
+  CashAdvance(employeeId: string, name: string) {
+    this.dialog.open(EmployeeCashAdvanceComponent, {
+      width: '900px',
+      height: 'auto',
+      maxHeight: '90vh',
+      maxWidth: '90vw',
+      data: { Id: employeeId, Name: name }
+    });
+  }
 
   editEmp(emp: EmployeeDto) {
     const dialogRef = this.dialog.open(AddEditEmployee, {

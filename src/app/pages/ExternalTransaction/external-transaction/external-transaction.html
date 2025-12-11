@@ -1,53 +1,86 @@
 <div class="container mt-4" dir="rtl">
 
-    <!-- Tabs Header -->
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <ul class="nav nav-tabs" id="mainTabs" role="tablist">
 
+        <!-- Home Tab -->
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="home-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#home-tab-pane"
-                    type="button" role="tab">
+            <button 
+                class="nav-link active" 
+                id="home-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#homeTab"
+                type="button" 
+                role="tab" 
+                aria-controls="homeTab"
+                aria-selected="true">
                 الرئيسية
             </button>
         </li>
 
+        <!-- Inventory Tab -->
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="profile-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#profile-tab-pane"
-                    type="button" role="tab">
-                الملف الشخصي
+            <button 
+                class="nav-link" 
+                id="inventory-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#inventoryTab"
+                type="button" 
+                role="tab" 
+                aria-controls="inventoryTab"
+                aria-selected="false">
+                الجرد
             </button>
         </li>
 
+        <!-- Profit Tab -->
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="contact-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#contact-tab-pane"
-                    type="button" role="tab">
-                التواصل
+            <button 
+                class="nav-link" 
+                id="profit-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#profitTab"
+                type="button" 
+                role="tab" 
+                aria-controls="profitTab"
+                aria-selected="false">
+                الأرباح
             </button>
         </li>
 
     </ul>
 
     <!-- Tabs Content -->
-    <div class="tab-content border border-top-0 p-3" id="myTabContent">
+    <div class="tab-content border border-top-0 p-3" id="mainTabsContent">
 
-        <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel">
-            <h5>محتوى الرئيسية</h5>
-            <p>هذا النص مثال لمحتوى التبويب الأول.</p>
+        <!-- Home Content -->
+        <div 
+            class="tab-pane fade show active" 
+            id="homeTab" 
+            role="tabpanel" 
+            aria-labelledby="home-tab">
+        
+            <app-external-trnx-list></app-external-trnx-list>
+
         </div>
 
-        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel">
-            <h5>محتوى الملف الشخصي</h5>
-            <p>هذا النص مثال لمحتوى التبويب الثاني.</p>
+        <!-- Inventory Content -->
+        <div 
+            class="tab-pane fade" 
+            id="inventoryTab" 
+            role="tabpanel" 
+            aria-labelledby="inventory-tab">
+            <h5>محتوى الجرد</h5>
+            <p>هذا مثال لمحتوى التبويب الثاني.</p>
         </div>
 
-        <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel">
-            <h5>محتوى التواصل</h5>
-            <p>هذا النص مثال لمحتوى التبويب الثالث.</p>
+        <!-- Profit Content -->
+        <div 
+            class="tab-pane fade" 
+            id="profitTab" 
+            role="tabpanel" 
+            aria-labelledby="profit-tab">
+            <h5>محتوى الأرباح</h5>
+            <p>هذا مثال لمحتوى التبويب الثالث.</p>
         </div>
 
     </div>

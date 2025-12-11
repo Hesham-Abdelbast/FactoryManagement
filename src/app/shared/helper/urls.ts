@@ -160,6 +160,7 @@ export class EmployeeManagementURLs {
   // Employee CRUD
   static readonly GetAll = this.base + 'GetAll';
   static Get(id: string): string { return `${this.base}Get/${id}` }
+  static EndWork(id: string): string { return `${this.base}EndWork/${id}` }
   static readonly Create = this.base + 'Create';
   static readonly CreateMonthlyPayroll = this.base + 'CreateMonthlyPayroll';
   static readonly GetEmployeeFullFinancialReport = this.base + 'GetEmployeeFullFinancialReport';
@@ -233,6 +234,7 @@ export class DriverManagementURLs {
 
   // Driver CRUD
   static readonly GetAll = this.base + 'GetAll';
+  static readonly GetAllDrivers = this.base + 'GetAllDrivers';
   static Get(id: string): string { return `${this.base}Get/${id}` }
   static readonly Create = this.base + 'Create';
   static readonly Update = this.base + 'Update';
@@ -252,3 +254,12 @@ export class DriverManagementURLs {
   static GetAllExpensesByDriverId(id: string): string { return `${this.base}GetAllExpensesByDriverId/${id}` }
   static readonly GetAllExpenses = this.base + 'GetAllExpenses';
 }
+
+export const ExternalTransactionURLs = {
+  GetAll: 'api/ExternalTransaction/GetAll',
+  GetAllPaged: 'api/ExternalTransaction/GetAllPaged',
+  GetById: (id: string) => `api/ExternalTransaction/GetById/${id}`,
+  Create: 'api/ExternalTransaction/Create',
+  Update: 'api/ExternalTransaction/Update',
+  Delete: (id: string) => `api/ExternalTransaction/Delete/${id}`
+};

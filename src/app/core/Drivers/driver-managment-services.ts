@@ -25,6 +25,10 @@ export class DriverManagmentServices {
       .pipe(catchError(err => this.handleError<DriverDto[]>('جلب السائقين', err, [])));
   }
 
+ getAll(): Observable<ApiResponse<DriverDto[]>> {
+    return this.baseService.GetRequest<ApiResponse<DriverDto[]>>(DriverManagementURLs.GetAllDrivers)
+      .pipe(catchError(err => this.handleError<DriverDto[]>('جلب السائقين', err, [])));
+  }
   getDriverById(id: string): Observable<ApiResponse<DriverDto>> {
     return this.baseService.GetRequest<ApiResponse<DriverDto>>(DriverManagementURLs.Get(id))
       .pipe(catchError(err => this.handleError<DriverDto>('جلب السائق', err, null)));

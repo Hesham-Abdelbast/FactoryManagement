@@ -1,0 +1,29 @@
+<app-h-table 
+  entityName="المعاملة الخارجية"
+  headerText="قائمة المعاملات الخارجية"
+
+  [keyColumns]="columnKeys"
+  [displayColumns]="columns"
+  [data]="list"
+  P_Key="id"
+
+  [enableActions]="true"
+  actionName="الإجراءات"
+  [actions]="actions"
+  (actionClick)="onTableAction($event)"
+
+  [enableAdd]="true"
+  addIcon="fa-solid fa-square-plus"
+  addText="إضافة معاملة"
+  (onAddEvent)="add()"
+
+  [showPagination]="true"
+  [total]="pagination.totalCount"
+  [pageIndex]="pagination.pageIndex"
+  [pageSize]="pagination.pageSize"
+  (pageChangeEvent)="onPageChange($event)"
+
+  page="صفحة"
+  ItemPerPage="عدد العناصر في الصفحة"
+>
+</app-h-table>
