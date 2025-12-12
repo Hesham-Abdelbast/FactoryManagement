@@ -1,4 +1,5 @@
-export const Base_URL = 'https://localhost:44308/';
+//export const Base_URL = 'https://localhost:44308/';
+export const Base_URL = 'https://alkawakeb.azurewebsites.net/';
 
 export const URLs = {
   LOGIN: 'login',
